@@ -1,0 +1,94 @@
+﻿@model EspecialidadDetalleInput
+@{
+    ViewData["Title"] = "EspecialidadDetalle";
+}
+
+<partial name="Shared/_EspecialidadMantPop" model="Model.Input" />
+
+<header class="page-header">
+    <div class="d-flex align-items-center">
+        <div class="mr-auto">
+            <h1 class="separator">Detalle Especialidad</h1>
+            <nav class="breadcrumb-wrapper" aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index"><i class="icon dripicons-home"></i></a></li>
+                    <li class="breadcrumb-item"><a asp-area="AtributoEmpresa" asp-controller="ConfigAtributo" asp-action="EspecialidadMant">Especialidad</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Detalle de Especialidad</li>
+                </ol>
+            </nav>
+        </div>
+
+        <ul class="actions top-right">
+            <li class="dropdown">
+                <a href="javascript:void(0)" class="btn btn-fab" data-toggle="dropdown" aria-expanded="false">
+                    <i class="la la-ellipsis-h"></i>
+                </a>
+                <div class="dropdown-menu dropdown-icon-menu dropdown-menu-right">
+                    <div class="dropdown-header">
+                        Quick Actions
+                    </div>
+                    <a href="#" class="dropdown-item" data-toggle="modal" data-target="#exampleModal" id="EditExp">
+                        <i class="icon dripicons-pencil text-info"></i> Editar
+                    </a>
+                    <a href="#" class="dropdown-item" id="ActExp">
+                        <i class="icon dripicons-cross text-danger"></i> Desabilitar
+                    </a>
+                </div>
+            </li>
+        </ul>
+    </div>
+</header>
+
+@Html.HiddenFor(p => p.Datos.EspecialidadId)
+@Html.HiddenFor(p => p.Metodo)
+
+
+<section class="page-content container-fluid">
+    <div class="row" id="Datos">
+        <partial name="Shared/_EspecialidadDetalleGnrl" model="Model.Datos" />
+    </div>
+</section>
+
+@section Scripts{
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+    <script src="~/js/MetodosCallSubmit.js"></script>
+
+
+    <script type="text/javascript">
+
+    $("#EditExp").click(function (e) {
+        $("#Nombre").val($("#dato_nombre").val());
+        $("#Descripcion").val($("#dato_descripcion").val());
+    });
+
+    $("#AjaxFormEspec").submit(async function (e) {
+        e.preventDefault();
+
+        if (!$("#AjaxFormEspec").valid()) {
+            return;
+        }
+
+        let post = new AjaxSubmit("@Url.Action("EspecialidadDetalle", "ConfigAtributo")", "#SubmitBtnEspec", "Error almacenamiento");
+        post.btnCancel = "#btnCancelEspec";
+        post.partial = "#Datos";
+        post.inputClear = ["#Nombre", "#Descripcion"];
+
+        let dt = ExtraccionDt();
+        post.AjaxPop(dt);
+
+    });
+
+    function ExtraccionDt() {
+
+        let DtGnrl = {
+            EspecialidadId : $("#Datos_EspecialidadId").val(),
+            Nombre: $("#Nombre").val(),
+            Descripcion: $("#Descripcion").val(),
+            Metodo: $("#Metodo").val()
+        };
+
+        return DtGnrl;
+    }
+    </script>
+
+}

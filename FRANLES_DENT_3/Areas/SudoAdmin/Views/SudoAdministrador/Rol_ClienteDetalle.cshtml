@@ -1,0 +1,148 @@
+﻿@model Rol_ClienteDetalleInput
+
+@{
+    ViewData["Title"] = "Rol_ClienteDetalle";
+}
+
+
+<header class="page-header">
+    <div class="d-flex align-items-center">
+        <div class="mr-auto">
+            <h1 class="separator">ROLES DE CLIENTE DETALLE</h1>
+            <nav class="breadcrumb-wrapper" aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index"><i class="icon dripicons-home"></i></a></li>
+                    <li class="breadcrumb-item"><a asp-area="SudoAdmin" asp-controller="SudoAdministrador" asp-action="Rol_ClienteMant">Roles de Clientes</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Roles de Cliente Detalle</li>
+                </ol>
+            </nav>
+        </div>
+        @if (Model.Action == "Vie")
+        {
+            <ul class="actions top-right">
+                <li class="dropdown">
+                    <a href="javascript:void(0)" class="btn btn-fab" data-toggle="dropdown" aria-expanded="false">
+                        <i class="la la-ellipsis-h"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-icon-menu dropdown-menu-right">
+                        <div class="dropdown-header">
+                            Quick Actions
+                        </div>
+                        <a asp-area="Configuracion" asp-action="Rol_ClienteDetalle" asp-route-id="@Model.Input.ClinicaID" asp-route-actmtd="actuli" class="dropdown-item">
+                            <i class="icon dripicons-pencil text-danger"></i> Editar
+                        </a>
+                    </div>
+                </li>
+            </ul>
+        }
+    </div>
+</header>
+
+
+<section class="page-content container-fluid">
+    <form id="AjaxForm" method="post">
+        @Html.HiddenFor(p => p.Metodo)
+        @Html.HiddenFor(p => p.Input.ClinicaID)
+
+        <div class="row">
+            <div class="col">
+                <div class="card text-center" id="packages">
+                    <h5 class="card-header"> @Model.Input.Nombre</h5>
+
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="card">
+                    <h5 class="card-header">Roles</h5>
+                    <div class="card-body">
+                        <div class="row">
+                            <div id="tree"></div>
+                        </div>
+                    </div>
+                    @if (Model.Action == "Upd")
+                    {
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-success" id="SubmitBtn">Guardar</button>
+                        </div>
+                    }
+                </div>
+            </div>
+
+
+
+        </div>
+    </form>
+</section>
+
+
+@section Scripts{
+
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+
+
+    <script src="~/js/CargaDatosGnrl.js"></script>
+    <script src="~/js/MetodosCallSubmit.js"></script>
+
+
+
+    <script type="text/javascript">
+
+    var treeModCRL;
+        var treeCarga = new CargaTree('#tree', "@Url.Action("AddRolesAdmin", "SudoAdministrador", new { id = Model.Input.ClinicaID, actmtd = Model.Metodo})", "cssIcon");
+
+
+  @if (Model.Action == "Vie")
+  {
+        <text>
+
+    $(document).ready(function () {
+        treeCarga.Viewtree();
+         });
+
+        </text>
+  }
+  else
+  {
+      <text>
+
+        $(document).ready(function () {
+            treeCarga.Updtree();
+        });
+
+
+        $("#AjaxForm").submit(async function (e) {
+            e.preventDefault();
+
+            if (!$("#AjaxForm").valid()) {
+                return;
+            }
+
+            let post = new AjaxSubmit("@Url.Action("AddRolClinica", "SudoAdministrador")", "#SubmitBtn", "Error almacenamiento");
+
+            if (await MensajeDecision("Modificación de Rol", "¿Se desea actualizar los roles para la clinica?")) {
+
+                let dt = ExtraccionDt();
+
+                post.AjaxPopRedirec(dt);
+            }
+
+        });
+
+        function ExtraccionDt() {
+
+            let checkedIds = treeModCRL.getCheckedNodes();
+
+            let DtGnrl = {
+                id: $("#Input_ClinicaID").val(),
+                rols: checkedIds
+            };
+
+            return DtGnrl;
+        }
+
+        </text>
+
+  }
+
+    </script>
+}

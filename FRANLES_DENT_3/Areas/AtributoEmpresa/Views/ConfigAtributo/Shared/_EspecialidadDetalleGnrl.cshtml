@@ -1,0 +1,28 @@
+﻿@model Especialidad
+
+@Html.HiddenFor(p => p.Nombre, new { id = "dato_nombre" })
+@Html.HiddenFor(p => p.Descripcion, new { id = "dato_descripcion" })
+@Html.HiddenFor(p => p.Activo, new { id = "dato_activo" })
+
+<div class="col">
+    <div class="card text-center" id="packages">
+        <div class="row">
+            <div class="col-1 text-right card-header">
+                @if (Model.Activo)
+                {
+                    <label class="badge badge-pill badge-success">Activo</label>
+                }
+                else
+                {
+                    <label class="badge badge-pill badge-danger">Inactivo</label>
+                }
+            </div>
+            <div class="col-10">
+                <h5 class="card-header"> @Model.Nombre</h5>
+            </div>
+        </div>
+        <div class="card-body">
+            <p>@Model.Descripcion</p>
+        </div>
+    </div>
+</div>

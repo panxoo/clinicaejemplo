@@ -1,0 +1,99 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UserSecretsId>aspnet-FRANLES_DENT_3-421D430B-0375-4FA7-BFBE-B3E4E5FCB069</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Data\Migrations\00000000000000_CreateIdentitySchema.cs" />
+    <Compile Remove="Data\Migrations\00000000000000_CreateIdentitySchema.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200522043756_Inicial.cs" />
+    <Compile Remove="Data\Migrations\20200522043756_Inicial.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200522044109_Inicial.cs" />
+    <Compile Remove="Data\Migrations\20200522044109_Inicial.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200522044443_Inicial.cs" />
+    <Compile Remove="Data\Migrations\20200522044443_Inicial.Designer.cs" />
+    <Compile Remove="Migrations\20200526040050_asd.cs" />
+    <Compile Remove="Migrations\20200526040050_asd.Designer.cs" />
+    <Compile Remove="Migrations\20200530040329_especialidadstringid.cs" />
+    <Compile Remove="Migrations\20200530040329_especialidadstringid.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.4" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.3" />
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.1.1" />
+    <PackageReference Include="Ulid" Version="1.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Areas\AtributoEmpresa\Data\" />
+    <Folder Include="Areas\Principal\Data\" />
+    <Folder Include="Areas\Principal\Models\" />
+    <Folder Include="Areas\SudoAdmin\Data\" />
+    <Folder Include="Data\Migrations\" />
+    <Folder Include="wwwroot\img\436c69656e7465\DENT4SMILE\417661746172\" />
+    <Folder Include="wwwroot\lib\assets\css\layouts\vertical\themes\elements\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Views\Shared\Components\DatosInicioUser\Default.cshtml" />
+    <None Include="wwwroot\lib\assets\js\.DS_Store" />
+    <None Include="wwwroot\lib\assets\js\cards\bar-chart-line-three.js" />
+    <None Include="wwwroot\lib\assets\js\cards\bounce-rate-chart.js" />
+    <None Include="wwwroot\lib\assets\js\cards\counter-group.js" />
+    <None Include="wwwroot\lib\assets\js\cards\monthly-budget-2.js" />
+    <None Include="wwwroot\lib\assets\js\cards\monthly-budget.js" />
+    <None Include="wwwroot\lib\assets\js\cards\payout-chartist.js" />
+    <None Include="wwwroot\lib\assets\js\cards\pricing-tables.js" />
+    <None Include="wwwroot\lib\assets\js\cards\recent-transactions.js" />
+    <None Include="wwwroot\lib\assets\js\cards\sales-chartist.js" />
+    <None Include="wwwroot\lib\assets\js\cards\session-duration-chart.js" />
+    <None Include="wwwroot\lib\assets\js\cards\sessions-by-location.js" />
+    <None Include="wwwroot\lib\assets\js\cards\total-revenue.js" />
+    <None Include="wwwroot\lib\assets\js\cards\total-unique-visits-chart.js" />
+    <None Include="wwwroot\lib\assets\js\cards\total-visits-chart.js" />
+    <None Include="wwwroot\lib\assets\js\cards\traffic-sources.js" />
+    <None Include="wwwroot\lib\assets\js\cards\users-chart.js" />
+    <None Include="wwwroot\lib\assets\js\charts\c3charts-init.js" />
+    <None Include="wwwroot\lib\assets\js\charts\chartist-init.js" />
+    <None Include="wwwroot\lib\assets\js\charts\chartjs-init.js" />
+    <None Include="wwwroot\lib\assets\js\charts\morris-init.js" />
+    <None Include="wwwroot\lib\assets\js\components\bootstrap-date-range-picker-init.js" />
+    <None Include="wwwroot\lib\assets\js\components\bootstrap-datepicker-init.js" />
+    <None Include="wwwroot\lib\assets\js\components\countUp-init.js" />
+    <None Include="wwwroot\lib\assets\js\components\custom-scrollbar.js" />
+    <None Include="wwwroot\lib\assets\js\components\datatables-init.js" />
+    <None Include="wwwroot\lib\assets\js\components\drag-and-drop-init.js" />
+    <None Include="wwwroot\lib\assets\js\components\dropzone-init.js" />
+    <None Include="wwwroot\lib\assets\js\components\ecom-dashboard-slider-init.js" />
+    <None Include="wwwroot\lib\assets\js\components\fullcalendar-init.js" />
+    <None Include="wwwroot\lib\assets\js\components\horizontal-wizard-init.js" />
+    <None Include="wwwroot\lib\assets\js\components\jquery-mask-init.js" />
+    <None Include="wwwroot\lib\assets\js\components\jquery-validation-init.js" />
+    <None Include="wwwroot\lib\assets\js\components\mail-app.js" />
+    <None Include="wwwroot\lib\assets\js\components\range-sliders-init.js" />
+    <None Include="wwwroot\lib\assets\js\components\rateYo-init.js" />
+    <None Include="wwwroot\lib\assets\js\components\select2-init.js" />
+    <None Include="wwwroot\lib\assets\js\components\sweetalert2.js" />
+    <None Include="wwwroot\lib\assets\js\components\switchery-init.js" />
+    <None Include="wwwroot\lib\assets\js\components\vertical-wizard-init.js" />
+    <None Include="wwwroot\lib\assets\js\global\app.js" />
+    <None Include="wwwroot\lib\assets\vendor\modernizr\modernizr.custom.js" />
+    <None Include="wwwroot\lib\assets\vendor\switchery-npm\index.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="wwwroot\lib\assets\font-awesome\css\all.min.css">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+</Project>

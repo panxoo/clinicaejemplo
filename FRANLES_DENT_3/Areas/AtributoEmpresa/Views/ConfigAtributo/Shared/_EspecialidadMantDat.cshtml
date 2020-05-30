@@ -1,0 +1,54 @@
+﻿@model List<Especialidad>
+
+
+<table id="bs4-table" class="table table-striped table-bordered" style="width:100%">
+    <thead>
+        <tr>
+
+            <th>
+                Activo
+            </th>
+            <th>
+                Nombre
+            </th>
+            <th>
+                Descripcion
+            </th>
+            <th>
+                Opciones
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Especialidad item in Model)
+        {
+            <tr>
+                <td>
+                    @if (item.Activo)
+                    {
+                        <label class="badge badge-pill badge-success">Activo</label>
+                    }
+                    else
+                    {
+                        <label class="badge badge-pill badge-danger">Inactivo</label>
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelIem => item.Nombre)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelIem => item.Descripcion)
+                </td>
+                <td>
+                    @*<a asp-area="Configuracion" asp-page="/Parametros/EspecialidadDetalle" asp-route-id="@item.EspecialidadId" class="btn btn-info">Detalle</a>*@
+                    <a asp-area="AtributoEmpresa" asp-controller="ConfigAtributo" asp-action="EspecialidadDetalle" asp-route-id="@item.EspecialidadId" asp-route-actmtd="1bj6WOlnNLZQ/Ka5Wixpp6RlgYBZc/QlSy4FUHVfOxo=566965" class="btn btn-info">Detalle</a>
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+
