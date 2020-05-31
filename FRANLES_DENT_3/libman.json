@@ -95,7 +95,29 @@
     },
     {
       "library": "font-awesome@5.13.0",
-      "destination": "wwwroot/lib/assets/font-awesome/"
+      "destination": "wwwroot/lib/assets/css/icons/font-awesome/"
+    },
+    {
+      "library": "line-awesome@1.3.0",
+      "destination": "wwwroot/lib/assets/css/icons/line-awesome/",
+      "files": [
+        "line-awesome/css/line-awesome.min.css",
+        "line-awesome/fonts/la-brands-400.eot",
+        "line-awesome/fonts/la-brands-400.svg",
+        "line-awesome/fonts/la-brands-400.ttf",
+        "line-awesome/fonts/la-brands-400.woff",
+        "line-awesome/fonts/la-brands-400.woff2",
+        "line-awesome/fonts/la-regular-400.eot",
+        "line-awesome/fonts/la-regular-400.svg",
+        "line-awesome/fonts/la-regular-400.ttf",
+        "line-awesome/fonts/la-regular-400.woff",
+        "line-awesome/fonts/la-regular-400.woff2",
+        "line-awesome/fonts/la-solid-900.eot",
+        "line-awesome/fonts/la-solid-900.svg",
+        "line-awesome/fonts/la-solid-900.ttf",
+        "line-awesome/fonts/la-solid-900.woff",
+        "line-awesome/fonts/la-solid-900.woff2"
+      ]
     }
   ]
 }

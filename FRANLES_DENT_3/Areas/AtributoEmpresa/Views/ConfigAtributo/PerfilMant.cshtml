@@ -1,0 +1,121 @@
+﻿@model List<PerfilMantenedor>
+
+@{
+    ViewData["Title"] = "PerfilMant";
+}
+
+
+<header class="page-header">
+    <div class="d-flex align-items-center">
+        <div class="mr-auto">
+            <h1 class="separator">PERFILES</h1>
+            <nav class="breadcrumb-wrapper" aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index"><i class="icon dripicons-home"></i></a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Perfiles</li>
+                </ol>
+            </nav>
+        </div>
+        <ul class="actions top-right">
+            <li class="dropdown">
+                <a href="javascript:void(0)" class="btn btn-fab" data-toggle="dropdown" aria-expanded="false">
+                    <i class="la la-ellipsis-h"></i>
+                </a>
+                <div class="dropdown-menu dropdown-icon-menu dropdown-menu-right">
+                    <div class="dropdown-header">
+                        Quick Actions
+                    </div>
+                    <a href="#" class="dropdown-item">
+                        <i class="icon dripicons-clockwise"></i> Refresh
+                    </a>
+                    <a asp-area="Configuracion" asp-action="PerfilDetalle" asp-controller="Usuario_Conf" asp-route-actmtd="4d616e745f50657266696c416464" class="dropdown-item">
+                        <i class="icon dripicons-plus text-success"></i> Agregar
+                    </a>
+                    <a href="#" class="dropdown-item">
+                        <i class="icon dripicons-cloud-download"></i> Export
+                    </a>
+                    <a href="#" class="dropdown-item">
+                        <i class="icon dripicons-help"></i> Support
+                    </a>
+                </div>
+            </li>
+        </ul>
+    </div>
+</header>
+
+<section class="page-content container-fluid">
+
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <h5 class="card-header">Title</h5>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="bs4-table" class="table table-striped">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>
+                                        Activo
+                                    </th>
+                                    <th>
+                                        Nombre
+                                    </th>
+                                    <th>
+                                        Descripción
+                                    </th>
+                                    <th>
+                                        Medico
+                                    </th>
+                                    <th>
+                                        Asistente
+                                    </th>
+                                    <th>
+                                        Opciones
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (PerfilMantenedor item in Model)
+                                {
+                                <tr data-id="@item.PerfilId" data-name="@item.Nombre" data-act="@item.Activo">
+                                    <td>
+                                        @if (item.Activo)
+                                        {
+
+                                            <label class="badge badge-pill badge-success">Activo</label>
+                                        }
+                                        else
+                                        {
+                                            <label class="badge badge-pill badge-danger">Inactivo</label>
+                                        }
+                                    </td>
+                                    <td>@Html.DisplayFor(modelItem => item.Nombre)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Descripcion)</td>
+                                    <td>
+                                        @if (item.IsMedic)
+                                        {
+                                            <i class="far fa-check-circle fa-2x text-success"></i>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (item.IsAsistente)
+                                        {
+                                            <i class="far fa-check-circle fa-2x text-success"></i>
+                                        }
+                                    </td>
+                                    <td>
+                                        <a asp-area="Configuracion" asp-controller="Usuario_Conf" asp-action="PerfilDetalle" asp-route-id="@item.PerfilId" asp-route-actmtd="4d616e745f50657266696c566965"><i data-toggle="tooltip" data-placement="top" title="" data-original-title="Visualizar" class="far fa-eye text-secondary fa-2x"></i></a>
+
+                                        <a asp-area="Configuracion" asp-controller="Usuario_Conf" asp-action="PerfilDetalle" asp-route-id="@item.PerfilId" asp-route-actmtd="4d616e745f50657266696c557064"><i data-toggle="tooltip" data-placement="top" title="" data-original-title="Editar" class="far fa-edit text-success fa-2x"></i></a>
+                                    </td>
+                                </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+

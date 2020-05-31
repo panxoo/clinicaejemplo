@@ -1,5 +1,6 @@
 ﻿using FRANLES_DENT_3.Areas.AtributoEmpresa.Models.ConfigAtributo;
 using FRANLES_DENT_3.Models.MedicoDato.Atributo;
+using FRANLES_DENT_3.Models.Permisos;
 using FRANLES_DENT_3.Models.Sistema;
 using FRANLES_DENT_3.Servicios.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -55,6 +56,25 @@ namespace FRANLES_DENT_3.Areas.AtributoEmpresa.Metodos.AtributoEmpresa
         public async Task<Especialidad> GetEspecialidadDetDato(string id)
         {
             return await _lstGnrl._context.Especialidades.Where(f => f.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId) && f.EspecialidadId.Equals(id)).FirstOrDefaultAsync();
+        }
+
+        public async Task<List<PerfilMantenedor>> GetPerfilMant()
+        {
+            List<PerfilMantenedor> _model;
+
+            _model = await _lstGnrl._context.Perfils.IgnoreQueryFilters().Where(w => w.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId))
+                                                                         .Select(s => new PerfilMantenedor
+                                                                         {
+                                                                             Nombre = s.Nombre,
+                                                                             Descripcion = s.Descripcion,
+                                                                             Activo = s.Activo,
+                                                                             PerfilId = s.PerfilId,
+                                                                             IsMedic = s.IsMedic,
+                                                                             IsAsistente = s.IsAsistente,
+                                                                             CantUser = _lstGnrl._context.Usuarios.Count(c => c.PerfilId.Equals(s.PerfilId))
+                                                                         }).ToListAsync();
+
+            return _model;
         }
     }
 }

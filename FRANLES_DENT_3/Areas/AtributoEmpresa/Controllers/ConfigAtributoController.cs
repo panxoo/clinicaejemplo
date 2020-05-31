@@ -163,6 +163,11 @@ namespace FRANLES_DENT_3.Areas.AtributoEmpresa.Controllers
         #endregion Especialidad
 
         public async Task<IActionResult> PerfilMant()
+        {
+            _lstGnrl._datosUsuario = await _lstGnrl._usuarios.DatosSession(HttpContext);
+
+            return View(await new ConfigAtributoGet(_lstGnrl).GetPerfilMant());
+        }
 
         public IActionResult Index()
         {
