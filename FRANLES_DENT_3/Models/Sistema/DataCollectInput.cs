@@ -10,5 +10,7 @@ namespace FRANLES_DENT_3.Models.Sistema
         public List<T> ListDatos { get; set; }
         public T Input { get; set; }
         public string Metodo { get; set; }
+        public string Action { get; set; }
+
     }
 }

@@ -118,6 +118,10 @@
         "line-awesome/fonts/la-solid-900.woff",
         "line-awesome/fonts/la-solid-900.woff2"
       ]
+    },
+    {
+      "library": "bootstrap-datepicker@1.9.0",
+      "destination": "wwwroot/lib/assets/vendor/bootstrap-datepicker/"
     }
   ]
 }

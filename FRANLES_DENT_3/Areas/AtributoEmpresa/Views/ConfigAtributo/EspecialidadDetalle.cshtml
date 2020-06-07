@@ -42,7 +42,6 @@
 @Html.HiddenFor(p => p.Datos.EspecialidadId)
 @Html.HiddenFor(p => p.Metodo)
 
-
 <section class="page-content container-fluid">
     <div class="row" id="Datos">
         <partial name="Shared/_EspecialidadDetalleGnrl" model="Model.Datos" />
@@ -52,7 +51,6 @@
 @section Scripts{
     @await Html.PartialAsync("_ValidationScriptsPartial")
     <script src="~/js/MetodosCallSubmit.js"></script>
-
 
     <script type="text/javascript">
 

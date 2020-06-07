@@ -18,7 +18,7 @@ namespace FRANLES_DENT_3.Areas.SudoAdmin.Metodos.SudoAdministrador
             _lstGnrl = lstGnrl;
         }
 
-        IListGeneral _lstGnrl;
+       private IListGeneral _lstGnrl;
 
 
 
@@ -26,6 +26,14 @@ namespace FRANLES_DENT_3.Areas.SudoAdmin.Metodos.SudoAdministrador
         {
             try
             {
+                RetornoAction retornoAction = new RetornoAction();
+
+                retornoAction = await new SudoAdministradorVal(_lstGnrl).ValAddRolClinica(id, rols);
+
+                if(retornoAction.Code != 0)
+                {
+                    return retornoAction;
+                }
 
 
                 List<Perfil_Rol> perfil_Rols = new List<Perfil_Rol>();

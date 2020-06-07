@@ -1,0 +1,106 @@
+﻿@model CreaUsuarioInput
+
+
+<div id="CreaUsr">
+
+    @if (Model.Action == "Upd" && !string.IsNullOrEmpty(Model.Input.Nombre_Cuenta))
+    {
+        <div class="form-row">
+            <div class="form-group col-md-5">
+                <label asp-for="Input.Nombre_Cuenta"></label>
+                <div class="input-group">
+                    <input type="text" class="form-control" asp-for="Input.Nombre_Cuenta" autocomplete="new-text" disabled>
+                </div>
+            </div>
+        </div>
+    }
+
+    else
+    {
+
+        <div class="form-group col-md-5 row">
+            <label asp-for="Nombre_CuentaT"></label>
+            <div class="input-group">
+                <input type="text" class="form-control" asp-for="Nombre_CuentaT" autocomplete="new-text">
+                <div class="input-group-append">
+                    <span class="input-group-text">@@@Model.Alias</span>
+                </div>
+                <span asp-validation-for="Nombre_CuentaT" class="text-danger"></span>
+            </div>
+        </div>
+    }
+
+    <div class="form-row">
+        <div class="form-group col-md-3">
+            <label asp-for="Input.PerfilId"></label>
+            <select asp-for="Input.PerfilId" class="form-control">
+                <option value="" disabled selected>Seleccionar un Valor</option>
+                @foreach (var dato in Model.PerfilesSelect)
+                {
+                    <option value="@dato.Value" data-ismedic="@dato.IsMedic" data-isasist="@dato.IsAsistent">@dato.Text</option>
+                }
+            </select>
+            <span asp-validation-for="Input.PerfilId" class="text-danger"></span>
+
+
+        </div>
+        <div class="form-group col-md align-self-end">
+            <label class="badge badge-pill " id="SelMedico">Medico</label>
+            <label class="badge badge-pill " id="SelAsiste">Asistente</label>
+        </div>
+    </div>
+
+    @if (Model.Action == "Add" || (Model.Action == "Upd" && !Model.Input.Acceso))
+    {
+        <div class="form-row">
+            <div class="form-group col-md-3">
+                <label asp-for="Contrasena"></label>
+                <input type="password" class="form-control" asp-for="Contrasena" autocomplete="off">
+                <span asp-validation-for="Contrasena" class="text-danger"></span>
+
+            </div>
+
+            <div class="form-group col-md-3">
+                <label asp-for="Contrasena_Segunda"></label>
+                <input type="password" class="form-control" asp-for="Contrasena_Segunda" autocomplete="off">
+                <span asp-validation-for="Contrasena_Segunda" class="text-danger"></span>
+
+            </div>
+        </div>
+    }
+
+
+</div>
+
+
+
+<div id="NotUsr">
+
+    <p>Seleccionar tipo de usuario</p>
+    <div class="form-group row">
+        <label class="col-sm-auto col-form-label col-form-label-sm">Usuario Medico</label>
+        <div class="col-sm-auto">
+            @if (Model.Action == "Upd" && !Model.Input.Acceso && Model.Input.IsMedic)
+            {
+                <input class="tgl tgl-light tgl-success" id="Usr_Medic" type="checkbox" checked>
+            }
+            else
+            {
+                <input class="tgl tgl-light tgl-success" id="Usr_Medic" type="checkbox">
+            }
+            <label class="tgl-btn" for="Usr_Medic"></label>
+        </div>
+        <label class="col-sm-auto col-form-label col-form-label-sm">Usuario Asistente</label>
+        <div class="col-sm-auto">
+            @if (Model.Input.IsAsist && Model.Action == "Upd" && !Model.Input.Acceso)
+            {
+                <input class="tgl tgl-light tgl-success" id="Usr_Asist" type="checkbox" checked>
+            }
+            else
+            {
+                <input class="tgl tgl-light tgl-success" id="Usr_Asist" type="checkbox">
+            }
+            <label class="tgl-btn" for="Usr_Asist"></label>
+        </div>
+    </div>
+</div>

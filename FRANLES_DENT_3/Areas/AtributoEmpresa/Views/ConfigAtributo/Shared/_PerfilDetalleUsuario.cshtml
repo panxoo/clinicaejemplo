@@ -1,0 +1,46 @@
+﻿@model List<PerfilDetalleInput.UsuariosGrillaPerfil>
+
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <h5 class="card-header">Usuarios</h5>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="bs4-table" class="table table-striped">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>
+                                    Usuario
+                                </th>
+                                <th>
+                                    Nombre
+                                </th>
+                                <th>
+                                    Apellido
+                                </th>
+                                <th>
+                                    Opciones
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (PerfilDetalleInput.UsuariosGrillaPerfil item in Model)
+                            {
+                                <tr>
+
+                                    <td>@Html.DisplayFor(modelItem => item.NombreUsuario)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Nombre)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Apellido)</td>
+                                    <td>
+                                        <a asp-area="Configuracion" asp-controller="Usuario_Conf" asp-action="PerfilDetalle" asp-route-id="@item.UsuarioId" asp-route-actmtd="visali" method="post" class="btn btn-info">Detalle</a>
+                                        <a asp-area="Configuracion" asp-controller="Usuario_Conf" asp-action="PerfilDetalle" asp-route-id="@item.UsuarioId" asp-route-actmtd="actuli" method="post" class="btn btn-info">Editar 2</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

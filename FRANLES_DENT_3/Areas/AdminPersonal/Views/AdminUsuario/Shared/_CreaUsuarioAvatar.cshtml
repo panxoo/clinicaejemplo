@@ -1,0 +1,20 @@
+﻿@model CreaUsuarioInput
+
+<div class="card w-250">
+    <div class="card-header w-250 h-250  d-flex align-items-center justify-content-center">
+        <output id="imageUser">
+            <img src="~/img/436c69656e7465/@Model.Input.Avatar" class="max-w-200  max-h-200" alt="Default">
+        </output>
+    </div>
+    <div class="card-footer text-center">
+        <div class="file-upload mr-2">
+            <input id="files" asp-for="AvatarImage" class="file-upload__input" type="file" name="file-upload">
+            <label for="files"><i class="fas fa-plus-circle fa-2x text-success"></i></label>
+        </div>
+
+        <div class="file-upload">
+            <input id="upload" class="file-upload__input" type="file" name="file-upload">
+            <label for="upload"><i class="fas fa-minus-circle fa-2x text-danger"></i></label>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,22 @@
+﻿@model Perfil
+
+<div class="row">
+    <div class="col">
+        <div class="card text-center" id="packages">
+            <h5 class="card-header"> @Model.Nombre</h5>
+            <div class="card-body">
+                <p>@Model.Descripcion</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="card">
+            <h5 class="card-header">Roles</h5>
+            <div class="card-body" style="max-height:400px" data-scroll="dark">
+                <div class="row">
+                    <div id="tree" />
+                </div>
+            </div>
+        </div>
+    </div>
+ </div>

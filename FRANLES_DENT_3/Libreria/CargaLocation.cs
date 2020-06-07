@@ -1,7 +1,6 @@
 ﻿using FRANLES_DENT_3.Data;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,7 +11,6 @@ namespace FRANLES_DENT_3.Libreria
     {
         public async Task<List<SelectListItem>> ObtenerLocalizacion(string Id, ApplicationDbContext context)
         {
-
             List<SelectListItem> dato = new List<SelectListItem>();
 
             switch (Id.Length)
@@ -47,9 +45,7 @@ namespace FRANLES_DENT_3.Libreria
                                                     }).OrderBy(o => o.Text)
                                                     .ToListAsync();
                     break;
-
             }
-
 
             return dato;
         }

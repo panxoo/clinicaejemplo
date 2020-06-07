@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace FRANLES_DENT_3.Variables
 {
@@ -8,52 +8,87 @@ namespace FRANLES_DENT_3.Variables
         static private Dictionary<string, string> modulos = new Dictionary<string, string>
         {
             { "Mant_Perfil", "AEMjsxFa5hkCrSdg2tCvfFttphIBJvsBXMteTHEYDC4=" },
-            { "Parm_Depart", "8KJPox2vb2P1yqQzwbldpofdZEMfHU60PAHSccRqDiY=" },
             { "Mant_Usuari", "wUgod0IPxcCx5D7I0Qxb2wWAdxYpNeuceuy1zPJYWtM=" },
             { "Root_CliRol", "YhqGOCf2+mrSGddrI0AqTl75kITiBeuW9aQsZ0i39tE=" },
             { "Conf_Empres", "U5DcOYpR8g2TeAL7uXuiDrUldMpNjKbiMEq/bK+m8mQ=" },
             { "Conf_Atribu", "1bj6WOlnNLZQ/Ka5Wixpp6RlgYBZc/QlSy4FUHVfOxo=" }
-
         };
 
         static private Dictionary<string, string> acciones = new Dictionary<string, string>
         {
-            { "557064" , "Upd" },
-            { "416464" , "Add" },
-            { "44656c" , "Del" },
-            { "566965" , "Vie" },
-            { "4c7374" , "Lst" }
+            { "Upd", "557064" },
+            { "Add", "416464" },
+            { "Del", "44656c" },
+            { "Vie", "566965" },
+            { "Lst", "4c7374" }
         };
 
         static public string AccionModulo(string _key, string _modulo)
         {
-            try
-            {
-
-                string keyacc = _key.Substring(44, 6);
-                string keymod = _key.Substring(0, 44);
-
-                if (modulos.ContainsKey(_modulo))
-                {
-                    if (modulos[_modulo] == keymod)
-                    {
-                        if (acciones.ContainsKey(keyacc))
-                        {
-                            return acciones[keyacc];
-                        }
-                        else
-                            return "notAcc";
-                    }
-                    else
-                        return "notMod";
-                }
-                else
-                    return "notMod";
-            }
-            catch (Exception ex)
+            if (string.IsNullOrEmpty(_key) || _key.Length != 50)
             {
                 return "notMod";
             }
+
+            string keyacc = _key.Substring(44, 6);
+            string keymod = _key.Substring(0, 44);
+
+            if (!modulos.ContainsKey(_modulo))
+            {
+                return "notMod";
+            }
+
+            if (modulos[_modulo] != keymod)
+            {
+                return "notMod";
+            }
+
+            if (!acciones.ContainsValue(keyacc))
+            {
+                return "notAcc";
+            }
+
+            return acciones.FirstOrDefault(s => s.Value.Equals(keyacc)).Key;  
+        }
+
+        static public string GetModuloKey(string _modulo)
+        {
+            if (modulos.ContainsKey(_modulo))
+            {
+                return modulos[_modulo];
+            }
+
+            return null;
+        }
+
+        static public string GetActionKey(string _accion)
+        {
+            if (acciones.ContainsKey(_accion))
+            {
+                return acciones[_accion];
+            }
+
+            return null;
+        }
+
+        static public string GetModuloActionKey(string _modulo, string _action)
+        {
+            string[] modact = new string[2];
+
+            modact[0] = GetModuloKey(_modulo);
+            modact[1] = GetActionKey(_action);
+
+            if (modact[0] == null || modact[1] == null)
+            {
+                return null;
+            }
+
+            return modact[0] + modact[1];
+        }
+
+        static public Dictionary<string, string> GetActionAll()
+        {
+            return acciones;
         }
     }
 }

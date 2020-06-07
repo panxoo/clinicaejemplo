@@ -1,5 +1,6 @@
 ﻿using FRANLES_DENT_3.Areas.SudoAdmin.Metodos.SudoAdministrador.Metodo;
 using FRANLES_DENT_3.Areas.SudoAdmin.Models.SudoAdministrador;
+using FRANLES_DENT_3.Models.Sistema;
 using FRANLES_DENT_3.Servicios.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -16,7 +17,7 @@ namespace FRANLES_DENT_3.Areas.SudoAdmin.Metodos.SudoAdministrador
             _lstGnrl = lstGnrl;
         }
 
-        IListGeneral _lstGnrl;
+        private IListGeneral _lstGnrl;
 
         public async Task<List<Rol_ClienteMantList>> GetRol_ClienteMant()
         {
@@ -52,6 +53,22 @@ namespace FRANLES_DENT_3.Areas.SudoAdmin.Metodos.SudoAdministrador
             model.Action = moduloAcc;
 
             return model;
+        }
+
+        public async Task<List<TreeViewTemp>> GetRolesAdmin(string id)
+        {
+            List<TreeViewTemp> _model = await _lstGnrl._context.Clinica_Rols.Include(i => i.Rol)
+                                                                               .Where(w => w.ClinicaId.Equals(id))
+                                                                               .Select(s => new TreeViewTemp
+                                                                               {
+                                                                                   Id = s.Rol.AtributoRolId,
+                                                                                   Name = s.Rol.NameRol,
+                                                                                   Hijo = s.Rol.Hijos,
+                                                                                   FatherId = s.Rol.FatherId,
+                                                                                   Check = s.Active
+                                                                               }).IgnoreQueryFilters().ToListAsync();
+
+            return _model;
         }
     }
 }

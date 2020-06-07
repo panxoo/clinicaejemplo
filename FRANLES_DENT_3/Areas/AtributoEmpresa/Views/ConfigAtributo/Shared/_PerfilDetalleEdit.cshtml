@@ -1,0 +1,35 @@
+﻿@model Perfil
+
+<form id="AjaxFormPerfil" method="post">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <h5 class="card-header">Detalle</h5>
+                <div class="card-body" style="height:329px">
+                    <div class="form-group row">
+                        <label asp-for="Nombre" class="col-form-label"></label>
+                        <input type="text" asp-for="Nombre" id="Nombre" class="form-control" />
+                        <span asp-validation-for="Nombre" class="text-danger"></span>
+                    </div>
+                    <div class="form-group row">
+                        <label asp-for="Descripcion" class="col-form-label"></label>
+                        <input type="text" asp-for="Descripcion" id="Descripcion" class="form-control" />
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <input type="submit" class="btn btn-success" id="SubmitBtn" />
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <h5 class="card-header">Roles</h5>
+                <div class="card-body" style="max-height:400px" data-scroll="dark">
+                    <div class="row">
+                        <div id="tree" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

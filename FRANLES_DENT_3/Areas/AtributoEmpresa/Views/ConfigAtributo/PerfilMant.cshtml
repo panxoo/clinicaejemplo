@@ -4,7 +4,6 @@
     ViewData["Title"] = "PerfilMant";
 }
 
-
 <header class="page-header">
     <div class="d-flex align-items-center">
         <div class="mr-auto">
@@ -28,7 +27,7 @@
                     <a href="#" class="dropdown-item">
                         <i class="icon dripicons-clockwise"></i> Refresh
                     </a>
-                    <a asp-area="Configuracion" asp-action="PerfilDetalle" asp-controller="Usuario_Conf" asp-route-actmtd="4d616e745f50657266696c416464" class="dropdown-item">
+                    <a asp-area="AtributoEmpresa" asp-action="PerfilDetalle" asp-controller="ConfigAtributo" asp-route-actmtd="AEMjsxFa5hkCrSdg2tCvfFttphIBJvsBXMteTHEYDC4=416464" class="dropdown-item">
                         <i class="icon dripicons-plus text-success"></i> Agregar
                     </a>
                     <a href="#" class="dropdown-item">
@@ -104,9 +103,9 @@
                                         }
                                     </td>
                                     <td>
-                                        <a asp-area="Configuracion" asp-controller="Usuario_Conf" asp-action="PerfilDetalle" asp-route-id="@item.PerfilId" asp-route-actmtd="4d616e745f50657266696c566965"><i data-toggle="tooltip" data-placement="top" title="" data-original-title="Visualizar" class="far fa-eye text-secondary fa-2x"></i></a>
+                                        <a asp-area="AtributoEmpresa" asp-controller="ConfigAtributo" asp-action="PerfilDetalle" asp-route-id="@item.PerfilId" asp-route-actmtd="AEMjsxFa5hkCrSdg2tCvfFttphIBJvsBXMteTHEYDC4=566965"><i data-toggle="tooltip" data-placement="top" title="" data-original-title="Visualizar" class="far fa-eye text-secondary fa-2x"></i></a>
 
-                                        <a asp-area="Configuracion" asp-controller="Usuario_Conf" asp-action="PerfilDetalle" asp-route-id="@item.PerfilId" asp-route-actmtd="4d616e745f50657266696c557064"><i data-toggle="tooltip" data-placement="top" title="" data-original-title="Editar" class="far fa-edit text-success fa-2x"></i></a>
+                                        <a asp-area="AtributoEmpresa" asp-controller="ConfigAtributo" asp-action="PerfilDetalle" asp-route-id="@item.PerfilId" asp-route-actmtd="AEMjsxFa5hkCrSdg2tCvfFttphIBJvsBXMteTHEYDC4=557064"><i data-toggle="tooltip" data-placement="top" title="" data-original-title="Editar" class="far fa-edit text-success fa-2x"></i></a>
                                     </td>
                                 </tr>
                                 }
@@ -118,4 +117,3 @@
         </div>
     </div>
 </section>
-

@@ -1,0 +1,273 @@
+﻿@model CreaUsuarioInput
+
+@{
+    ViewData["Title"] = "CreaUsuario";
+}
+
+
+<header class="page-header">
+    <div class="d-flex align-items-center">
+        <div class="mr-auto">
+            @if (Model.Action == "Add")
+            {
+                <h1 class="separator">CRECIÓN DE USUARIO</h1>
+            }
+            else
+            {
+                <h1 class="separator">ACTUALIZACIÓN DE USUARIO</h1>
+            }
+            <nav class="breadcrumb-wrapper" aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index"><i class="icon dripicons-home"></i></a></li>
+                    <li class="breadcrumb-item"><a asp-area="Administrativo" asp-controller="AdmUsuario" asp-action="UsuarioMant">Usuarios</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Datos de usuario</li>
+                </ol>
+            </nav>
+        </div>
+        @if (Model.Action == "Upd")
+        {
+            <ul class="actions top-right">
+                <li class="dropdown">
+                    <a href="javascript:void(0)" class="btn btn-fab" data-toggle="dropdown" aria-expanded="false">
+                        <i class="la la-ellipsis-h"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-icon-menu dropdown-menu-right">
+                        <div class="dropdown-header">
+                            Quick Actions
+                        </div>
+                        <a href="#" class="dropdown-item">
+                            <i class="icon dripicons-clockwise"></i> Refresh
+                        </a>
+                        <a asp-area="Configuracion" asp-action="CreaUsuarioAdm" asp-controller="AdmUsuario" asp-route-actmtd="@Model.Metodo@Model.Acciones["Add"]" class="dropdown-item">
+                            <i class="icon dripicons-plus text-success"></i> Agregar
+                        </a>
+                        <a href="#" class="dropdown-item">
+                            <i class="icon dripicons-cloud-download"></i> Export
+                        </a>
+                        <a href="#" class="dropdown-item">
+                            <i class="icon dripicons-help"></i> Support
+                        </a>
+                    </div>
+
+                </li>
+            </ul>
+        }
+    </div>
+</header>
+
+<section class="page-content container-fluid">
+
+    @Html.HiddenFor(p => p.ModAct)
+    @Html.HiddenFor(p => p.Input.UsuarioId)
+    @Html.HiddenFor(p => p.Accesact)
+    @Html.HiddenFor(p => p.UserNomExist)
+
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <form id="AjaxForm" method="post">
+                    <div class="card-body">
+
+                        <div class="row">
+
+                            <div class="col-12 col-md-6">
+                                <h1 class="card-heading p-b-20 text-info">
+                                    Datos Cuenta
+                                </h1>
+                            </div>
+                            <div class="col-12 col-md-6 ">
+                                <div class="row">
+
+                                    <div class="col-7 col-md-9 d-flex justify-content-md-end">
+                                        <label>Acceso al sistema</label>
+                                    </div>
+                                    <div class="col-3 ">
+                                        @if (Model.Input.Acceso)
+                                        {
+                                            <input class="tgl tgl-light tgl-success" asp-for="Input.Acceso" type="checkbox" checked>
+
+                                        }
+                                        else
+                                        {
+                                            <input class="tgl tgl-light tgl-success" asp-for="Input.Acceso" type="checkbox">
+                                        }
+
+                                        <label class="tgl-btn" for="Input_Acceso"></label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-3">
+                                <partial name="Shared/_CreaUsuarioAvatar" model="Model" />
+                            </div>
+                            <div class="col-md-8">
+                                <partial name="Shared/_CreaUsuarioUsr" model="Model" />
+                            </div>
+                        </div>
+                        <br /><br />
+
+                        <hr class="dashed" />
+
+                        <h1 class="card-heading p-b-20 text-info">
+                            Informacion Usuario
+                        </h1>
+
+                        <partial name="Shared/_CreaUsuarioGnrl" model="Model" />
+                        <br /><br />
+
+                        <hr class="dashed" />
+
+                        <h1 class="card-heading p-b-20 text-info">
+                            Informacion de Emergencia
+                        </h1>
+
+                        <partial name="Shared/_CreaUsuarioEmerg" model="Model" />
+                    </div>
+
+                    <div class="card-footer">
+                        <div class="form-group">
+                            <input type="submit" class="btn btn-success" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts{
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+
+    <script src="~/js/ValidacionJS.js"></script>
+    <script src="~/js/MetodosCallSubmit.js"></script>
+    <script src="~/js/CargaDatosGnrl.js"></script>
+    <script src="~/js/CambioAtributos.js"></script>
+
+    <script type="text/javascript">
+
+        var cargaLocation = new CargaLocation("@Url.Action("CargaProvincia", "Comun")", "#LocalizacionGnrl_DepartId", "#LocalizacionGnrl_ProvinId", "#LocalizacionGnrl_DistriId")
+
+        VALIDACIONESTP.validacionGnrl.requiredif();
+
+        var user = new Uploadpicture();
+        var imageUser = (evt) => {
+            user.archivo(evt, "imageUser");
+        }
+
+    $(document).ready(function () {
+        document.getElementById('files').addEventListener('change', imageUser, false);
+
+        $("#LocalizacionGnrl_DepartId").change(  function () {
+            id = $(this).val();
+            if (id != '') {
+                cargaLocation.CargaProvincia(id);
+            }
+        });
+
+        $("#LocalizacionGnrl_ProvinId").change(function () {
+             id = $(this).val();
+            if (id != '') {
+                cargaLocation.CargaDistrito(id);
+             }
+        });
+
+        ChangePerfil($(this).find('option:selected'));
+
+        $("#Input_PerfilId").change(function () {
+            ChangePerfil($(this).find('option:selected'));
+        });
+
+        $("#Input_Acceso").change(function () {
+            VisibleTwoDivCheck($(this).prop('checked'), "#CreaUsr","#NotUsr");
+        });
+
+        VisibleTwoDivCheck($("#Input_Acceso").prop('checked'), "#CreaUsr", "#NotUsr");
+
+    });
+
+        function ChangePerfil(perf) {
+            ReverseClass(perf.data("ismedic") == 'True', '#SelMedico', 'badge-success', 'badge-secondary');
+            ReverseClass(perf.data("isasist") == 'True', '#SelAsiste', 'badge-success', 'badge-secondary');
+        }
+
+        function PivoteDistrito(id) {
+            cargaLocation.CargaDistrito(id);
+        }
+
+        $("#AjaxForm").submit( async function (e) {
+            e.preventDefault();
+
+            if (!$("#AjaxForm").valid()) {
+                return;
+            }
+
+            let post = new AjaxSubmit("@Url.Action("CreaUsuarioAdm", "AdmUsuario")", "#SubmitBtn", "Error almacenamiento");
+
+            @if(Model.Action == "Upd")
+            {
+                <text>
+
+            if (await MensajeDecision("Registro de usuario", "¿Se desea actualizar los datos del usuario?")) {
+
+                let usr = { UsuarioId: $('#Input_UsuarioId').val() };
+                let dt = Object.assign({}, ExtraccionDt(), usr);
+
+                post.AjaxPopRedirec(dt);
+            }
+                </text>
+            }
+            else
+            {
+                <text>
+
+            let dt = ExtraccionDt();
+
+            post.AjaxPopRedirec(dt);
+            </text>
+            }
+
+        });
+
+        function ExtraccionDt() {
+
+            var dtEmer = {
+                Nombre: $('#DatoEmergencia_Nombre').val(),
+                Apellido_Paterno: $('#DatoEmergencia_Apellido_Paterno').val(),
+                Apellido_Materno: $('#DatoEmergencia_Apellido_Materno').val(),
+                Parentesco: $('#DatoEmergencia_Parentesco').val(),
+                Movil: $('#DatoEmergencia_Movil').val()
+            };
+
+            var DtGnrl = {
+                TipoDocumento: $("#Input_TipoDocumento").val(),
+                NumDocumento: $("#Input_NumDocumento").val(),
+                Nombre: $("#Input_Nombre").val(),
+                Apellido_Paterno: $("#Input_Apellido_Paterno").val(),
+                Apellido_Materno: $("#Input_Apellido_Materno").val(),
+                Sexo: $("#Input_Sexo").val(),
+                Fecha_Nac: $("#Input_Fecha_Nac").val(),
+                Telefono: $("#Input_Telefono").val(),
+                Correo: $("#Input_Correo").val(),
+                Movil: $("#Input_Movil").val(),
+                Direccion: $("#Input_Direccion").val(),
+                DtEmUsr: dtEmer,
+                DistritoId: $("#LocalizacionGnrl_DistriId").val(),
+                ModAct: $("#ModAct").val(),
+                Acceso: $("#Input_Acceso").prop('checked'),
+                Nombre_Cuenta: $("#Input_Acceso").prop('checked') ? $("#UserNomExist").val() == "False" ? $("#Nombre_CuentaT").val() : $("#Input_Nombre_Cuenta").val() : "",
+                IsMedic: !$("#Input_Acceso").prop('checked') ? $("#Usr_Medic").prop('checked') : false,
+                IsAsist: !$("#Input_Acceso").prop('checked') ? $("#Usr_Asist").prop('checked') : false,
+                PerfilId: $("#Input_Acceso").prop('checked') ? $("#Input_PerfilId").val() : null,
+                Contrasena: $("#Input_Acceso").prop('checked') ? $('#Contrasena').val() :null,
+                Accesact: $("#Accesact").val(),
+                UserNomExistUserNomExist: $("#UserNomExist").val()
+            };
+
+            return DtGnrl;
+                                                                         }
+    </script>
+
+}
+

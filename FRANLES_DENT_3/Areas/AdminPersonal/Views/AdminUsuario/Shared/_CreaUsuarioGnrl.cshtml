@@ -1,0 +1,154 @@
+﻿@model CreaUsuarioInput
+
+
+<div class="form-row">
+
+    @if (Model.Action == "Add")
+    {
+        <div class="form-group col-lg-3">
+            (*)<label asp-for="Input.TipoDocumento"></label>
+            <select asp-for="Input.TipoDocumento" class="form-control">
+                <option value="" disabled selected>Seleccionar un Valor</option>
+                @foreach (var dato in Model.TipoDocumentoSelect)
+                {
+                    <option value="@dato.Value">@dato.Text</option>
+                }
+            </select>
+            <span asp-validation-for="Input.TipoDocumento" class="text-danger"></span>
+        </div>
+
+        <div class="form-group col-lg-3">
+            <label asp-for="Input.NumDocumento"></label>
+            <input type="text" class="form-control" asp-for="Input.NumDocumento" autocomplete="off">
+            <span asp-validation-for="Input.NumDocumento" class="text-danger"></span>
+        </div>
+
+    }
+    else
+    {
+        <div class="form-group col-md-3">
+            <label asp-for="Input.TipoDocumento"></label>
+            <select asp-for="Input.TipoDocumento" class="form-control" disabled>
+                @foreach (var dato in Model.TipoDocumentoSelect)
+                {
+                    <option value="@dato.Value">@dato.Text</option>
+                }
+            </select>
+        </div>
+
+        <div class="form-group col-md-3">
+            <label asp-for="Input.NumDocumento"></label>
+            <input type="text" class="form-control" asp-for="Input.NumDocumento" autocomplete="off" disabled>
+        </div>
+
+    }
+
+</div>
+
+<div class="form-row">
+
+    <div class="form-group col-md-4">
+        <label asp-for="Input.Nombre"> </label>
+        <input type="text" class="form-control" asp-for="Input.Nombre" autocomplete="off">
+        <span asp-validation-for="Input.Nombre" class="text-danger"></span>
+    </div>
+
+
+    <div class="form-group col-md-4">
+        <label asp-for="Input.Apellido_Paterno"></label>
+        <input type="text" class="form-control" asp-for="Input.Apellido_Paterno" autocomplete="off">
+        <span asp-validation-for="Input.Apellido_Paterno" class="text-danger"></span>
+
+    </div>
+
+    <div class="form-group col-md-4">
+        <label asp-for="Input.Apellido_Materno"></label>
+        <input type="text" class="form-control" asp-for="Input.Apellido_Materno" autocomplete="off">
+    </div>
+</div>
+
+<div class="form-row">
+    <div class="form-group col-md-3">
+        (*)<label asp-for="Input.Sexo"></label>
+        <select asp-for="Input.Sexo" class="form-control">
+            <option value="" disabled selected>Seleccionar un Valor</option>
+            @foreach (var dato in Model.SexoSelect)
+            {
+                <option value="@dato.Value">@dato.Text</option>
+            }
+        </select>
+        <span asp-validation-for="Input.Sexo" class="text-danger"></span>
+
+
+    </div>
+
+    <div class="form-group col-md-3">
+        <label asp-for="Input.Fecha_Nac"></label>
+        <input type="text" class="form-control datepicker" asp-for="Input.Fecha_Nac">
+
+    </div>
+</div>
+
+<hr class="dashed" />
+
+<div class="form-row">
+    <div class="form-group col-md-3">
+        <label asp-for="Input.Correo"></label>
+        <input type="email" class="form-control" asp-for="Input.Correo" autocomplete="off">
+        <span asp-validation-for="Input.Correo" class="text-danger"></span>
+
+    </div>
+
+    <div class="form-group col-md-3">
+        <label asp-for="Input.Telefono"></label>
+        <input type="tel" class="form-control" asp-for="Input.Telefono" autocomplete="off" />
+    </div>
+
+    <div class="form-group col-md-3">
+        <label asp-for="Input.Movil"></label>
+        <input type="tel" class="form-control" asp-for="Input.Movil" autocomplete="off" />
+        <span asp-validation-for="Input.Movil" class="text-danger"></span>
+
+    </div>
+</div>
+
+<div class="form-row ">
+
+    <div class="form-group col-md-3">
+        <label asp-for="LocalizacionGnrl.DepartId"> </label>
+        <select asp-for="LocalizacionGnrl.DepartId" class="form-control">
+            @foreach (var dato in Model.LocalizacionGnrl.LstDepart)
+            {
+                <option value="@dato.Value">@dato.Text</option>
+            }
+        </select>
+    </div>
+
+    <div class="form-group col-md-3">
+        <label asp-for="LocalizacionGnrl.ProvinId"> </label>
+        <select asp-for="LocalizacionGnrl.ProvinId" class="form-control">
+            @foreach (var dato in Model.LocalizacionGnrl.LstProvin)
+            {
+                <option value="@dato.Value">@dato.Text</option>
+            }
+        </select>
+
+    </div>
+
+    <div class="form-group col-md-3">
+        <label asp-for="LocalizacionGnrl.DistriId"> </label>
+        <select asp-for="LocalizacionGnrl.DistriId" class="form-control">
+            @foreach (var dato in Model.LocalizacionGnrl.LstDistri)
+            {
+                <option value="@dato.Value">@dato.Text</option>
+            }
+        </select>
+    </div>
+
+
+</div>
+
+<div class="form-group">
+    <label asp-for="Input.Direccion"></label>
+    <input type="text" class="form-control" asp-for="Input.Direccion" autocomplete="off">
+</div>

@@ -124,7 +124,7 @@ namespace FRANLES_DENT_3
                 endpoints.MapAreaControllerRoute("Principal", "Principal", "{controller=Principal}/{action=Index}/{id?}");
                 endpoints.MapAreaControllerRoute("AtributoEmpresa", "AtributoEmpresa", "{controller=ConfigAtributo}/{action=Index}/{id?}");
                 endpoints.MapAreaControllerRoute("Usuarios", "Configuracion", "{controller=Usuario_Conf}/{action=Usuarios}/{id?}");
-                endpoints.MapAreaControllerRoute("AdmUsuario", "Administrativo", "{controller=AdmUsuario}/{action=Usuarios}/{id?}");
+                endpoints.MapAreaControllerRoute("AdminPersonal", "AdminPersonal", "{controller=AdminUsuario}/{action=Index}/{id?}");
                 endpoints.MapAreaControllerRoute("SudoAdministrador", "SudoAdmin", "{controller=SudoAdministrador}/{action=Index}/{id?}");
                 endpoints.MapAreaControllerRoute("EmpresaConf", "Configuracion", "{controller=EmpresaConfg}/{action=Index}/{id?}");
 

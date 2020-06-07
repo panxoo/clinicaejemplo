@@ -1,0 +1,136 @@
+﻿@model PerfilDetalleInput
+@{
+    ViewData["Title"] = "PerfilDetalle";
+}
+
+<header class="page-header">
+    <div class="d-flex align-items-center">
+        <div class="mr-auto">
+            <h1 class="separator">DETALLE DE PERFIL</h1>
+            <nav class="breadcrumb-wrapper" aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index"><i class="icon dripicons-home"></i></a></li>
+                    <li class="breadcrumb-item"><a asp-area="AtributoEmpresa" asp-controller="ConfigAtributo" asp-action="PerfilMant">Perfiles</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Detalle de Perfil</li>
+                </ol>
+            </nav>
+        </div>
+        @if (Model.Action == "Vie")
+        {
+            <ul class="actions top-right">
+                <li class="dropdown">
+                    <a href="javascript:void(0)" class="btn btn-fab" data-toggle="dropdown" aria-expanded="false">
+                        <i class="la la-ellipsis-h"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-icon-menu dropdown-menu-right">
+                        <div class="dropdown-header">
+                            Quick Actions
+                        </div>
+                        <a asp-area="AtributoEmpresa" asp-action="PerfilDetalle" asp-controller="ConfigAtributo" asp-route-actmtd="AEMjsxFa5hkCrSdg2tCvfFttphIBJvsBXMteTHEYDC4=416464" class="dropdown-item">
+                            <i class="icon dripicons-plus text-success"></i> Agregar
+                        </a>
+                        <a asp-area="AtributoEmpresa" asp-action="PerfilDetalle" asp-controller="ConfigAtributo" asp-route-id="@Model.Input.PerfilId" asp-route-actmtd="AEMjsxFa5hkCrSdg2tCvfFttphIBJvsBXMteTHEYDC4=557064" class="dropdown-item">
+                            <i class="icon dripicons-pencil text-danger"></i> Editar
+                        </a>
+                    </div>
+                </li>
+            </ul>
+        }
+    </div>
+</header>
+
+<section class="page-content container-fluid">
+
+    @Html.HiddenFor(p => p.Metodo)
+    @Html.HiddenFor(p => p.Input.PerfilId)
+
+    @if (Model.Action == "Vie")
+    {
+        <partial name="Shared/_PerfilDetalleVista" model="Model.Input" />
+        <partial name="Shared/_PerfilDetalleUsuario" model="Model.Usuarios" />
+    }
+    else
+    {
+        <partial name="Shared/_PerfilDetalleEdit" model="Model.Input" />
+    }
+</section>
+
+@section Scripts{
+
+@await Html.PartialAsync("_ValidationScriptsPartial")
+
+<script src="~/js/CargaDatosGnrl.js"></script>
+<script src="~/js/MetodosCallSubmit.js"></script>
+
+<script type="text/javascript">
+
+    var treeModCRL;
+    var treeCarga = new CargaTree('#tree', "@Url.Action("AddRolesAdmin", "ConfigAtributo", new { id = Model.Input.PerfilId, actmtd = Model.Metodo})", "cssIcon");
+
+    @if (Model.Action == "Vie")
+    {
+        <text>
+
+        $(document).ready(function () {
+            treeCarga.Viewtree();
+         });
+        </text>
+    }
+    else
+    {
+        <text>
+
+        $(document).ready(function () {
+            treeCarga.Updtree();
+        });
+
+        $("#AjaxFormPerfil").submit(async function (e) {
+            e.preventDefault();
+
+            if (!$("#AjaxFormPerfil").valid()) {
+                return;
+            }
+
+            let post = new AjaxSubmit("@Url.Action("PerfilDetalle", "ConfigAtributo")", "#SubmitBtn", "Error almacenamiento");
+
+            @if (Model.Action == "Upd")
+            {
+                <text>
+
+                if (await MensajeDecision("Modificación de Pefil", "¿Se desea actualizar los datos del perfil?")) {
+
+                    let prf = { PerfilId: $('#Input_PerfilId').val() };
+                    let dt = Object.assign({}, ExtraccionDt(), prf);
+
+                    post.AjaxPopRedirec(dt);
+                }
+                </text>
+              }
+              else
+              {
+                <text>
+
+                let dt = ExtraccionDt();
+                post.AjaxPopRedirec(dt);
+                </text>
+
+              }
+         });
+
+        function ExtraccionDt() {
+
+            let checkedIds = treeModCRL.getCheckedNodes();
+
+            let DtGnrl = {
+                Nombre: $("#Nombre").val(),
+                Descripcion: $("#Descripcion").val(),
+                Rols: checkedIds,
+                Metodo: $('#Metodo').val()
+            };
+
+            return DtGnrl;
+        }
+        </text>
+    }
+</script>
+}

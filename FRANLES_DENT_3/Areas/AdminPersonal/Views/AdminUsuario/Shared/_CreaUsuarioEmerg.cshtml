@@ -1,0 +1,47 @@
+﻿@model CreaUsuarioInput
+
+<div class="form-row">
+
+    <div class="form-group col-md-4">
+        <label asp-for="DatoEmergencia.Nombre"> </label>
+        <input type="text" class="form-control" asp-for="DatoEmergencia.Nombre" autocomplete="off">
+    </div>
+
+
+    <div class="form-group col-md-4">
+        <label asp-for="DatoEmergencia.Apellido_Paterno"></label>
+        <input type="text" class="form-control" asp-for="DatoEmergencia.Apellido_Paterno" autocomplete="off">
+
+    </div>
+
+    <div class="form-group col-md-4">
+        <label asp-for="DatoEmergencia.Apellido_Materno"></label>
+        <input type="text" class="form-control" asp-for="DatoEmergencia.Apellido_Materno" autocomplete="off">
+    </div>
+</div>
+
+
+<div class="form-row">
+
+    <div class="form-group col-md-3">
+        <label asp-for="DatoEmergencia.Parentesco"></label>
+        <select asp-for="DatoEmergencia.Parentesco" class="form-control">
+            @foreach (var dato in Model.ParentescoSelect)
+            {
+                <option value="@dato.Value" data-act="@dato.Selected">@dato.Text</option>
+            }
+        </select>
+
+    </div>
+</div>
+
+<div class="form-row">
+
+
+    <div class="form-group col-md-4">
+        <label asp-for="DatoEmergencia.Movil"></label>
+        <input type="tel" class="form-control" asp-for="DatoEmergencia.Movil" autocomplete="off" />
+        <span asp-validation-for="DatoEmergencia.Movil" class="text-danger"></span>
+
+    </div>
+</div>

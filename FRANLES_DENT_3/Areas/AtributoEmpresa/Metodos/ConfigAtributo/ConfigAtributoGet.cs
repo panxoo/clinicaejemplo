@@ -1,6 +1,5 @@
 ﻿using FRANLES_DENT_3.Areas.AtributoEmpresa.Models.ConfigAtributo;
 using FRANLES_DENT_3.Models.MedicoDato.Atributo;
-using FRANLES_DENT_3.Models.Permisos;
 using FRANLES_DENT_3.Models.Sistema;
 using FRANLES_DENT_3.Servicios.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -8,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace FRANLES_DENT_3.Areas.AtributoEmpresa.Metodos.AtributoEmpresa
+namespace FRANLES_DENT_3.Areas.AtributoEmpresa.Metodos.ConfigAtributo
 {
     public class ConfigAtributoGet
     {
@@ -74,6 +73,70 @@ namespace FRANLES_DENT_3.Areas.AtributoEmpresa.Metodos.AtributoEmpresa
                                                                              CantUser = _lstGnrl._context.Usuarios.Count(c => c.PerfilId.Equals(s.PerfilId))
                                                                          }).ToListAsync();
 
+            return _model;
+        }
+
+        public async Task<PerfilDetalleInput> GetPerfilDetalle(string id, string actmd, string accion)
+        {
+            PerfilDetalleInput _model = new PerfilDetalleInput();
+
+            if (accion != "Add" && !string.IsNullOrEmpty(id))
+            {
+                _model.Input = await _lstGnrl._context.Perfils.IgnoreQueryFilters().FirstOrDefaultAsync(w => w.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId) && w.PerfilId.Equals(id));
+            }
+
+            if (accion == "Vie" && !string.IsNullOrEmpty(id))
+            {
+                _model.Usuarios = await _lstGnrl._context.Usuarios.Where(w => w.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId) && w.PerfilId.Equals(id))
+                                                                    .Select(s => new PerfilDetalleInput.UsuariosGrillaPerfil
+                                                                    {
+                                                                        Nombre = s.Nombre,
+                                                                        Apellido = s.Apellido_Paterno + " " + s.Apellido_Materno,
+                                                                        NombreUsuario = s.Nombre_Cuenta,
+                                                                        UsuarioId = s.UsuarioId
+                                                                    }).ToListAsync();
+            }
+
+            _model.Metodo = actmd;
+            _model.Action = accion;
+
+            return _model;
+        }
+
+        public async Task<List<TreeViewTemp>> GetRolesPerfil(string id, string accion)
+        {
+            List<TreeViewTemp> _model;
+
+            if (accion == "Add")
+            {
+                _model = await _lstGnrl._context.Clinica_Rols.Include(t => t.Rol)
+                                                          .Where(w => w.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId))
+                                                          .Select(s => new TreeViewTemp
+                                                          {
+                                                              Id = s.Rol.AtributoRolId,
+                                                              Name = s.Rol.NameRol,
+                                                              Hijo = s.Rol.Hijos,
+                                                              FatherId = s.Rol.FatherId,
+                                                              Check = false
+                                                          }).ToListAsync();
+            }
+            else
+            {
+                List<string> PerfRlTemp = await _lstGnrl._context.Perfil_Rols.Include(i => i.Perfil)
+                                                                       .Where(w => w.PerfilId.Equals(id) && w.Perfil.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId))
+                                                                       .Select(s => s.RolId).ToListAsync();
+
+                _model = await _lstGnrl._context.Clinica_Rols.Include(i => i.Rol)
+                                                          .Where(w => w.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId))
+                                                          .Select(s => new TreeViewTemp
+                                                          {
+                                                              Id = s.Rol.AtributoRolId,
+                                                              Name = s.Rol.NameRol,
+                                                              Hijo = s.Rol.Hijos,
+                                                              FatherId = s.Rol.FatherId,
+                                                              Check = PerfRlTemp.Contains(s.RolId)
+                                                          }).ToListAsync();
+            }
             return _model;
         }
     }

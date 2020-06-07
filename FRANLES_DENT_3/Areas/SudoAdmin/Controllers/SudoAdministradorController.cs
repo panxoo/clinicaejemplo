@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
-using FRANLES_DENT_3.Areas.SudoAdmin.Metodos.SudoAdministrador;
+﻿using FRANLES_DENT_3.Areas.SudoAdmin.Metodos.SudoAdministrador;
 using FRANLES_DENT_3.Data;
 using FRANLES_DENT_3.Libreria;
 using FRANLES_DENT_3.Models.Sistema;
@@ -13,6 +8,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Net;
+using System.Threading.Tasks;
 
 namespace FRANLES_DENT_3.Areas.SudoAdmin.Controllers
 {
@@ -20,7 +18,6 @@ namespace FRANLES_DENT_3.Areas.SudoAdmin.Controllers
     [Authorize]
     public class SudoAdministradorController : Controller
     {
-
         public SudoAdministradorController(SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager, IListGeneral lstGnrl, ApplicationDbContext context)
         {
             _lstGnrl = lstGnrl;
@@ -29,20 +26,18 @@ namespace FRANLES_DENT_3.Areas.SudoAdmin.Controllers
             _lstGnrl._userManager = userManager;
         }
 
-        IListGeneral _lstGnrl;
+        private IListGeneral _lstGnrl;
 
         public async Task<IActionResult> Rol_ClienteMant()
         {
             return View(await new SudoAdministradorGet(_lstGnrl).GetRol_ClienteMant());
         }
 
-
         public async Task<IActionResult> Rol_ClienteDetalle(string id, string actmtd)
         {
-
             string moduloAcc = VarGnrl.AccionModulo(actmtd, "Root_CliRol");
 
-            if (moduloAcc.Contains("not"))
+            if (!(moduloAcc == "Vie" || moduloAcc == "Upd"))
                 return RedirectToAction(nameof(SudoAdministradorController.Rol_ClienteMant), "SudoAdministrador");
 
             if (string.IsNullOrEmpty(id))
@@ -51,48 +46,26 @@ namespace FRANLES_DENT_3.Areas.SudoAdmin.Controllers
             if (!(await _lstGnrl._context.Clinicas.AnyAsync(A => A.ClinicaID.Equals(id))))
                 return RedirectToAction(nameof(SudoAdministradorController.Rol_ClienteMant), "SudoAdministrador");
 
-
             return View(await new SudoAdministradorGet(_lstGnrl).GetRol_ClienteDetalle(id, actmtd, moduloAcc));
         }
 
-
         public async Task<JsonResult> AddRolesAdmin(string id, string actmtd)
         {
-
             string moduloAcc = VarGnrl.AccionModulo(actmtd, "Root_CliRol");
 
-            List<TreeViewTemp> rol_Temps = await _lstGnrl._context.Clinica_Rols.Include(i => i.Rol)
-                                                                     .Where(w => w.ClinicaId.Equals(id))
-                                                                     .Select(s => new TreeViewTemp
-                                                                     {
-                                                                         Id = s.Rol.AtributoRolId,
-                                                                         Name = s.Rol.NameRol,
-                                                                         Hijo = s.Rol.Hijos,
-                                                                         FatherId = s.Rol.FatherId,
-                                                                         Check = s.Active
-                                                                     }).IgnoreQueryFilters().ToListAsync();
-
+            List<TreeViewTemp> _model = await new SudoAdministradorGet(_lstGnrl).GetRolesAdmin(id);
 
             TreeViewModel tvm = new TreeViewModel();
 
-            return new JsonResult( tvm.TreeViewRealiza(rol_Temps, moduloAcc));
+            return new JsonResult(tvm.TreeViewRealiza(_model, moduloAcc));
         }
 
-
-
-
-
         [HttpPost]
-        public async Task<IActionResult> AddRolClinica(string id, List<string> rols)
+        public async Task<IActionResult> AddRolClinica(string id, List<string> rols, string actmtd)
         {
-            RetornoAction ra = await new SudoAdministradorPost(_lstGnrl).PostAddRolClinica(id, rols);
+            string moduloAcc = VarGnrl.AccionModulo(actmtd, "Root_CliRol");
 
-            if (ra.Code == 0)
-            {
-                Response.StatusCode = (int)HttpStatusCode.OK;
-                return Json(new { redir = false });
-            }
-            else
+            if (moduloAcc != "Upd")
             {
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return Json(new
@@ -101,6 +74,28 @@ namespace FRANLES_DENT_3.Areas.SudoAdmin.Controllers
                     redir = true,
                     mnsj = "Error en el registro, volver abrir pantalla para registro."
                 });
+            }
+
+            RetornoAction retornoAction = await new SudoAdministradorPost(_lstGnrl).PostAddRolClinica(id, rols);
+
+            switch (retornoAction.Code)
+            {
+                case 0:
+                    Response.StatusCode = (int)HttpStatusCode.OK;
+                    return Json(new { redir = false });
+
+                case 1:
+                    Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    return Json(new { redir = false, mnsj = retornoAction.Mensaje });
+
+                default:
+                    Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    return Json(new
+                    {
+                        redirectToUrl = Url.Action(nameof(SudoAdministradorController.Rol_ClienteMant), "SudoAdministrador"),
+                        redir = true,
+                        mnsj = "Error en el registro, volver abrir pantalla para registro."
+                    });
             }
         }
     }
