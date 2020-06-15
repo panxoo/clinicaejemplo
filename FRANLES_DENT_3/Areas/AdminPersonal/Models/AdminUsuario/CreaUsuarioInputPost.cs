@@ -12,6 +12,6 @@ namespace FRANLES_DENT_3.Areas.AdminPersonal.Models.AdminUsuario
         public string Contrasena { get; set; }
 
         public DatosEmergenciaUsuario DtEmUsr { get; set; }
-        public string Metodo { get; set; }
+        public string ModAct { get; set; }
     }
 }

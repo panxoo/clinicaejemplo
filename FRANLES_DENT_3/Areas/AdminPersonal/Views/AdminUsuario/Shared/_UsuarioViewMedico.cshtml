@@ -1,0 +1,94 @@
+﻿@model UsuarioViewInput.MedicoView
+
+@Html.HiddenFor(p => p.DatoMedico.COP)
+@Html.HiddenFor(p => p.DatoMedico.RNE)
+@Html.HiddenFor(p => p.DatoMedico.OpcRemFija)
+@Html.HiddenFor(p => p.DatoMedico.Porcentaje_ganancia_asegurada)
+@Html.HiddenFor(p => p.DatoMedico.Porcentaje_ganancia_interno)
+@Html.HiddenFor(p => p.DatoMedico.RemFijaMonto)
+@Html.HiddenFor(p => p.DatoMedico.OpcPorc_Ganancia_REM_fj)
+@Html.HiddenFor(p => p.DatoMedico.Porc_Ganancia_REM_FJ)
+
+<dl class="row m-t-10">
+    <dt class="col-md-3  m-b-20">
+        COP:
+    </dt>
+    <dd class="col-md-9 m-b-20 ">
+        @Model.DatoMedico.COP
+    </dd>
+
+    <dt class="col-md-3 m-b-20">
+        RNE:
+    </dt>
+    <dd class="col-md-9 m-b-20">
+        @Model.DatoMedico.RNE
+    </dd>
+
+    <dt class="col-md-3 m-b-20">
+        @(Model.DatoMedico.OpcRemFija ? "Remuneracón Fija" : "Remuneración Porcentual")
+    </dt>
+    <dd class="col-md-9 m-b-20">
+    </dd>
+
+    @if (Model.DatoMedico.OpcRemFija)
+    {
+        <dt class="col-md-3 m-b-20">
+            Remuneración Monto:
+        </dt>
+        <dd class="col-md-9 m-b-20">
+            @Model.DatoMedico.RemFijaMonto
+        </dd>
+
+        <dt class="col-md-3 m-b-20">
+            @(Model.DatoMedico.OpcPorc_Ganancia_REM_fj ? "Porcentaje por Ganancia" : "")
+        </dt>
+        <dd class="col-md-9 m-b-20">
+        </dd>
+
+        @if (Model.DatoMedico.OpcPorc_Ganancia_REM_fj)
+        {
+            <dt class="col-md-3 m-b-20">
+                Porcentaje por Ganancia:
+            </dt>
+            <dd class="col-md-9 m-b-20">
+                @Model.DatoMedico.Porc_Ganancia_REM_FJ%
+            </dd>
+        }
+
+    }
+    else
+    {
+        <dt class="col-md-3 m-b-20">
+            % Ganancia Asegurada:
+        </dt>
+        <dd class="col-md-9 m-b-20">
+            @Model.DatoMedico.Porcentaje_ganancia_asegurada%
+        </dd>
+
+        <dt class="col-md-3 m-b-20">
+            % Ganancia Interno:
+        </dt>
+        <dd class="col-md-9 m-b-20">
+            @Model.DatoMedico.Porcentaje_ganancia_interno%
+        </dd>
+    }
+</dl>
+
+<div class="row">
+
+    <div class="col-md">
+        <div class="card">
+            <div class="card-header">
+                Especialidad Seleccionadas
+            </div>
+            <div class="card-body" data-scroll="dark" style="max-height:200px">
+                <ul class="list-group" id="CollectEspec">
+                    @foreach (SelectListItem it in Model.EspcialidadMed)
+                    {
+                        <li id="@it.Value" data-text="@it.Text">@it.Text</li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

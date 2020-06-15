@@ -1,4 +1,5 @@
-﻿
+﻿@model DataCollect<Rol_ClienteMantList>
+
 @{
     ViewData["Title"] = "Rol_ClienteMant"; 
 }
@@ -57,15 +58,15 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (Rol_ClienteMantList item in Model)
+                                @foreach (Rol_ClienteMantList item in Model.ListDatos)
                                 {
                                     <tr>
 
                                         <td>@Html.DisplayFor(modelItem => item.Nombre)</td>
                                         <td>@Html.DisplayFor(modelItem => item.CantRoles)</td>
                                         <td>
-                                            <a asp-area="SudoAdmin" asp-action="Rol_ClienteDetalle" asp-route-id="@item.ClinicaId" asp-route-actmtd="YhqGOCf2+mrSGddrI0AqTl75kITiBeuW9aQsZ0i39tE=566965"><i data-toggle="tooltip" data-placement="top" title="" data-original-title="Visualizar" class="far fa-eye text-secondary fa-2x"></i></a>
-                                            <a asp-area="SudoAdmin" asp-action="Rol_ClienteDetalle" asp-route-id="@item.ClinicaId" asp-route-actmtd="YhqGOCf2+mrSGddrI0AqTl75kITiBeuW9aQsZ0i39tE=557064"><i data-toggle="tooltip" data-placement="top" title="" data-original-title="Editar" class="far fa-edit text-success fa-2x"></i></a>
+                                            <a asp-area="SudoAdmin" asp-action="Rol_ClienteDetalle" asp-route-id="@item.ClinicaId" asp-route-actmtd="@Model.Metodo@Model.Acciones["Vie"]"><i data-toggle="tooltip" data-placement="top" title="" data-original-title="Visualizar" class="far fa-eye text-secondary fa-2x"></i></a>
+                                            <a asp-area="SudoAdmin" asp-action="Rol_ClienteDetalle" asp-route-id="@item.ClinicaId" asp-route-actmtd="@Model.Metodo@Model.Acciones["Upd"]"><i data-toggle="tooltip" data-placement="top" title="" data-original-title="Editar" class="far fa-edit text-success fa-2x"></i></a>
                                         </td>
                                     </tr>
                                 }

@@ -26,10 +26,10 @@
                         <div class="dropdown-header">
                             Quick Actions
                         </div>
-                        <a asp-area="AtributoEmpresa" asp-action="PerfilDetalle" asp-controller="ConfigAtributo" asp-route-actmtd="AEMjsxFa5hkCrSdg2tCvfFttphIBJvsBXMteTHEYDC4=416464" class="dropdown-item">
+                        <a asp-area="AtributoEmpresa" asp-action="PerfilDetalle" asp-controller="ConfigAtributo" asp-route-actmtd="@Model.Metodo@Model.Acciones["Add"]" class="dropdown-item">
                             <i class="icon dripicons-plus text-success"></i> Agregar
                         </a>
-                        <a asp-area="AtributoEmpresa" asp-action="PerfilDetalle" asp-controller="ConfigAtributo" asp-route-id="@Model.Input.PerfilId" asp-route-actmtd="AEMjsxFa5hkCrSdg2tCvfFttphIBJvsBXMteTHEYDC4=557064" class="dropdown-item">
+                        <a asp-area="AtributoEmpresa" asp-action="PerfilDetalle" asp-controller="ConfigAtributo" asp-route-id="@Model.Input.PerfilId" asp-route-actmtd="@Model.Metodo@Model.Acciones["Upd"]" class="dropdown-item">
                             <i class="icon dripicons-pencil text-danger"></i> Editar
                         </a>
                     </div>
@@ -41,7 +41,7 @@
 
 <section class="page-content container-fluid">
 
-    @Html.HiddenFor(p => p.Metodo)
+    @Html.HiddenFor(p => p.ModAct)
     @Html.HiddenFor(p => p.Input.PerfilId)
 
     @if (Model.Action == "Vie")
@@ -65,7 +65,7 @@
 <script type="text/javascript">
 
     var treeModCRL;
-    var treeCarga = new CargaTree('#tree', "@Url.Action("AddRolesAdmin", "ConfigAtributo", new { id = Model.Input.PerfilId, actmtd = Model.Metodo})", "cssIcon");
+    var treeCarga = new CargaTree('#tree', "@Url.Action("AddRolesAdmin", "ConfigAtributo", new { id = Model.Input.PerfilId, actmtd = Model.ModAct })", "cssIcon");
 
     @if (Model.Action == "Vie")
     {
@@ -125,7 +125,7 @@
                 Nombre: $("#Nombre").val(),
                 Descripcion: $("#Descripcion").val(),
                 Rols: checkedIds,
-                Metodo: $('#Metodo').val()
+                Metodo: $('#ModAct').val()
             };
 
             return DtGnrl;

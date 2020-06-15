@@ -5,6 +5,7 @@ using FRANLES_DENT_3.Variables;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace FRANLES_DENT_3.Areas.AdminPersonal.Metodos.AdminUsuario
@@ -111,6 +112,40 @@ namespace FRANLES_DENT_3.Areas.AdminPersonal.Metodos.AdminUsuario
             {
                 System.Diagnostics.Debug.WriteLine("Error " + ex.Message);
 
+                return new RetornoAction { Code = 2, Mensaje = "Error de sistema, contactar con soporte" };
+            }
+        }
+
+        public async Task<RetornoAction> ValDetalleUsuarioMedUpd(UsuarioViewPost.UsuarioMedicoPost _model)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(_model.UsuarioId))
+                {
+                    return new RetornoAction { Code = 2, Mensaje = "" };
+                }
+
+                if (!await _lstGnrl._context.Usuarios.AnyAsync(a => a.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId) && a.UsuarioId.Equals(_model.UsuarioId) && a.IsMedic))
+                {
+                    return new RetornoAction { Code = 2, Mensaje = "" };
+                }
+
+                if (_model.EspecialIds.Count == 0)
+                {
+                    return new RetornoAction { Code = 1, Mensaje = "Se debe seleccionar especialidad del medico" };
+                }
+
+                if (_model.EspecialIds.Except(await _lstGnrl._context.Especialidades.Where(w => w.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId)).Select(a => a.EspecialidadId.ToString()).ToListAsync()).Any())
+                {
+                    return new RetornoAction { Code = 2, Mensaje = "" };
+                }
+
+
+                return new RetornoAction { Code = 0, Mensaje = "" };
+
+            }
+            catch (Exception ex)
+            {
                 return new RetornoAction { Code = 2, Mensaje = "Error de sistema, contactar con soporte" };
             }
         }

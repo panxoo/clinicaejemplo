@@ -1,9 +1,9 @@
 ﻿using FRANLES_DENT_3.Areas.AdminPersonal.Models.AdminUsuario;
+using FRANLES_DENT_3.Metodos.Permisos;
 using FRANLES_DENT_3.Models.Personal;
 using FRANLES_DENT_3.Servicios.Interfaces;
 using FRANLES_DENT_3.Variables;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -19,12 +19,13 @@ namespace FRANLES_DENT_3.Areas.AdminPersonal.Metodos.AdminUsuario
             _lstGnrl = lstGnrl;
         }
 
-        IListGeneral _lstGnrl;
+        private IListGeneral _lstGnrl;
 
         public async Task<RetornoAction> SaveCreaUsuarioAdd(CreaUsuarioInputPost _model)
         {
             try
             {
+
                 IdentityUser _user = new IdentityUser();
 
                 if (_model.Acceso)
@@ -40,7 +41,6 @@ namespace FRANLES_DENT_3.Areas.AdminPersonal.Metodos.AdminUsuario
 
                     _user = await _lstGnrl._userManager.FindByNameAsync(_model.Nombre_Cuenta.ToString().Trim());
 
-
                     var objPrf = await _lstGnrl._context.Perfils.Where(w => w.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId) && w.PerfilId.Equals(_model.PerfilId))
                                                                 .Select(s => new { isMedic = s.IsMedic, isAssistente = s.IsAsistente })
                                                                 .FirstOrDefaultAsync();
@@ -53,7 +53,7 @@ namespace FRANLES_DENT_3.Areas.AdminPersonal.Metodos.AdminUsuario
                 {
                     UsuarioId = Ulid.NewUlid().ToString(),
                     Nombre_Cuenta = _model.Acceso ? _model.Nombre_Cuenta.Trim() : null,
-                    Nombre = _model.Nombre,
+                    Nombre = _model.Nombre.Trim(),
                     Apellido_Paterno = _model.Apellido_Paterno.Trim(),
                     Apellido_Materno = string.IsNullOrEmpty(_model.Apellido_Materno) ? "" : _model.Apellido_Materno.Trim(),
                     Correo = _model.Correo.Trim(),
@@ -76,7 +76,7 @@ namespace FRANLES_DENT_3.Areas.AdminPersonal.Metodos.AdminUsuario
                     NumDocumento = _model.NumDocumento.Trim()
                 };
 
-                _lstGnrl._context.Add(_usuario);
+               await _lstGnrl._context.AddAsync(_usuario);
 
                 if (!string.IsNullOrEmpty(_model.DtEmUsr.Nombre))
                 {
@@ -95,36 +95,31 @@ namespace FRANLES_DENT_3.Areas.AdminPersonal.Metodos.AdminUsuario
 
                 await _lstGnrl._context.SaveChangesAsync();
 
-
-
                 return new RetornoAction { Code = 0, Mensaje = "" };
             }
             catch (Exception ex)
             {
-
                 return new RetornoAction { Code = 1, Mensaje = "Error del almacenamiento" };
             }
-
         }
 
         public async Task<RetornoAction> SaveCreaUsuarioUpd(CreaUsuarioInputPost _model)
         {
             try
             {
-                Usuario _usuario = await _lstGnrl._context.Usuarios.IgnoreQueryFilters().FirstOrDefaultAsync(f => f.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId) && f.UsuarioId.Equals(_model.UsuarioId));
+                Usuario _usuario = await _lstGnrl._context.Usuarios.FirstOrDefaultAsync(f => f.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId) && f.UsuarioId.Equals(_model.UsuarioId));
                 RetornoAction retornoAction = new RetornoAction();
                 IdentityUser _user = new IdentityUser();
 
                 if (_model.Acceso && _model.UserNomExist)
                 {
                     _user = await _lstGnrl._userManager.FindByNameAsync(_model.Nombre_Cuenta.ToString().Trim());
-                    await EvaluacionRoles(_user, _usuario.PerfilId);
                     if (!_model.Accesact)
                     {
                         await ActivaUsr(_user);
                         await Cambiocontraseña(_user, _model.Contrasena);
-
                     }
+                    await new PermisosSave(_lstGnrl).SavePermisosUsr(_model.PerfilId, _lstGnrl._datosUsuario.ClinicaId, _user);
                 }
 
                 if (_model.Acceso && !_model.UserNomExist)
@@ -138,7 +133,6 @@ namespace FRANLES_DENT_3.Areas.AdminPersonal.Metodos.AdminUsuario
 
                     _user = await _lstGnrl._userManager.FindByNameAsync(_model.Nombre_Cuenta.ToString().Trim());
                 }
-
 
                 if (!_model.Acceso && _model.Accesact)
                 {
@@ -156,9 +150,18 @@ namespace FRANLES_DENT_3.Areas.AdminPersonal.Metodos.AdminUsuario
                     _model.IsAsist = objPrf.isAssistente;
                 }
 
+                bool cambioPrfl = false;
+
+                if (_model.Acceso)
+                {
+                    if (_usuario.PerfilId != _model.PerfilId)
+                    {
+                        cambioPrfl = true;
+                    }
+                }
 
 
-                _usuario.Nombre = _model.Nombre;
+                _usuario.Nombre = _model.Nombre.Trim();
                 _usuario.Apellido_Paterno = _model.Apellido_Paterno.Trim();
                 _usuario.Apellido_Materno = string.IsNullOrEmpty(_model.Apellido_Materno) ? "" : _model.Apellido_Materno.Trim();
                 _usuario.Correo = _model.Correo.Trim();
@@ -174,13 +177,14 @@ namespace FRANLES_DENT_3.Areas.AdminPersonal.Metodos.AdminUsuario
 
                 if (_model.Acceso)
                 {
+                    
                     _usuario.PerfilId = _model.PerfilId;
+                   
                     if (!_model.UserNomExist)
                     {
                         _usuario.UsuarioId = _user.Id;
                     }
                 }
-
 
                 DatosEmergenciaUsuario _dtEmerg = await _lstGnrl._context.DatosEmergenciaUsuarios.FirstOrDefaultAsync(f => f.UsuarioId.Equals(_model.UsuarioId));
 
@@ -217,52 +221,19 @@ namespace FRANLES_DENT_3.Areas.AdminPersonal.Metodos.AdminUsuario
                     }
                 }
 
-
                 await _lstGnrl._context.SaveChangesAsync();
 
-
-
+                if (_model.Acceso && cambioPrfl )
+                {
+                    await new PermisosSave(_lstGnrl).SavePermisosUsr(_usuario.PerfilId, _lstGnrl._datosUsuario.ClinicaId, _user);
+                }
 
                 return new RetornoAction { Code = 0, Mensaje = "" };
             }
             catch (Exception ex)
             {
-
                 return new RetornoAction { Code = 1, Mensaje = "Error del almacenamiento" };
             }
-
-        }
-
-
-        private async Task<bool> EvaluacionRoles(IdentityUser _user, string idPrfl)
-        {
-            List<SelectListItem> rolPrfl = await _lstGnrl._context.Perfil_Rols.Include(i => i.Role).Where(w => w.PerfilId.Equals(idPrfl))
-                                                                                                .Select(s => new SelectListItem
-                                                                                                {
-                                                                                                    Text = s.Role.NameRol,
-                                                                                                    Value = s.RolId
-                                                                                                }).ToListAsync();
-
-
-            List<string> rolUsr = await _lstGnrl._context.UserRoles.Where(w => w.UserId.Equals(_user.Id)).Select(s => s.RoleId).ToListAsync();
-
-
-            List<string> rolAdd = rolPrfl.Where(w => !rolUsr.Contains(w.Value)).Select(s => s.Text).ToList();
-
-
-            if (rolAdd.Count() > 0)
-                await _lstGnrl._userManager.AddToRolesAsync(_user, rolAdd);
-
-            List<string> rolDel = rolPrfl.Where(w => !rolUsr.Contains(w.Value)).Select(s => s.Text).ToList();
-
-            if (rolDel.Count() > 0)
-            {
-                List<string> rolDelName = await _lstGnrl._context.Roles.Where(w => rolDel.Contains(w.Id)).Select(s => s.Name).ToListAsync();
-                await _lstGnrl._userManager.RemoveFromRolesAsync(_user, rolDelName);
-
-            }
-
-            return true;
         }
 
         private async Task<RetornoAction> AddUser(string nombre_cuenta, string correo, string idPerfil, string contrasena)
@@ -274,12 +245,11 @@ namespace FRANLES_DENT_3.Areas.AdminPersonal.Metodos.AdminUsuario
                 LockoutEnabled = false
             };
 
-
             IdentityResult _resUser = await _lstGnrl._userManager.CreateAsync(usr, contrasena);
 
             if (!_resUser.Succeeded)
             {
-                foreach(IdentityError erro in _resUser.Errors)
+                foreach (IdentityError erro in _resUser.Errors)
                 {
                     System.Diagnostics.Debug.WriteLine("Error " + erro.Description);
                 }
@@ -295,44 +265,28 @@ namespace FRANLES_DENT_3.Areas.AdminPersonal.Metodos.AdminUsuario
 
         private async Task<bool> AddRolesUsr(IdentityUser usr, string prfl)
         {
-            try
-            {
-                List<string> roles = await _lstGnrl._context.Perfil_Rols.Where(w => w.PerfilId.Equals(prfl)).Select(s => s.Role.NameRol).ToListAsync();
-                foreach (string pr in roles)
-                {
-                    var asdas = await _lstGnrl._userManager.AddToRoleAsync(usr, pr);
-                }
-                return true;
-            }
-            catch (Exception ex)
-            {
-                return false;
-            }
+            List<string> roles = await _lstGnrl._context.Perfil_Rols.Where(w => w.PerfilId.Equals(prfl) && w.Perfil.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId)).Select(s => s.Role.NameRol).ToListAsync();
+
+            await _lstGnrl._userManager.AddToRolesAsync(usr, roles);
+
+            return true;
         }
 
         private async Task Cambiocontraseña(IdentityUser _user, string _password)
         {
-            try
-            {
-                var _token = await _lstGnrl._userManager.GeneratePasswordResetTokenAsync(_user);
-                var sssd = await _lstGnrl._userManager.ResetPasswordAsync(_user, _token, _password);
-            }
-            catch (Exception ex)
-            {
-                var asds = ex.Message;
-            }
+            var _token = await _lstGnrl._userManager.GeneratePasswordResetTokenAsync(_user);
+            await _lstGnrl._userManager.ResetPasswordAsync(_user, _token, _password);
         }
 
         private async Task DesactUsr(IdentityUser _user)
         {
-            var qs = await _lstGnrl._userManager.SetLockoutEnabledAsync(_user, true);
-            var ss3 = await _lstGnrl._userManager.SetLockoutEndDateAsync(_user, DateTime.Now.AddYears(200));
+            await _lstGnrl._userManager.SetLockoutEnabledAsync(_user, true);
+            await _lstGnrl._userManager.SetLockoutEndDateAsync(_user, DateTime.Now.AddYears(200));
         }
 
         private async Task ActivaUsr(IdentityUser _user)
         {
-            var qs = await _lstGnrl._userManager.SetLockoutEnabledAsync(_user, false);
-
+            await _lstGnrl._userManager.SetLockoutEnabledAsync(_user, false);
         }
     }
 }

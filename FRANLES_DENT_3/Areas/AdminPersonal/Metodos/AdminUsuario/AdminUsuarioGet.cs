@@ -4,6 +4,7 @@ using FRANLES_DENT_3.Models.Permisos;
 using FRANLES_DENT_3.Models.Personal;
 using FRANLES_DENT_3.Servicios.Interfaces;
 using FRANLES_DENT_3.Variables;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -86,7 +87,7 @@ namespace FRANLES_DENT_3.Areas.AdminPersonal.Metodos.AdminUsuario
             else
             {
                 model.Input = new Usuario();
-                model.Accesact = true;
+                model.Input.Acceso = true;
                 model.Input.Avatar = "DEFAULT/417661746172/default.png";
             }
 
@@ -117,6 +118,94 @@ namespace FRANLES_DENT_3.Areas.AdminPersonal.Metodos.AdminUsuario
 
             return model;
         }
+
+
+        public async Task<UsuarioViewInput> GetUsuarioView(string id, string accion)
+        {
+            UsuarioViewInput _model = new UsuarioViewInput();
+
+            _model.DtUsuario = await _lstGnrl._context.Usuarios.Include(i => i.DatosEmergenciaUsuario).IgnoreQueryFilters().FirstOrDefaultAsync(f => f.UsuarioId.Equals(id) && f.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId));
+
+            if(_model.DtUsuario == null)
+            {
+                return null;
+            }
+
+            _model.PerfilDet = await _lstGnrl._context.Perfils.IgnoreQueryFilters().Where(f => f.PerfilId.Equals(_model.DtUsuario.PerfilId) && f.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId))
+                                                                                   .Select(s => s.Nombre).FirstOrDefaultAsync();
+
+            _model.SexoDet = TransfParam.ParamSexo().FirstOrDefault(f => f.Value.Equals(_model.DtUsuario.Sexo)).Text;
+            _model.TipoDocumento = TransfParam.ParamTipoDocumento().FirstOrDefault(f => f.Value.Equals(_model.DtUsuario.TipoDocumento.ToString())).Text;
+
+            _model.Departamento = await _lstGnrl._context.Distritos.Where(w => w.DistritoId.Equals(_model.DtUsuario.DistritoId))
+                                                                   .Select(s => s.Name + " / " + s.Provincia.Name + " / " + s.Provincia.Departamento.Name)
+                                                                   .FirstOrDefaultAsync();
+
+            if (_model.DtUsuario.DatosEmergenciaUsuario != null)
+                _model.ParentescoDet = TransfParam.ParamParentesco().FirstOrDefault(f => f.Value.Equals(_model.DtUsuario.DatosEmergenciaUsuario.Parentesco.ToString())).Text;
+
+
+
+            if (_model.DtUsuario.IsMedic)
+            {
+
+                _model.DtMedico = await ObtenerDatosMedico(_model.DtUsuario.UsuarioId);
+
+
+                _model.EspcialiSelLst = await _lstGnrl._context.Especialidades.Where(w => w.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId))
+                                                                              .Select(s => new SelectListItem
+                                                                              {
+                                                                                  Value = s.EspecialidadId.ToString(),
+                                                                                  Text = s.Nombre
+                                                                              })
+                                                                              .ToListAsync();
+                
+            }
+
+            
+            _model.Metodo = VarGnrl.GetModuloKey("Mant_Usuari");
+            _model.ModAct = VarGnrl.GetModuloActionKey("Mant_Usuario", "Vie");
+
+            return _model;
+        }
+
+
+        public async Task<UsuarioViewInput.MedicoView> ObtenerDatosMedico(string _usuarioId)
+        {
+            UsuarioViewInput.MedicoView _model = new UsuarioViewInput.MedicoView();
+          
+            _model.DatoMedico = await _lstGnrl._context.DatosMedicos.FirstOrDefaultAsync(f => f.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId) && f.UsuarioId.Equals(_usuarioId));
+
+
+            if (_model.DatoMedico == null)
+            {
+                _model.DatoMedico = new FRANLES_DENT_3.Models.MedicoDato.DatosMedico();
+                _model.EspcialidadMed = new List<SelectListItem>();
+            }
+            else
+            {
+
+                if (await _lstGnrl._context.Especialidad_Medicos.AnyAsync(w => w.DatosMedicoId.Equals(_model.DatoMedico.DatosMedicoId) && w.Especialidad.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId)))
+                {
+
+                    _model.EspcialidadMed = await _lstGnrl._context.Especialidad_Medicos.Where(w => w.DatosMedicoId.Equals(_model.DatoMedico.DatosMedicoId) && w.Especialidad.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId))
+                                                                                        .Select(s => new SelectListItem
+                                                                                        {
+                                                                                            Value = s.EspecialidadId,
+                                                                                            Text = s.Especialidad.Nombre
+                                                                                        }).ToListAsync();
+                }
+                else
+                {
+                    _model.EspcialidadMed = new List<SelectListItem>();
+
+                }
+            }
+
+            return _model;
+
+        }
+
 
     }
 }

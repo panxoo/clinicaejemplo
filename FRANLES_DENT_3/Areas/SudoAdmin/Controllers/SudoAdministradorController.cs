@@ -46,7 +46,7 @@ namespace FRANLES_DENT_3.Areas.SudoAdmin.Controllers
             if (!(await _lstGnrl._context.Clinicas.AnyAsync(A => A.ClinicaID.Equals(id))))
                 return RedirectToAction(nameof(SudoAdministradorController.Rol_ClienteMant), "SudoAdministrador");
 
-            return View(await new SudoAdministradorGet(_lstGnrl).GetRol_ClienteDetalle(id, actmtd, moduloAcc));
+            return View(await new SudoAdministradorGet(_lstGnrl).GetRol_ClienteDetalle(id, moduloAcc));
         }
 
         public async Task<JsonResult> AddRolesAdmin(string id, string actmtd)
@@ -82,7 +82,8 @@ namespace FRANLES_DENT_3.Areas.SudoAdmin.Controllers
             {
                 case 0:
                     Response.StatusCode = (int)HttpStatusCode.OK;
-                    return Json(new { redir = false });
+                    return Json(new { redirectToUrl = Url.Action(nameof(SudoAdministradorController.Rol_ClienteDetalle), "SudoAdministrador", new { id = id, actmtd = VarGnrl.GetModuloActionKey("Root_CliRol", "Vie") }), redir = true });
+
 
                 case 1:
                     Response.StatusCode = (int)HttpStatusCode.BadRequest;

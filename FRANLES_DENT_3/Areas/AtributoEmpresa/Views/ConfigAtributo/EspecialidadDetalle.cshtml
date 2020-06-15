@@ -40,7 +40,7 @@
 </header>
 
 @Html.HiddenFor(p => p.Datos.EspecialidadId)
-@Html.HiddenFor(p => p.Metodo)
+@Html.HiddenFor(p => p.ModAct)
 
 <section class="page-content container-fluid">
     <div class="row" id="Datos">
@@ -82,7 +82,7 @@
             EspecialidadId : $("#Datos_EspecialidadId").val(),
             Nombre: $("#Nombre").val(),
             Descripcion: $("#Descripcion").val(),
-            Metodo: $("#Metodo").val()
+            Metodo: $("#ModAct").val()
         };
 
         return DtGnrl;

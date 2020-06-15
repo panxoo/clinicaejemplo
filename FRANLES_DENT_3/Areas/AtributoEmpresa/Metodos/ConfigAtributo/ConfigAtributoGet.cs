@@ -2,6 +2,7 @@
 using FRANLES_DENT_3.Models.MedicoDato.Atributo;
 using FRANLES_DENT_3.Models.Sistema;
 using FRANLES_DENT_3.Servicios.Interfaces;
+using FRANLES_DENT_3.Variables;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,7 +25,8 @@ namespace FRANLES_DENT_3.Areas.AtributoEmpresa.Metodos.ConfigAtributo
 
             _model.ListDatos = await GetListEspecialidad();
             _model.Input = new Especialidad();
-            _model.Metodo = "1bj6WOlnNLZQ/Ka5Wixpp6RlgYBZc/QlSy4FUHVfOxo=4c7374";
+            _model.Metodo = VarGnrl.GetModuloKey("Conf_Atribu");
+            _model.ModAct = VarGnrl.GetModuloActionKey("Conf_Atribu", "Lst");
 
             return _model;
         }
@@ -47,7 +49,8 @@ namespace FRANLES_DENT_3.Areas.AtributoEmpresa.Metodos.ConfigAtributo
             EspecialidadDetalleInput _model = new EspecialidadDetalleInput();
             _model.Datos = await GetEspecialidadDetDato(id);
 
-            _model.Metodo = "1bj6WOlnNLZQ/Ka5Wixpp6RlgYBZc/QlSy4FUHVfOxo=566965";
+            _model.Metodo = VarGnrl.GetModuloKey("Conf_Atribu");
+            _model.ModAct = VarGnrl.GetModuloActionKey("Conf_Atribu", "Vie");
 
             return _model;
         }
@@ -57,11 +60,11 @@ namespace FRANLES_DENT_3.Areas.AtributoEmpresa.Metodos.ConfigAtributo
             return await _lstGnrl._context.Especialidades.Where(f => f.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId) && f.EspecialidadId.Equals(id)).FirstOrDefaultAsync();
         }
 
-        public async Task<List<PerfilMantenedor>> GetPerfilMant()
+        public async Task<DataCollect<PerfilMantenedor>> GetPerfilMant()
         {
-            List<PerfilMantenedor> _model;
+            DataCollect<PerfilMantenedor> _model = new DataCollect<PerfilMantenedor>();
 
-            _model = await _lstGnrl._context.Perfils.IgnoreQueryFilters().Where(w => w.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId))
+            _model.ListDatos = await _lstGnrl._context.Perfils.IgnoreQueryFilters().Where(w => w.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId))
                                                                          .Select(s => new PerfilMantenedor
                                                                          {
                                                                              Nombre = s.Nombre,
@@ -73,6 +76,8 @@ namespace FRANLES_DENT_3.Areas.AtributoEmpresa.Metodos.ConfigAtributo
                                                                              CantUser = _lstGnrl._context.Usuarios.Count(c => c.PerfilId.Equals(s.PerfilId))
                                                                          }).ToListAsync();
 
+            _model.Metodo = VarGnrl.GetModuloKey("Mant_Perfil");
+            _model.ModAct = VarGnrl.GetModuloActionKey("Mant_Perfil", "Lst");
             return _model;
         }
 
@@ -97,7 +102,8 @@ namespace FRANLES_DENT_3.Areas.AtributoEmpresa.Metodos.ConfigAtributo
                                                                     }).ToListAsync();
             }
 
-            _model.Metodo = actmd;
+            _model.Metodo = VarGnrl.GetModuloKey("Mant_Perfil");
+            _model.ModAct = VarGnrl.GetModuloActionKey("Mant_Perfil", accion);
             _model.Action = accion;
 
             return _model;

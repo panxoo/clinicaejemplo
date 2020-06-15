@@ -38,7 +38,7 @@
                         <a href="#" class="dropdown-item">
                             <i class="icon dripicons-clockwise"></i> Refresh
                         </a>
-                        <a asp-area="Configuracion" asp-action="CreaUsuarioAdm" asp-controller="AdmUsuario" asp-route-actmtd="@Model.Metodo@Model.Acciones["Add"]" class="dropdown-item">
+                        <a asp-area="AdminPersonal" asp-action="CreaUsuario" asp-controller="AdminUsuario" asp-route-actmtd="@Model.Metodo@Model.Acciones["Add"]" class="dropdown-item">
                             <i class="icon dripicons-plus text-success"></i> Agregar
                         </a>
                         <a href="#" class="dropdown-item">
@@ -184,7 +184,7 @@
         });
 
         VisibleTwoDivCheck($("#Input_Acceso").prop('checked'), "#CreaUsr", "#NotUsr");
-
+ 
     });
 
         function ChangePerfil(perf) {
@@ -203,7 +203,7 @@
                 return;
             }
 
-            let post = new AjaxSubmit("@Url.Action("CreaUsuarioAdm", "AdmUsuario")", "#SubmitBtn", "Error almacenamiento");
+            let post = new AjaxSubmit("@Url.Action("CreaUsuario", "AdminUsuario")", "#SubmitBtn", "Error almacenamiento");
 
             @if(Model.Action == "Upd")
             {

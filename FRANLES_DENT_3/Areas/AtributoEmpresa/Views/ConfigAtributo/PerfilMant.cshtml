@@ -1,4 +1,4 @@
-﻿@model List<PerfilMantenedor>
+﻿@model DataCollect<PerfilMantenedor>
 
 @{
     ViewData["Title"] = "PerfilMant";
@@ -27,7 +27,7 @@
                     <a href="#" class="dropdown-item">
                         <i class="icon dripicons-clockwise"></i> Refresh
                     </a>
-                    <a asp-area="AtributoEmpresa" asp-action="PerfilDetalle" asp-controller="ConfigAtributo" asp-route-actmtd="AEMjsxFa5hkCrSdg2tCvfFttphIBJvsBXMteTHEYDC4=416464" class="dropdown-item">
+                    <a asp-area="AtributoEmpresa" asp-action="PerfilDetalle" asp-controller="ConfigAtributo" asp-route-actmtd="@Model.Metodo@Model.Acciones["Add"]" class="dropdown-item">
                         <i class="icon dripicons-plus text-success"></i> Agregar
                     </a>
                     <a href="#" class="dropdown-item">
@@ -74,7 +74,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (PerfilMantenedor item in Model)
+                                @foreach (PerfilMantenedor item in Model.ListDatos)
                                 {
                                 <tr data-id="@item.PerfilId" data-name="@item.Nombre" data-act="@item.Activo">
                                     <td>
@@ -103,9 +103,9 @@
                                         }
                                     </td>
                                     <td>
-                                        <a asp-area="AtributoEmpresa" asp-controller="ConfigAtributo" asp-action="PerfilDetalle" asp-route-id="@item.PerfilId" asp-route-actmtd="AEMjsxFa5hkCrSdg2tCvfFttphIBJvsBXMteTHEYDC4=566965"><i data-toggle="tooltip" data-placement="top" title="" data-original-title="Visualizar" class="far fa-eye text-secondary fa-2x"></i></a>
+                                        <a asp-area="AtributoEmpresa" asp-controller="ConfigAtributo" asp-action="PerfilDetalle" asp-route-id="@item.PerfilId" asp-route-actmtd="@Model.Metodo@Model.Acciones["Vie"]"><i data-toggle="tooltip" data-placement="top" title="" data-original-title="Visualizar" class="far fa-eye text-secondary fa-2x"></i></a>
 
-                                        <a asp-area="AtributoEmpresa" asp-controller="ConfigAtributo" asp-action="PerfilDetalle" asp-route-id="@item.PerfilId" asp-route-actmtd="AEMjsxFa5hkCrSdg2tCvfFttphIBJvsBXMteTHEYDC4=557064"><i data-toggle="tooltip" data-placement="top" title="" data-original-title="Editar" class="far fa-edit text-success fa-2x"></i></a>
+                                        <a asp-area="AtributoEmpresa" asp-controller="ConfigAtributo" asp-action="PerfilDetalle" asp-route-id="@item.PerfilId" asp-route-actmtd="@Model.Metodo@Model.Acciones["Upd"]"><i data-toggle="tooltip" data-placement="top" title="" data-original-title="Editar" class="far fa-edit text-success fa-2x"></i></a>
                                     </td>
                                 </tr>
                                 }

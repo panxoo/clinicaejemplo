@@ -1,4 +1,4 @@
-﻿using FRANLES_DENT_3.Areas.AtributoEmpresa.Metodos.AtributoEmpresa;
+﻿using FRANLES_DENT_3.Areas.AtributoEmpresa.Metodos.ConfigAtributo;
 using FRANLES_DENT_3.Areas.AtributoEmpresa.Models.ConfigAtributo;
 using FRANLES_DENT_3.Controllers;
 using FRANLES_DENT_3.Data;
@@ -72,7 +72,7 @@ namespace FRANLES_DENT_3.Areas.AtributoEmpresa.Controllers
                 case 0:
 
                     Response.StatusCode = (int)HttpStatusCode.OK;
-                    List<Especialidad> modelret = await new ConfigAtributoGet(_lstGnrl).GetListEspecialidad();
+                    var modelret = await new ConfigAtributoGet(_lstGnrl).GetEspecialidadMant();
                     return PartialView("Shared/_EspecialidadMantDat", modelret);
 
                 case 1:
@@ -221,7 +221,7 @@ namespace FRANLES_DENT_3.Areas.AtributoEmpresa.Controllers
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return Json(new
                 {
-                    redirectToUrl = Url.Action(nameof(ConfigAtributoController.EspecialidadMant), "ConfigAtributo"),
+                    redirectToUrl = Url.Action(nameof(ConfigAtributoController.PerfilMant), "ConfigAtributo"),
                     redir = true,
                     mnsj = "Error en el registro, volver abrir pantalla para registro."
                 });
@@ -242,14 +242,8 @@ namespace FRANLES_DENT_3.Areas.AtributoEmpresa.Controllers
             switch (retornoAction.Code)
             {
                 case 0:
-
                     Response.StatusCode = (int)HttpStatusCode.OK;
-                    return Json(new
-                    {
-                        redirectToUrl = Url.Action(nameof(ConfigAtributoController.PerfilDetalle), "ConfigAtributo"),
-                        redir = true,
-                        mnsj = string.IsNullOrEmpty(retornoAction.Mensaje) ? "Error en el registro, volver abrir pantalla para registro." : retornoAction.Mensaje
-                    });
+                    return Json(new { redirectToUrl = Url.Action(nameof(ConfigAtributoController.PerfilDetalle), "ConfigAtributo", new {id = retornoAction.Parametro[0], actmtd = VarGnrl.GetModuloActionKey("Mant_Perfil", "Vie") }), redir = true });
 
                 case 1:
                     Response.StatusCode = (int)HttpStatusCode.BadRequest;
@@ -259,7 +253,7 @@ namespace FRANLES_DENT_3.Areas.AtributoEmpresa.Controllers
                     Response.StatusCode = (int)HttpStatusCode.BadRequest;
                     return Json(new
                     {
-                        redirectToUrl = Url.Action(nameof(ConfigAtributoController.EspecialidadMant), "ConfigAtributo"),
+                        redirectToUrl = Url.Action(nameof(ConfigAtributoController.PerfilMant), "ConfigAtributo"),
                         redir = true,
                         mnsj = string.IsNullOrEmpty(retornoAction.Mensaje) ? "Error en el registro, volver abrir pantalla para registro." : retornoAction.Mensaje
                     });

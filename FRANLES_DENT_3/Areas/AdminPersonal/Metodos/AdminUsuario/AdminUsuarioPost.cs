@@ -2,6 +2,7 @@
 using FRANLES_DENT_3.Servicios.Interfaces;
 using FRANLES_DENT_3.Variables;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query.Internal;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -65,5 +66,29 @@ namespace FRANLES_DENT_3.Areas.AdminPersonal.Metodos.AdminUsuario
 
             return retornoAction;
         }
+
+        public async Task<RetornoAction> PostDetalleUsuarioMedUpd(UsuarioViewPost.UsuarioMedicoPost _model)
+        {
+
+            RetornoAction retornoAction = new RetornoAction();
+
+            AdminUsuarioVal valAdmUsr = new AdminUsuarioVal(_lstGnrl);
+
+            retornoAction = await valAdmUsr.ValDetalleUsuarioMed(_model);
+
+
+            if (retornoAction.Code == "0")
+            {
+                MetAdmUsr metAdmUsr = new MetAdmUsr(_lstGnrl);
+
+                retornoAction = await metAdmUsr.UpdAddDatosMedico(_model);
+            }
+
+            return retornoAction;
+
+             
+
+        }
+
     }
 }

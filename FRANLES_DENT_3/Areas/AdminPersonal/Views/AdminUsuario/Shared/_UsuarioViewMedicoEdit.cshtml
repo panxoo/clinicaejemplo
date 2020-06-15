@@ -1,0 +1,112 @@
+﻿@model UsuarioViewInput
+
+<form id="AjaxFormMedicos" method="post">
+    <div class="modal fade" id="MedicosModal" tabindex="-1" role="dialog" aria-labelledby="MedicosModal" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Actualizar datos Medico</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="form-row">
+                        <div class="form-group col-md-3">
+                            <label asp-for="DtMedicoInp.COP"></label>
+                            <input type="number" class="form-control" asp-for="DtMedicoInp.COP">
+                            <span asp-validation-for="DtMedicoInp.COP" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label asp-for="DtMedicoInp.RNE"></label>
+                            <input type="number" class="form-control" asp-for="DtMedicoInp.RNE">
+                        </div>
+                    </div>
+
+                    <hr class="dashed" />
+                    <div class="form-inline m-b-20">
+                        <label class="m-r-10">Remuneración fija </label>
+                        <input class="tgl tgl-light tgl-success" asp-for="DtMedicoInp.OpcRemFija" type="checkbox">
+                        <label class="tgl-btn" for="DtMedicoInp_OpcRemFija"></label>
+                    </div>
+
+                    <div id="DvPorcentajeGanancia">
+                        <div class="form-row">
+                            <div class="form-group col-md-3">
+                                <label asp-for="DtMedicoInp.Porcentaje_ganancia_asegurada"></label>
+                                <input type="number" class="form-control" asp-for="DtMedicoInp.Porcentaje_ganancia_asegurada" min="0">
+                                <span asp-validation-for="DtMedicoInp.Porcentaje_ganancia_asegurada" class="text-danger"></span>
+                            </div>
+                            <div class="form-group  col-md-3">
+                                <label asp-for="DtMedicoInp.Porcentaje_ganancia_interno"></label>
+                                <input type="number" class="form-control" asp-for="DtMedicoInp.Porcentaje_ganancia_interno">
+                                <span asp-validation-for="DtMedicoInp.Porcentaje_ganancia_interno" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="DvRemFija">
+                        <div class="form-row">
+                            <div class="form-group col-md-3">
+                                <label asp-for="DtMedicoInp.RemFijaMonto"></label>
+                                <input type="number" class="form-control" asp-for="DtMedicoInp.RemFijaMonto">
+                                <span asp-validation-for="DtMedicoInp.RemFijaMonto" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-3 form-group">
+                                <label for="OpcPorc_Ganancia_REM_FJDv">Porcentaje por ganancia </label>
+                                <div id="OpcPorc_Ganancia_REM_FJDv" class="form-group ">
+                                    <input class="tgl tgl-light tgl-success" asp-for="DtMedicoInp.OpcPorc_Ganancia_REM_fj" type="checkbox">
+                                    <label class="tgl-btn" for="DtMedicoInp_OpcPorc_Ganancia_REM_fj"></label>
+                                </div>
+                            </div>
+                            <div class="form-group  col-md-3" id="DvPorcExtraRemFj">
+                                <label asp-for="DtMedicoInp.Porc_Ganancia_REM_FJ"></label>
+                                <input type="number" class="form-control" asp-for="DtMedicoInp.Porc_Ganancia_REM_FJ">
+                                <span asp-validation-for="DtMedicoInp.Porc_Ganancia_REM_FJ" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr class="dashed" />
+
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+
+                            <label for="EspcialiSelLstId">Seleccionar Especialidad Medicos</label>
+                            <select id="EspcialiSelLstId" class="form-control">
+                                <option value="" disabled selected>Seleccionar un Valor</option>
+                                @foreach (var dato in Model.EspcialiSelLst)
+                                {
+                                    <option value="@dato.Value">@dato.Text</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+
+                        <div class="col-md">
+                            <div class="card">
+                                <div class="card-header">
+                                    Especialidad Seleccionadas
+                                </div>
+                                <div class="card-body" data-scroll="dark" style="max-height:200px">
+                                    <ul class="list-group" id="CollectSelEsp">         </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="col-md-9">
+                        <div id="ErrorAlert" class="alert alert-danger" style="display:none" role="alert">
+                            Error en los datos enviados!
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" id="btnCancel">Cancelar</button>
+                    <button type="submit" class="btn btn-success" id="SubmitBtn">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

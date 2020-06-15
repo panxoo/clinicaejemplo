@@ -11,7 +11,9 @@ using Microsoft.AspNetCore.Mvc;
 namespace FRANLES_DENT_3.Areas.Principal.Controllers
 {
     [Area("Principal")] 
-    [Authorize(Roles =("Admin"))]
+    //[Authorize(Roles =("Admin"))]
+    [Authorize]
+
     public class PrincipalController : Controller
     {
 

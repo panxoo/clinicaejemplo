@@ -28,7 +28,7 @@
                         <div class="dropdown-header">
                             Quick Actions
                         </div>
-                        <a asp-area="Configuracion" asp-action="Rol_ClienteDetalle" asp-route-id="@Model.Input.ClinicaID" asp-route-actmtd="actuli" class="dropdown-item">
+                        <a asp-area="Configuracion" asp-action="Rol_ClienteDetalle" asp-route-id="@Model.Input.ClinicaID" asp-route-actmtd="@Model.Metodo@Model.Acciones["Upd"]" class="dropdown-item">
                             <i class="icon dripicons-pencil text-danger"></i> Editar
                         </a>
                     </div>
@@ -41,7 +41,7 @@
 
 <section class="page-content container-fluid">
     <form id="AjaxForm" method="post">
-        @Html.HiddenFor(p => p.Metodo)
+        @Html.HiddenFor(p => p.ModAct)
         @Html.HiddenFor(p => p.Input.ClinicaID)
 
         <div class="row">
@@ -88,7 +88,7 @@
     <script type="text/javascript">
 
     var treeModCRL;
-        var treeCarga = new CargaTree('#tree', "@Url.Action("AddRolesAdmin", "SudoAdministrador", new { id = Model.Input.ClinicaID, actmtd = Model.Metodo})", "cssIcon");
+        var treeCarga = new CargaTree('#tree', "@Url.Action("AddRolesAdmin", "SudoAdministrador", new { id = Model.Input.ClinicaID, actmtd = Model.ModAct})", "cssIcon");
 
 
   @if (Model.Action == "Vie")
@@ -135,7 +135,7 @@
             let DtGnrl = {
                 id: $("#Input_ClinicaID").val(),
                 rols: checkedIds,
-                actmtd: $("#Metodo").val()
+                actmtd: $("#ModAct").val()
             };
 
             return DtGnrl;

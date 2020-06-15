@@ -45,7 +45,7 @@
     </div>
 </header>
 
-@Html.HiddenFor(p => p.Metodo);
+@Html.HiddenFor(p => p.ModAct);
 
 <section class="page-content container-fluid">
     <div class="row">
@@ -54,7 +54,7 @@
                 <h5 class="card-header">Especialidad de la clinica</h5>
                 <div class="card-body" id="PostList1">
                     <div class="table-responsive">
-                        <partial name="Shared/_EspecialidadMantDat" model="@Model.ListDatos" />
+                        <partial name="Shared/_EspecialidadMantDat" model="@Model" />
                     </div>
                 </div>
             </div>
@@ -96,7 +96,7 @@
             let DtGnrl = {
                 Nombre: $("#Nombre").val(),
                 Descripcion: $("#Descripcion").val(),
-                Metodo: $("#Metodo").val()
+                Metodo: $("#ModAct").val()
             };
 
             return DtGnrl;
