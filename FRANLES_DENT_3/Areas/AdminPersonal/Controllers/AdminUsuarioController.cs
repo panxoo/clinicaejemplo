@@ -157,24 +157,22 @@ namespace FRANLES_DENT_3.Areas.AdminPersonal.Controllers
 
             switch (retornoAction.Code)
             {
-                case "0":
+                case 0:
                     Response.StatusCode = (int)HttpStatusCode.OK;
-                    DetalleUsuario.MedicoView modelret = await new AdmUsuarioGet(_lstGnrl).ObtenerDatosMedico(_model.UsuarioId);
+                    UsuarioViewInput.MedicoView modelret = await new AdminUsuarioGet(_lstGnrl).GetObtenerDatosMedico(_model.UsuarioId);
                     return PartialView("Shared/_UsuarioViewMedico", modelret);
-                case "1":
+                case 1:
                     Response.StatusCode = (int)HttpStatusCode.BadRequest;
                     return Json(new RetornoActionView { mnsj = retornoAction.Mensaje });
                 default:
                     Response.StatusCode = (int)HttpStatusCode.BadRequest;
                     return Json(new RetornoActionView
                     {
-                        redirectToUrl = Url.Action(nameof(AdmUsuarioController.UsuarioMant), "AdmUsuario"),
+                        redirectToUrl = Url.Action(nameof(AdminUsuarioController.UsuarioMant), "AdmUsuario"),
                         redir = true,
                         mnsj = string.IsNullOrEmpty(retornoAction.Mensaje) ? "Error en el registro, volver abrir pantalla para registro." : retornoAction.Mensaje
                     });
             }
-
-
         }
 
 

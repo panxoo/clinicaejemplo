@@ -458,7 +458,7 @@
 
             if (await MensajeDecision("Actualización de Usuario", "¿Se desea modificar el usuario?")) {
 
-                let post = new AjaxSubmit('@Url.Action("DetalleUsuarioMed", "AdmUsuario")', "#SubmitBtn", "Error almacenamiento");
+                let post = new AjaxSubmit('@Url.Action("DetalleUsuarioMedUpd", "AdminUsuario")', "#SubmitBtn", "Error almacenamiento");
                 post.btnCancel = "#btnCancel";
                 post.partial = "#datosMedico";
 
@@ -485,9 +485,9 @@
                 RemFijaMonto: $('#DtMedicoInp_RemFijaMonto').val(),
                 OpcPorc_Ganancia_REM_fj: $('#DtMedicoInp_OpcPorc_Ganancia_REM_fj').prop('checked'),
                 Porc_Ganancia_REM_FJ: $('#DtMedicoInp_Porc_Ganancia_REM_FJ').val(),
-                Expecialid: expeci,
+                EspecialIds: expeci,
                 UsuarioId: $('#DtUsuario_UsuarioId').val(),
-                Metodo: $('#ModAct').val()
+                ModAct: $('#ModAct').val()
             }
 
             return dt;

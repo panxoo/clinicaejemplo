@@ -1,5 +1,6 @@
 ﻿using FRANLES_DENT_3.Areas.AdminPersonal.Models.AdminUsuario;
 using FRANLES_DENT_3.Metodos.Permisos;
+using FRANLES_DENT_3.Models.MedicoDato;
 using FRANLES_DENT_3.Models.Personal;
 using FRANLES_DENT_3.Servicios.Interfaces;
 using FRANLES_DENT_3.Variables;
@@ -76,7 +77,7 @@ namespace FRANLES_DENT_3.Areas.AdminPersonal.Metodos.AdminUsuario
                     NumDocumento = _model.NumDocumento.Trim()
                 };
 
-               await _lstGnrl._context.AddAsync(_usuario);
+                await _lstGnrl._context.AddAsync(_usuario);
 
                 if (!string.IsNullOrEmpty(_model.DtEmUsr.Nombre))
                 {
@@ -177,9 +178,9 @@ namespace FRANLES_DENT_3.Areas.AdminPersonal.Metodos.AdminUsuario
 
                 if (_model.Acceso)
                 {
-                    
+
                     _usuario.PerfilId = _model.PerfilId;
-                   
+
                     if (!_model.UserNomExist)
                     {
                         _usuario.UsuarioId = _user.Id;
@@ -223,7 +224,7 @@ namespace FRANLES_DENT_3.Areas.AdminPersonal.Metodos.AdminUsuario
 
                 await _lstGnrl._context.SaveChangesAsync();
 
-                if (_model.Acceso && cambioPrfl )
+                if (_model.Acceso && cambioPrfl)
                 {
                     await new PermisosSave(_lstGnrl).SavePermisosUsr(_usuario.PerfilId, _lstGnrl._datosUsuario.ClinicaId, _user);
                 }
@@ -288,5 +289,101 @@ namespace FRANLES_DENT_3.Areas.AdminPersonal.Metodos.AdminUsuario
         {
             await _lstGnrl._userManager.SetLockoutEnabledAsync(_user, false);
         }
+
+        public async Task<RetornoAction> SaveDetalleUsuarioMedUpd(UsuarioViewPost.UsuarioMedicoPost _model)
+        {
+            try
+            {
+
+                DatosMedico _medico;
+
+                if (await _lstGnrl._context.DatosMedicos.AnyAsync(a => a.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId) && a.UsuarioId.Equals(_model.UsuarioId)))
+                {
+                    _medico = await _lstGnrl._context.DatosMedicos.FirstOrDefaultAsync(a => a.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId) && a.UsuarioId.Equals(_model.UsuarioId));
+
+                    _medico.COP = _model.COP;
+                    _medico.RNE = _model.RNE;
+                    _medico.OpcRemFija = _model.OpcRemFija;
+                    _medico.Porcentaje_ganancia_asegurada = !_model.OpcRemFija ? _model.Porcentaje_ganancia_asegurada : 0;
+                    _medico.Porcentaje_ganancia_interno = !_model.OpcRemFija ? _model.Porcentaje_ganancia_interno : 0;
+                    _medico.RemFijaMonto = _model.OpcRemFija ? _model.RemFijaMonto : 0;
+                    _medico.OpcPorc_Ganancia_REM_fj = _model.OpcRemFija ? _model.OpcPorc_Ganancia_REM_fj : false;
+                    _medico.Porc_Ganancia_REM_FJ = _model.OpcRemFija && _model.OpcPorc_Ganancia_REM_fj ? _model.Porc_Ganancia_REM_FJ : 0;
+                }
+                else
+                {
+                    _medico = new DatosMedico
+                    {
+                        DatosMedicoId = Ulid.NewUlid().ToString(),
+                        UsuarioId = _model.UsuarioId,
+                        COP = _model.COP,
+                        RNE = _model.RNE,
+                        OpcRemFija = _model.OpcRemFija,
+                        Porcentaje_ganancia_asegurada = !_model.OpcRemFija ? _model.Porcentaje_ganancia_asegurada : 0,
+                        Porcentaje_ganancia_interno = !_model.OpcRemFija ? _model.Porcentaje_ganancia_interno : 0,
+                        RemFijaMonto = _model.OpcRemFija ? _model.RemFijaMonto : 0,
+                        OpcPorc_Ganancia_REM_fj = _model.OpcRemFija ? _model.OpcPorc_Ganancia_REM_fj : false,
+                        Porc_Ganancia_REM_FJ = _model.OpcRemFija && _model.OpcPorc_Ganancia_REM_fj ? _model.Porc_Ganancia_REM_FJ : 0,
+                        ClinicaId = _lstGnrl._datosUsuario.ClinicaId
+                    };
+
+                    await _lstGnrl._context.AddAsync(_medico);
+                }
+
+                await _lstGnrl._context.SaveChangesAsync();
+
+                await EvaluacionMedicoEsp(_medico.DatosMedicoId, _model.EspecialIds);
+
+                return new RetornoAction { Code = 0, Mensaje = "" };
+
+
+            }
+            catch (Exception ex)
+            {
+                return new RetornoAction { Code = 1, Mensaje = "Error del almacenamiento" };
+            }
+        }
+
+        private async Task<bool> EvaluacionMedicoEsp(string _idMedico, List<string> _lstEspec)
+        {
+
+            List<Especialidad_Medico> _espMedicoAct;
+            List<Especialidad_Medico> _espMedicoNew;
+            List<Especialidad_Medico> _espMedicoDel = new List<Especialidad_Medico>();
+
+
+            _espMedicoAct = await _lstGnrl._context.Especialidad_Medicos.Where(w => w.DatosMedico.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId) && w.DatosMedico.DatosMedicoId.Equals(_idMedico)).ToListAsync();
+
+            if (_espMedicoAct.Count > 0)
+            {
+                foreach (Especialidad_Medico em in _espMedicoAct.Where(w => !_lstEspec.Contains(w.EspecialidadId)))
+                {
+                    _espMedicoDel.Add(em);
+                }
+
+                _espMedicoNew = _lstEspec.Except(_espMedicoAct.Select(s => s.EspecialidadId).ToList()).Select(s => new Especialidad_Medico { DatosMedicoId = _idMedico, EspecialidadId = s }).ToList();
+
+            }
+            else
+            {
+                _espMedicoNew = _lstEspec.Select(s => new Especialidad_Medico { DatosMedicoId = _idMedico, EspecialidadId = s }).ToList();
+            }
+
+            if (_espMedicoNew != null || _espMedicoNew.Count > 0)
+            {
+                await _lstGnrl._context.AddRangeAsync(_espMedicoNew);
+            }
+
+            if (_espMedicoDel.Count > 0)
+            {
+                _lstGnrl._context.RemoveRange(_espMedicoDel);
+            }
+
+            if (_espMedicoAct.Count > 0 || _espMedicoNew.Count > 0)
+                await _lstGnrl._context.SaveChangesAsync();
+
+            return true;
+        }
+
     }
 }

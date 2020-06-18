@@ -1,0 +1,102 @@
+﻿@model DataCollect<SucursalConfManList>
+@{
+    ViewData["Title"] = "SucursalConfMant";
+}
+
+
+
+<header class="page-header">
+    <div class="d-flex align-items-center">
+        <div class="mr-auto">
+            <h1 class="separator">MANTENEDOR SUCURSAL</h1>
+            <nav class="breadcrumb-wrapper" aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index"><i class="icon dripicons-home"></i></a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Mantenedor Sucursal</li>
+                </ol>
+            </nav>
+        </div>
+        <ul class="actions top-right">
+            <li class="dropdown">
+                <a href="javascript:void(0)" class="btn btn-fab" data-toggle="dropdown" aria-expanded="false">
+                    <i class="la la-ellipsis-h"></i>
+                </a>
+                <div class="dropdown-menu dropdown-icon-menu dropdown-menu-right">
+                    <div class="dropdown-header">
+                        Quick Actions
+                    </div>
+                    <a href="#" class="dropdown-item">
+                        <i class="icon dripicons-clockwise"></i> Refresh
+                    </a>
+
+                </div>
+            </li>
+        </ul>
+    </div>
+</header>
+
+<section class="page-content container-fluid">
+
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <h5 class="card-header">Title</h5>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="bs4-table" class="table table-striped">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>
+                                        Principal
+                                    </th>
+                                    <th>
+                                        Nombre
+                                    </th>
+                                    <th>
+                                        Dirección
+                                    </th>
+                                    <th>
+                                        Distrito
+                                    </th>
+                                    <th>
+                                        Provincia
+                                    </th>
+                                    <th>
+                                        Departamento
+                                    </th>
+                                    <th>
+                                        Opciones
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (SucursalConfManList item in Model.ListDatos)
+                                {
+                                    <tr>
+                                        <td>
+                                            @if (item.Principal)
+                                            {
+                                                <i class="fa fa-star fa-2x text-warning"></i>
+                                            }
+                                        </td>
+                                        <td>@Html.DisplayFor(modelItem => item.Nombre)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.Direccion)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.DistritoNom)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.ProvinciaNom)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.DepartamentoNom)</td>
+                                        <td>
+                                            <a asp-area="AtributoEmpresa" asp-action="SucursalConf" asp-route-id="@item.SucursalId" asp-route-actmtd="@Model.Metodo@Model.Acciones["Vie"]"><i data-toggle="tooltip" data-placement="top" title="" data-original-title="Visualizar" class="far fa-eye text-secondary fa-2x"></i></a>
+                                            <a asp-area="AtributoEmpresa" asp-action="SucursalConfEdit" asp-route-id="@item.SucursalId" asp-route-actmtd="@Model.Metodo@Model.Acciones["Upd"]"><i data-toggle="tooltip" data-placement="top" title="" data-original-title="Editar" class="far fa-edit text-success fa-2x"></i></a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+

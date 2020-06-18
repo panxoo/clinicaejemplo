@@ -1,0 +1,213 @@
+﻿@model SucursalConfEditInput
+
+@{
+    ViewData["Title"] = "SucursalConfEdit";
+}
+
+
+<header class="page-header">
+    <div class="d-flex align-items-center">
+        <div class="mr-auto">
+            <h1 class="separator">DATOS DE SUCURSAL</h1>
+            <nav class="breadcrumb-wrapper" aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index"><i class="icon dripicons-home"></i></a></li>
+                    <li class="breadcrumb-item"><a asp-area="Administrativo" asp-controller="AdmUsuario" asp-action="UsuarioMant">Usuarios</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Datos de usuario</li>
+                </ol>
+            </nav>
+        </div>
+        <ul class="actions top-right">
+            <li class="dropdown">
+                <a href="javascript:void(0)" class="btn btn-fab" data-toggle="dropdown" aria-expanded="false">
+                    <i class="la la-ellipsis-h"></i>
+                </a>
+                <div class="dropdown-menu dropdown-icon-menu dropdown-menu-right">
+                    <div class="dropdown-header">
+                        Quick Actions
+                    </div>
+                    <a href="#" class="dropdown-item">
+                        <i class="icon dripicons-clockwise"></i> Refresh
+                    </a>
+                    <a asp-area="Configuracion" asp-action="CreaUsuarioAdm" asp-controller="AdmUsuario" asp-route-actmtd="" class="dropdown-item">
+                        <i class="icon dripicons-plus text-success"></i> Agregar
+                    </a>
+                    <a href="#" class="dropdown-item">
+                        <i class="icon dripicons-cloud-download"></i> Export
+                    </a>
+                    <a href="#" class="dropdown-item">
+                        <i class="icon dripicons-help"></i> Support
+                    </a>
+                </div>
+            </li>
+        </ul>
+    </div>
+</header>
+
+<section class="page-content container-fluid">
+
+    @Html.HiddenFor(p => p.ModAct)
+    @Html.HiddenFor(p => p.Input.SucursalId)
+
+    <div class="row">
+        <div class="col">          
+            <div class="card">
+                <h5 class="card-header">Datos Sucursal Actualizar</h5>
+                <form id="AjaxFormSucursal" method="post">
+                    <div class="card-body">
+
+                        <div class="form-group ">
+                            <label asp-for="Input.Nombre"></label>
+                            <input type="text" class="form-control" asp-for="Input.Nombre" autocomplete="off">
+                            <span asp-validation-for="Input.Nombre" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-3">
+                                <label asp-for="Input.Telefono"></label>
+                                <input type="text" class="form-control" asp-for="Input.Telefono" autocomplete="off">
+                                <span asp-validation-for="Input.Telefono" class="text-danger"></span>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label asp-for="Input.Telefono2"></label>
+                                <input type="text" class="form-control" asp-for="Input.Telefono2" autocomplete="off">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-3">
+                                <label asp-for="Input.CorreoSucursal"></label>
+                                <input type="text" class="form-control" asp-for="Input.CorreoSucursal" autocomplete="off">
+                                <span asp-validation-for="Input.CorreoSucursal" class="text-danger"></span>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label asp-for="Input.CorreoSucursal2"></label>
+                                <input type="text" class="form-control" asp-for="Input.CorreoSucursal2" autocomplete="off">
+                                <span asp-validation-for="Input.CorreoSucursal2" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-row ">
+
+                            <div class="form-group col-md-3">
+                                <label asp-for="LocalizacionGnrl.DepartId"> </label>
+                                <select asp-for="LocalizacionGnrl.DepartId" class="form-control">
+                                    @foreach (var dato in Model.LocalizacionGnrl.LstDepart)
+                                    {
+                                        <option value="@dato.Value">@dato.Text</option>
+                                    }
+                                </select>
+                            </div>
+
+                            <div class="form-group col-md-3">
+                                <label asp-for="LocalizacionGnrl.ProvinId"> </label>
+                                <select asp-for="LocalizacionGnrl.ProvinId" class="form-control">
+                                    @foreach (var dato in Model.LocalizacionGnrl.LstProvin)
+                                    {
+                                        <option value="@dato.Value">@dato.Text</option>
+                                    }
+                                </select>
+                            </div>
+
+                            <div class="form-group col-md-3">
+                                <label asp-for="LocalizacionGnrl.DistriId"> </label>
+                                <select asp-for="LocalizacionGnrl.DistriId" class="form-control">
+                                    @foreach (var dato in Model.LocalizacionGnrl.LstDistri)
+                                    {
+                                        <option value="@dato.Value">@dato.Text</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Input.Direccion"></label>
+                            <input type="text" class="form-control" asp-for="Input.Direccion" autocomplete="off">
+                            <span asp-validation-for="Input.Direccion" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="card-footer">
+                        <div class="form-group">
+                            <input type="submit" class="btn btn-success" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts{
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+
+    <script src="~/js/MetodosCallSubmit.js"></script>
+    <script src="~/js/CargaDatosGnrl.js"></script>
+
+ 
+
+            <script type="text/javascript">
+
+
+
+        var cargaLocation = new CargaLocation("@Url.Action("CargaProvincia", "Comun")", "#LocalizacionGnrl_DepartId", "#LocalizacionGnrl_ProvinId", "#LocalizacionGnrl_DistriId")
+
+        $(document).ready(function () {
+
+        $("#LocalizacionGnrl_DepartId").change(  function () {
+            id = $(this).val();
+            if (id != '') {
+         |       cargaLocation.CargaProvincia(id);
+            }
+        });
+
+        $("#LocalizacionGnrl_ProvinId").change(function () {
+             id = $(this).val();
+            if (id != '') {
+                cargaLocation.CargaDistrito(id);
+             }
+        });
+
+        });
+
+        function PivoteDistrito(id) {
+            cargaLocation.CargaDistrito(id);
+        }
+
+        $("#AjaxFormSucursal").submit( async function (e) {
+            e.preventDefault();
+
+            if (!$("#AjaxFormSucursal").valid()) {
+                return;
+            }
+
+            let post = new AjaxSubmit("@Url.Action("SucursalConfEdit","EmpresaConfg")", "#SubmitBtn", "Error almacenamiento");
+
+            if (await MensajeDecision("Registro de usuario", "¿Se desea actualizar los datos del usuario?")) {
+                let dt = ExtraccionDt();
+                post.AjaxPopRedirec(dt);
+            }
+        });
+
+        function ExtraccionDt() {
+
+            var DtGnrl = {
+                SucursalId: $("#Input_SucursalId").val(),
+                Nombre: $("#Input_Nombre").val(),
+                Direccion: $("#Input_Direccion").val(),
+                DistritoId: $("#LocalizacionGnrl_DistriId").val(),
+                Telefono: $("#Input_Telefono").val(),
+                Telefono2: $("#Input_Telefono2").val(),
+                CorreoSucursal: $("#Input_CorreoSucursal").val(),
+                CorreoSucursal2: $("#Input_CorreoSucursal2").val(),
+                ModAct: $("#ModAct").val()
+            };
+
+            return DtGnrl;
+        }
+            </script>
+ 
+    
+
+
+}

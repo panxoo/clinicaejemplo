@@ -243,7 +243,7 @@ namespace FRANLES_DENT_3.Areas.AtributoEmpresa.Controllers
             {
                 case 0:
                     Response.StatusCode = (int)HttpStatusCode.OK;
-                    return Json(new { redirectToUrl = Url.Action(nameof(ConfigAtributoController.PerfilDetalle), "ConfigAtributo", new {id = retornoAction.Parametro[0], actmtd = VarGnrl.GetModuloActionKey("Mant_Perfil", "Vie") }), redir = true });
+                    return Json(new { redirectToUrl = Url.Action(nameof(ConfigAtributoController.PerfilDetalle), "ConfigAtributo", new {id = retornoAction.Parametro, actmtd = VarGnrl.GetModuloActionKey("Mant_Perfil", "Vie") }), redir = true });
 
                 case 1:
                     Response.StatusCode = (int)HttpStatusCode.BadRequest;

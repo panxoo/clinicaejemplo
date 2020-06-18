@@ -35,6 +35,7 @@
   <ItemGroup>
     <Folder Include="Areas\AdminPersonal\Data\" />
     <Folder Include="Areas\AtributoEmpresa\Data\" />
+    <Folder Include="Areas\AtributoEmpresa\Views\EmpresaConfg\Shared\" />
     <Folder Include="Areas\Principal\Data\" />
     <Folder Include="Areas\Principal\Models\" />
     <Folder Include="Areas\SudoAdmin\Data\" />

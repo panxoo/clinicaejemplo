@@ -130,7 +130,7 @@ namespace FRANLES_DENT_3.Areas.AdminPersonal.Metodos.AdminUsuario
                     return new RetornoAction { Code = 2, Mensaje = "" };
                 }
 
-                if (_model.EspecialIds.Count == 0)
+                if (_model.EspecialIds == null || _model.EspecialIds.Count == 0)
                 {
                     return new RetornoAction { Code = 1, Mensaje = "Se debe seleccionar especialidad del medico" };
                 }

@@ -149,7 +149,7 @@ namespace FRANLES_DENT_3.Areas.AdminPersonal.Metodos.AdminUsuario
             if (_model.DtUsuario.IsMedic)
             {
 
-                _model.DtMedico = await ObtenerDatosMedico(_model.DtUsuario.UsuarioId);
+                _model.DtMedico = await GetObtenerDatosMedico(_model.DtUsuario.UsuarioId);
 
 
                 _model.EspcialiSelLst = await _lstGnrl._context.Especialidades.Where(w => w.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId))
@@ -170,7 +170,7 @@ namespace FRANLES_DENT_3.Areas.AdminPersonal.Metodos.AdminUsuario
         }
 
 
-        public async Task<UsuarioViewInput.MedicoView> ObtenerDatosMedico(string _usuarioId)
+        public async Task<UsuarioViewInput.MedicoView> GetObtenerDatosMedico(string _usuarioId)
         {
             UsuarioViewInput.MedicoView _model = new UsuarioViewInput.MedicoView();
           

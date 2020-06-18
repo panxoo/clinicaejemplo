@@ -45,7 +45,7 @@ namespace FRANLES_DENT_3.Areas.AtributoEmpresa.Metodos.ConfigAtributo
 
                 await _lstGnrl._context.SaveChangesAsync();
 
-                return new RetornoAction { Code = 0, Mensaje = "", Parametro = new [] { _perfil.PerfilId } };
+                return new RetornoAction { Code = 0, Mensaje = "", Parametro = _perfil.PerfilId  };
             }
             catch (Exception ex)
             {
@@ -72,7 +72,7 @@ namespace FRANLES_DENT_3.Areas.AtributoEmpresa.Metodos.ConfigAtributo
                 await new PermisosSave(_lstGnrl).SavePermisosUsr(_perfil.PerfilId, _lstGnrl._datosUsuario.ClinicaId);
 
 
-                return new RetornoAction { Code = 0, Mensaje = "", Parametro = new[] { _perfil.PerfilId } };
+                return new RetornoAction { Code = 0, Mensaje = "", Parametro =   _perfil.PerfilId  };
             }
             catch (Exception ex)
             {

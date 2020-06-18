@@ -72,16 +72,11 @@ namespace FRANLES_DENT_3.Areas.AdminPersonal.Metodos.AdminUsuario
 
             RetornoAction retornoAction = new RetornoAction();
 
-            AdminUsuarioVal valAdmUsr = new AdminUsuarioVal(_lstGnrl);
+            retornoAction = await new AdminUsuarioVal(_lstGnrl).ValDetalleUsuarioMedUpd(_model);
 
-            retornoAction = await valAdmUsr.ValDetalleUsuarioMed(_model);
-
-
-            if (retornoAction.Code == "0")
-            {
-                MetAdmUsr metAdmUsr = new MetAdmUsr(_lstGnrl);
-
-                retornoAction = await metAdmUsr.UpdAddDatosMedico(_model);
+            if (retornoAction.Code == 0)
+            {              
+                retornoAction = await new AdminUsuarioSave(_lstGnrl).SaveDetalleUsuarioMedUpd(_model);
             }
 
             return retornoAction;
