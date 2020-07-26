@@ -128,13 +128,45 @@ namespace FRANLES_DENT_3.Areas.AdminPersonal.Controllers
             return View(_model);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> AreaSucursalDetalle(string id,string usuarioId, string actmtd)
+        {
+            string moduloAcc = VarGnrl.AccionModulo(actmtd, "Mant_Usuari");
+
+            if (moduloAcc != "Vie")
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Json(new
+                {
+                    redirectToUrl = Url.Action(nameof(AdminUsuarioController.UsuarioMant), "AdminUsuario"),
+                    redir = true,
+                    mnsj = "Error en el registro, volver abrir pantalla para registro."
+                });
+            }
+
+            _lstGnrl._datosUsuario = await _lstGnrl._usuarios.DatosSession(HttpContext);
+
+            var _model = await new AdminUsuarioGet(_lstGnrl).GetAreaAtencionSucursal(id, usuarioId);
+
+
+            if (_model != null)
+            {
+                Response.StatusCode = (int)HttpStatusCode.OK;
+                return PartialView("Shared/_UsuarioViewSucursalMedicoEdit", _model);
+            }
+            else
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return null;
+            }                      
+        }
 
         [HttpPost]
         public async Task<IActionResult> DetalleUsuarioMedUpd(UsuarioViewPost.UsuarioMedicoPost _model)
         {
             string moduloAcc = VarGnrl.AccionModulo(_model.ModAct, "Mant_Usuari");
 
-            if (moduloAcc == "Vie")
+            if (moduloAcc != "Vie")
             {
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return Json(new
@@ -173,6 +205,56 @@ namespace FRANLES_DENT_3.Areas.AdminPersonal.Controllers
                         mnsj = string.IsNullOrEmpty(retornoAction.Mensaje) ? "Error en el registro, volver abrir pantalla para registro." : retornoAction.Mensaje
                     });
             }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DetalleUsuarioSucursalAA(UsuarioViewPost.UsuarioSucursalAAPost _model)
+        {
+
+            string moduloAcc = VarGnrl.AccionModulo(_model.ModAct, "Mant_Usuari");
+
+            if (moduloAcc != "Vie")
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Json(new
+                {
+                    redirectToUrl = Url.Action(nameof(AdminUsuarioController.UsuarioMant), "AdminUsuario"),
+                    redir = true,
+                    mnsj = "Error en el registro, volver abrir pantalla para registro."
+                });
+            }
+
+            if (!ModelState.IsValid)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Json(new RetornoActionView { mnsj = "Falta llenar los campos obligatorios" });
+            }
+
+            _lstGnrl._datosUsuario = await _lstGnrl._usuarios.DatosSession(HttpContext);
+
+            RetornoAction retornoAction = await new AdminUsuarioPost(_lstGnrl).PostDetalleUsuarioSucursalAA(_model);
+
+            switch (retornoAction.Code)
+            {
+                case 0:
+                    Response.StatusCode = (int)HttpStatusCode.OK;
+                    return Json(new RetornoActionView { redir = false});
+
+                    //UsuarioViewInput.MedicoView modelret = await new AdminUsuarioGet(_lstGnrl).GetObtenerDatosMedico(_model.UsuarioId);
+                    //return PartialView("Shared/_UsuarioViewMedico", modelret);
+                case 1:
+                    Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    return Json(new RetornoActionView { mnsj = retornoAction.Mensaje });
+                default:
+                    Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    return Json(new RetornoActionView
+                    {
+                        redirectToUrl = Url.Action(nameof(AdminUsuarioController.UsuarioMant), "AdmUsuario"),
+                        redir = true,
+                        mnsj = string.IsNullOrEmpty(retornoAction.Mensaje) ? "Error en el registro, volver abrir pantalla para registro." : retornoAction.Mensaje
+                    });
+            }
+
         }
 
 

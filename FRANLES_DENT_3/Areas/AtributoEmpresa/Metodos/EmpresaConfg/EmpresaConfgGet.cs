@@ -1,8 +1,10 @@
 ﻿using FRANLES_DENT_3.Areas.AtributoEmpresa.Models.EmpresaConfg;
 using FRANLES_DENT_3.Libreria;
+using FRANLES_DENT_3.Models.Empresa.Atributos;
 using FRANLES_DENT_3.Models.Sistema;
 using FRANLES_DENT_3.Servicios.Interfaces;
 using FRANLES_DENT_3.Variables;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -99,38 +101,91 @@ namespace FRANLES_DENT_3.Areas.AtributoEmpresa.Metodos.EmpresaConfg
                                                                    .Select(s => s.Name + " / " + s.Provincia.Name + " / " + s.Provincia.Departamento.Name)
                                                                    .FirstOrDefaultAsync();
 
-            if (await _lstGnrl._context.Sucursal_Area_Atencions.AnyAsync(w => w.Area_Atencion.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId) && w.SucursalId.Equals(id)))
-            {
-                _model.AreaSucursal = await _lstGnrl._context.Sucursal_Area_Atencions.Where(w => w.Area_Atencion.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId) && w.SucursalId.Equals(id))
-                                                                                     .Select(s => new SucursalConfInput.AreaAtencionSucursal
-                                                                                        {
-                                                                                            AreaId = s.Area_AtencionId,
-                                                                                            AreaNombre = s.Area_Atencion.Nombre,
-                                                                                            CantMedicos = _lstGnrl._context.Area_Medicos.Include(i => i.Usuario).Count(c => c.Sucursal_Area_AtencionId.Equals(s.Sucursal_Area_AtencionId))
-                                                                                        }).ToListAsync();
-            }
-         
+            _model.AreaSucursal = await GetSucursalObtenerArea(id);
 
-            if (await _lstGnrl._context.Area_Atencions.AnyAsync(a => a.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId)))
-            {
-
-                _model.AreaAtencionSucursalInputs = await _lstGnrl._context.Area_Atencions.Where(w => w.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId))
-                                                                   .Select(s => new SucursalConfInput.AreaAtencionSucursalInput
-                                                                   {
-                                                                       AreaAtencionId = s.Area_AtencionId,
-                                                                       AANombre = s.Nombre,
-                                                                       SucursalId = id,
-                                                                       Activo = _lstGnrl._context.Sucursal_Area_Atencions.Any(a => a.Area_Atencion.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId) && a.Area_AtencionId.Equals(s.Area_AtencionId) && a.SucursalId.Equals(id))
-                                                                   }).ToListAsync();
-
-            }
+            _model.AreaAtencionSucursalInputs = new List<SelectListItem>();
 
             _model.Metodo = VarGnrl.GetModuloKey("Conf_Empres");
             _model.ModAct = VarGnrl.GetModuloActionKey("Conf_Empres", action);
 
             return new RetornoAction { Code = 0, Parametro = _model };
+        }
 
-             
+        public async Task<List<SelectListItem>> GetSucursalObtenerAreaAdd(string id)
+        {
+            List<SelectListItem> _model = new List<SelectListItem>();
+
+            if (await _lstGnrl._context.Area_Atencions.AnyAsync(a => a.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId)))
+            {
+                _model = await (from aa in _lstGnrl._context.Area_Atencions
+                                join sa in _lstGnrl._context.Sucursal_Area_Atencions on new { s1 = aa.Area_AtencionId, s2 = id } equals new { s1 = sa.Area_AtencionId, s2 = sa.SucursalId } into saa
+                                from saaf in saa.DefaultIfEmpty()
+                                where saaf == null
+                                select new SelectListItem
+                                {
+                                    Value = aa.Area_AtencionId,
+                                    Text = aa.Nombre,
+                                }).ToListAsync();
+            }
+
+            return _model;
+        }
+
+        public async Task<List<SucursalConfInput.AreaAtencionSucursal>> GetSucursalObtenerArea(string id)
+        {
+            List<SucursalConfInput.AreaAtencionSucursal> _model = new List<SucursalConfInput.AreaAtencionSucursal>();
+
+            if (await _lstGnrl._context.Sucursal_Area_Atencions.AnyAsync(w => w.Area_Atencion.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId) && w.SucursalId.Equals(id)))
+            {
+                _model = await _lstGnrl._context.Sucursal_Area_Atencions.Where(w => w.Area_Atencion.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId) && w.SucursalId.Equals(id))
+                                                                                     .Select(s => new SucursalConfInput.AreaAtencionSucursal
+                                                                                     {
+                                                                                         AreaId = s.Area_AtencionId,
+                                                                                         AreaNombre = s.Area_Atencion.Nombre,
+                                                                                         CantMedicos = _lstGnrl._context.Area_Medicos.Include(i => i.Usuario).Count(c => c.Sucursal_Area_AtencionId.Equals(s.Sucursal_Area_AtencionId))
+                                                                                     }).ToListAsync();
+            }
+
+            return _model;
+        }
+
+        public async Task<RangoHorarioConfMantInput> GetRangoHorarioConfMant()
+        {
+            RangoHorarioConfMantInput _model = new RangoHorarioConfMantInput();
+
+            _model.ListDatos = await _lstGnrl._context.Tipo_Horarios.Where(w => w.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId)).ToListAsync();
+            _model.Metodo = VarGnrl.GetModuloKey("Conf_Empres");
+            _model.ModAct = VarGnrl.GetModuloActionKey("Conf_Empres", "Lst");
+
+            return _model;
+        }
+
+        public async Task<RetornoAction> GetRangoHorarioConfDetalle(string id, string accion)
+        {
+            RangoHorarioConfDetalleInput _model = new RangoHorarioConfDetalleInput();
+
+            if (accion != "Add")
+            {
+                if (string.IsNullOrEmpty(id))
+                {
+                    return new RetornoAction { Code = 2, Mensaje = "Error, Tipo de Horario no existente" };
+                }
+
+                _model.Input = await _lstGnrl._context.Tipo_Horarios.FirstOrDefaultAsync(f => f.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId) && f.Tipo_HorarioId.Equals(id));
+
+                if (_model.Input == null)
+                {
+                    return new RetornoAction { Code = 2, Mensaje = "Error, Tipo de Horario no existente" };
+                }
+            }
+            else
+            {
+                _model.Input = new Tipo_Horario();
+            }
+            _model.Metodo = VarGnrl.GetModuloKey("Conf_Empres");
+            _model.ModAct = VarGnrl.GetModuloActionKey("Conf_Empres", accion);
+
+            return new RetornoAction { Code = 0, Parametro = _model };
         }
     }
 }

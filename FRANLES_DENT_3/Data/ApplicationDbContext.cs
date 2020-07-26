@@ -38,6 +38,7 @@ namespace FRANLES_DENT_3.Data
         public DbSet<Sucursal_Area_Atencion> Sucursal_Area_Atencions { get; set; }
         public DbSet<Sucursal_Usuario> Sucursal_Usuarios { get; set; }
         public DbSet<Area_Medico> Area_Medicos { get; set; }
+        public DbSet<Tipo_Horario> Tipo_Horarios { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -199,6 +200,11 @@ namespace FRANLES_DENT_3.Data
                    .HasOne(a => a.Distrito)
                    .WithMany(b => b.Usuarios)
                    .HasForeignKey(s => s.DistritoId);
+
+            builder.Entity<Tipo_Horario>()
+                   .HasOne(a => a.Clinica)
+                   .WithMany(b => b.Tipo_Horarios)
+                   .HasForeignKey(s => s.ClinicaId);
 
             base.OnModelCreating(builder);
         }

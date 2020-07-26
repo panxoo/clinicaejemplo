@@ -1,0 +1,29 @@
+﻿@model List<SucursalConfInput.AreaAtencionSucursal>
+
+
+
+
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Area Atencion</th>
+                        <th>Cant. Medicos</th>
+                        <th>Opciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem => item.AreaNombre)</td>
+                            <td>@Html.DisplayFor(modelItem => item.CantMedicos)</td>
+                            <td>
+                                <a asp-area="Configuracion" asp-action="SucursalConfEdit" asp-route-id="@item.AreaId" asp-route-actmtd="436f6e665f456d70726573566965"><i data-toggle="tooltip" data-placement="top" title="" data-original-title="Visualizar" class="far fa-eye text-secondary fa-2x"></i></a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+ 

@@ -85,5 +85,21 @@ namespace FRANLES_DENT_3.Areas.AdminPersonal.Metodos.AdminUsuario
 
         }
 
+        public async Task<RetornoAction> PostDetalleUsuarioSucursalAA(UsuarioViewPost.UsuarioSucursalAAPost _model)
+        {
+
+            RetornoAction retornoAction = new RetornoAction();
+
+            retornoAction = await new AdminUsuarioVal(_lstGnrl).ValDetalleUsuarioSucursalAA(_model);
+
+            if (retornoAction.Code == 0)
+            {
+                retornoAction = await new AdminUsuarioSave(_lstGnrl).SaveDetalleUsuarioSucursalAA(_model);
+            }
+
+            return retornoAction;
+
+        }
+
     }
 }

@@ -1,5 +1,6 @@
 ﻿using FRANLES_DENT_3.Areas.AdminPersonal.Models.AdminUsuario;
 using FRANLES_DENT_3.Metodos.Permisos;
+using FRANLES_DENT_3.Models.Empresa.Atributos;
 using FRANLES_DENT_3.Models.MedicoDato;
 using FRANLES_DENT_3.Models.Personal;
 using FRANLES_DENT_3.Servicios.Interfaces;
@@ -383,6 +384,67 @@ namespace FRANLES_DENT_3.Areas.AdminPersonal.Metodos.AdminUsuario
                 await _lstGnrl._context.SaveChangesAsync();
 
             return true;
+        }
+
+        public async Task<RetornoAction> SaveDetalleUsuarioSucursalAA(UsuarioViewPost.UsuarioSucursalAAPost _model)
+        {
+            try
+            {
+
+                List<Sucursal_Area_Atencion> sucursalaas = await _lstGnrl._context.Sucursal_Area_Atencions.Where(w => w.Sucursal.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId) && w.SucursalId.Equals(_model.Sucursal)).ToListAsync();
+                List<Area_Medico> area_MedicosActual = await _lstGnrl._context.Area_Medicos.IgnoreQueryFilters().Include(i => i.Sucursal_Area_Atencion)
+                                                                                                                .Where(w => w.UsuarioId.Equals(_model.UsuarioId) && w.Sucursal_Area_Atencion.SucursalId.Equals(_model.Sucursal)
+                                                                                                                        && w.Sucursal_Area_Atencion.Sucursal.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId)).ToListAsync();
+
+                area_MedicosActual.ForEach(f =>
+                {
+                    f.Activo = _model.AreaAtencions.Contains(f.Sucursal_Area_Atencion.Area_AtencionId);
+                }                );
+
+
+                
+                if (_model.AreaAtencions.Except(area_MedicosActual.Select(s => s.Sucursal_Area_Atencion.Area_AtencionId)).Any())
+                {
+
+                    List<Area_Medico> area_medicoAdd = new List<Area_Medico>();
+
+
+                    var sucuraaNotAsign = await (from saa in _lstGnrl._context.Sucursal_Area_Atencions
+                                         join suc in _lstGnrl._context.Sucursals on new { s1 = saa.SucursalId, s2 = _lstGnrl._datosUsuario.ClinicaId, s3 = _model.Sucursal } equals new { s1 = suc.SucursalId, s2 = suc.ClinicaId, s3 = suc.SucursalId }
+                                         join ame in _lstGnrl._context.Area_Medicos on new { s1 = saa.Sucursal_Area_AtencionId, s2 = _model.UsuarioId } equals new { s1 = ame.Sucursal_Area_AtencionId, s2 = ame.UsuarioId } into armed
+                                         from armedNul in armed.DefaultIfEmpty()
+                                         where armedNul == null
+                                         select new
+                                         {
+                                             saaid = saa.Sucursal_Area_AtencionId,
+                                             aaid = saa.Area_AtencionId
+                                         }).ToListAsync();
+
+                    foreach(var dt in sucuraaNotAsign.Where(w => _model.AreaAtencions.Contains(w.aaid)))
+                    {
+                        area_medicoAdd.Add(new Area_Medico
+                        {
+                            Area_MedicoId = Ulid.NewUlid().ToString(),
+                            Sucursal_Area_AtencionId = dt.saaid,
+                            UsuarioId = _model.UsuarioId,
+                            Activo = true
+                        });
+                    }
+
+                    await _lstGnrl._context.AddRangeAsync(area_medicoAdd);
+                }
+
+                await _lstGnrl._context.SaveChangesAsync();
+
+                return new RetornoAction { Code = 0 };
+
+
+            }
+            catch (Exception ex)
+            {
+                return new RetornoAction { Code = 1, Mensaje = "Error del almacenamiento" };
+
+            }
         }
 
     }

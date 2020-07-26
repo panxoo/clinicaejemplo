@@ -41,11 +41,11 @@ AjaxSubmit.prototype.AjaxPop = function (_dt) {
         type: "post",
         cache: false,
         success: function (result) {
-            if (result != null) {
+            if (result != null) {                
                 $(_btnCancel).click();
                 $(_partial).html(result);
                 NotificaSave();
-                if (_inputClear.length > 0) {
+                if (_inputClear != null) {
                     _inputClear.forEach(function (input) {
                         $(input).val("");
                     });
@@ -101,8 +101,8 @@ AjaxSubmit.prototype.AjaxPopCall = function (_dt) {
     _divBlock = this.divBlock;
     _titleError = this.titleError;
 
-    //$(_divBlock).append('<div class="qt-block-ui"></div>');
-    //_block = $(_divBlock).find(".qt-block-ui");
+    $(_divBlock).append('<div class="qt-block-ui"></div>');
+    _block = $(_divBlock).find(".qt-block-ui");
 
     $.ajax({
         url: this.url,
@@ -118,9 +118,37 @@ AjaxSubmit.prototype.AjaxPopCall = function (_dt) {
             MensajeError(_titleError, result.responseJSON.mnsj);
         },
         complete: function (res) {
-            //_block.fadeOut("3000", function () {
-            //    _block.remove();
-            //});
+            _block.fadeOut("1", function () {
+                _block.remove();
+            });
+        }
+    });
+}
+
+AjaxSubmit.prototype.AjaxGetDato = function (_dt) {
+    _partial = this.partial;
+    _divBlock = this.divBlock;
+
+    $(_divBlock).append('<div class="qt-block-ui"></div>');
+    _block = $(_divBlock).find(".qt-block-ui");
+
+    $.ajax({
+        url: this.url,
+        data: _dt,
+        type: "post",
+        cache: false,
+        success: function (result) {
+            if (result != null) {
+                $(_partial).html(result);
+            };
+        },
+        error: function (result) {
+            console.log("error llamar datos");
+        },
+        complete: function (res) {
+            _block.fadeOut("1", function () {
+                _block.remove();
+            });
         }
     });
 }

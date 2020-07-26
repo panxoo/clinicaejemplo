@@ -1,0 +1,180 @@
+﻿@model RangoHorarioConfDetalleInput
+@{
+    ViewData["Title"] = "RangoHorarioConfDetalle";
+}
+<style>
+    .highlighted_timespan {
+        background-color: #87cefa;
+        opacity: 0.5;
+        filter: alpha(opacity=50);
+        cursor: pointer;
+        z-index: 0;
+    }
+</style>
+
+
+<header class="page-header">
+    <div class="d-flex align-items-center">
+        <div class="mr-auto">
+            <h1 class="separator">DATO DE TIPO HORARIO</h1>
+            <nav class="breadcrumb-wrapper" aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index"><i class="icon dripicons-home"></i></a></li>
+                    <li class="breadcrumb-item"><a asp-area="Administrativo" asp-controller="AdmUsuario" asp-action="UsuarioMant">Usuarios</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Datos de usuario</li>
+                </ol>
+            </nav>
+        </div>
+        <ul class="actions top-right">
+            <li class="dropdown">
+                <a href="javascript:void(0)" class="btn btn-fab" data-toggle="dropdown" aria-expanded="false">
+                    <i class="la la-ellipsis-h"></i>
+                </a>
+                <div class="dropdown-menu dropdown-icon-menu dropdown-menu-right">
+                    <div class="dropdown-header">
+                        Quick Actions
+                    </div>
+                    <a href="#" class="dropdown-item">
+                        <i class="icon dripicons-clockwise"></i> Refresh
+                    </a>
+                    <a asp-area="Configuracion" asp-action="CreaUsuarioAdm" asp-controller="AdmUsuario" asp-route-actmtd="" class="dropdown-item">
+                        <i class="icon dripicons-plus text-success"></i> Agregar
+                    </a>
+                    <a href="#" class="dropdown-item">
+                        <i class="icon dripicons-cloud-download"></i> Export
+                    </a>
+                    <a href="#" class="dropdown-item">
+                        <i class="icon dripicons-help"></i> Support
+                    </a>
+                </div>
+            </li>
+        </ul>
+    </div>
+</header>
+
+<section class="page-content container-fluid">
+
+    @Html.HiddenFor(p => p.ModAct)
+    @Html.HiddenFor(p => p.Input.Tipo_HorarioId)
+
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <h5 class="card-header">Datos Sucursal Actualizar</h5>
+                <form id="AjaxFormTpHorario" method="post">
+                    <div class="card-body">
+
+                        <div class="form-group ">
+                            <label asp-for="Input.Nombre"></label>
+                            <input type="text" class="form-control" asp-for="Input.Nombre" autocomplete="off">
+                            <span asp-validation-for="Input.Nombre" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Input.Descripcion"></label>
+                            <input type="text" class="form-control" asp-for="Input.Descripcion" autocomplete="off">
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-3">
+                                <label asp-for="Input.Hora_Inicio"></label>
+                                <input type="text" class="form-control datetimepicker-input timepicker-input-act" asp-for="Input.Hora_Inicio"    data-toggle="datetimepicker" data-target="#Input_Hora_Inicio" autocomplete="off">
+                                <span asp-validation-for="Input.Hora_Inicio" class="text-danger"></span>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label asp-for="Input.Hora_Fin"></label>
+                                <input type="text" class="form-control datetimepicker-input timepicker-input-act" asp-for="Input.Hora_Fin"  data-toggle="datetimepicker" data-target="#Input_Hora_Fin" autocomplete="off">
+                                <span asp-validation-for="Input.Hora_Fin" class="text-danger"></span>
+                            </div>
+                        </div>                        
+
+                    </div>
+
+                    <div class="card-footer">
+                        <div class="form-group">
+                            <input type="submit" class="btn btn-success" value="Guardar" id="SubmitBtn" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="card">
+                <div class="body">
+                    <div id="scheduler_here" class="dhx_cal_container" style='width:100%; height:500px'>
+                        <div class="dhx_cal_navline">
+                            <div class="dhx_cal_prev_button">&nbsp;</div>
+                            <div class="dhx_cal_next_button">&nbsp;</div>
+                            <div class="dhx_cal_today_button"></div>
+                            <div class="dhx_cal_date"></div>
+                            <div class="dhx_cal_tab" name="day_tab" style="right:204px;"></div>
+                            <div class="dhx_cal_tab" name="week_tab" style="right:140px;"></div>
+                            <div class="dhx_cal_tab" name="month_tab" style="right:76px;"></div>
+                        </div>
+                        <div class="dhx_cal_header">
+                        </div>
+                        <div class="dhx_cal_data">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts{
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+
+    <script src="~/js/MetodosCallSubmit.js"></script>
+    <script src="~/js/CargaDatosGnrl.js"></script>
+
+
+
+    <script type="text/javascript">
+
+        $("#AjaxFormTpHorario").submit( async function (e) {
+            e.preventDefault();
+
+            if (!$("#AjaxFormTpHorario").valid()) {
+                return;
+            }
+
+            let post = new AjaxSubmit("@Url.Action("RangoHorarioConfDetalle", "EmpresaConfg")", "#SubmitBtn", "Error almacenamiento");
+
+            if (await MensajeDecision("Registro de usuario", "¿Se desea actualizar los datos del usuario?")) {
+                let dt = ExtraccionDt();
+                post.AjaxPopRedirec(dt);
+            }
+        });
+
+        function ExtraccionDt() {
+
+            var DtGnrl = {
+                Tipo_HorarioId: $("#Input_Tipo_HorarioId").val(),
+                Nombre: $("#Input_Nombre").val(),
+                Descripcion: $("#Input_Descripcion").val(),
+                Hora_Inicio: $("#Input_Hora_Inicio").val(),
+                Hora_Fin: $("#Input_Hora_Fin").val(),
+                ModAct: $("#ModAct").val()
+            };
+
+            return DtGnrl;
+        }
+
+        window.addEventListener("DOMContentLoaded", function(){
+            scheduler.init('scheduler_here', new Date(2018, 0, 1), "week");
+            scheduler.markTimespan({
+                start_date: fixed_dat,
+                end_date: scheduler.date.add(fixed_date, event_step, "minute"),
+                css: "highlighted_timespan"
+            });
+		});
+     
+        
+        
+
+    </script>
+
+
+
+
+}
+

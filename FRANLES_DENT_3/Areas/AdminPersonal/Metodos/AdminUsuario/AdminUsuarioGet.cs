@@ -1,12 +1,10 @@
 ﻿using FRANLES_DENT_3.Areas.AdminPersonal.Models.AdminUsuario;
 using FRANLES_DENT_3.Libreria;
-using FRANLES_DENT_3.Models.Permisos;
 using FRANLES_DENT_3.Models.Personal;
 using FRANLES_DENT_3.Servicios.Interfaces;
 using FRANLES_DENT_3.Variables;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,14 +13,12 @@ namespace FRANLES_DENT_3.Areas.AdminPersonal.Metodos.AdminUsuario
 {
     public class AdminUsuarioGet
     {
-
         public AdminUsuarioGet(IListGeneral lstGnrl)
         {
             _lstGnrl = lstGnrl;
         }
 
         private IListGeneral _lstGnrl;
-
 
         public async Task<UsuarioMantList> GetUsuarioMant()
         {
@@ -47,14 +43,11 @@ namespace FRANLES_DENT_3.Areas.AdminPersonal.Metodos.AdminUsuario
             return _model;
         }
 
-
         public async Task<CreaUsuarioInput> GetCreaUsuario(string id, string _accion)
         {
-
             if (_accion == "Upd")
                 if (!await _lstGnrl._context.Usuarios.AnyAsync(a => a.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId) && a.UsuarioId.Equals(id)))
                     return null;
-
 
             CreaUsuarioInput model = new CreaUsuarioInput();
 
@@ -62,8 +55,7 @@ namespace FRANLES_DENT_3.Areas.AdminPersonal.Metodos.AdminUsuario
                                                          .Select(s => s.Dominio)
                                                          .FirstOrDefaultAsync();
 
-
-            model.PerfilesSelect =await _lstGnrl._context.Perfils.Where(p => p.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId))
+            model.PerfilesSelect = await _lstGnrl._context.Perfils.Where(p => p.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId))
                                                             .Select(p => new CreaUsuarioInput.SelPerfil
                                                             {
                                                                 Value = p.PerfilId,
@@ -72,7 +64,7 @@ namespace FRANLES_DENT_3.Areas.AdminPersonal.Metodos.AdminUsuario
                                                                 IsAsistent = p.IsAsistente
                                                             }).ToListAsync();
 
-           string ubigeo = "";
+            string ubigeo = "";
 
             if (_accion == "Upd")
             {
@@ -82,7 +74,6 @@ namespace FRANLES_DENT_3.Areas.AdminPersonal.Metodos.AdminUsuario
                 model.UserNomExist = !string.IsNullOrEmpty(model.Input.Nombre_Cuenta);
                 ubigeo = model.Input.DistritoId;
                 model.Input.Avatar = !string.IsNullOrEmpty(model.Input.Avatar) ? _lstGnrl._datosUsuario.CodClinica + "/417661746172/" + model.Input.Avatar : "DEFAULT/417661746172/default.png";
-
             }
             else
             {
@@ -91,12 +82,10 @@ namespace FRANLES_DENT_3.Areas.AdminPersonal.Metodos.AdminUsuario
                 model.Input.Avatar = "DEFAULT/417661746172/default.png";
             }
 
-
             if (_accion == "Add" || string.IsNullOrEmpty(ubigeo))
             {
                 ubigeo = await _lstGnrl._context.Clinicas.Where(f => f.ClinicaID.Equals(_lstGnrl._datosUsuario.ClinicaId)).Select(s => s.DistritoId).FirstOrDefaultAsync();
             }
-
 
             model.LocalizacionGnrl.DistriId = ubigeo;
             model.LocalizacionGnrl.ProvinId = ubigeo.Substring(0, 4);
@@ -104,13 +93,11 @@ namespace FRANLES_DENT_3.Areas.AdminPersonal.Metodos.AdminUsuario
 
             CargaLocation cargaLocation = new CargaLocation();
 
-
             model.LocalizacionGnrl.LstDistri = await cargaLocation.ObtenerLocalizacion(model.LocalizacionGnrl.ProvinId, _lstGnrl._context);
 
             model.LocalizacionGnrl.LstProvin = await cargaLocation.ObtenerLocalizacion(model.LocalizacionGnrl.DepartId, _lstGnrl._context);
 
             model.LocalizacionGnrl.LstDepart = await cargaLocation.ObtenerLocalizacion("", _lstGnrl._context);
-
 
             model.Metodo = VarGnrl.GetModuloKey("Mant_Usuari");
             model.ModAct = VarGnrl.GetModuloActionKey("Mant_Usuari", _accion);
@@ -119,14 +106,13 @@ namespace FRANLES_DENT_3.Areas.AdminPersonal.Metodos.AdminUsuario
             return model;
         }
 
-
         public async Task<UsuarioViewInput> GetUsuarioView(string id, string accion)
         {
             UsuarioViewInput _model = new UsuarioViewInput();
 
             _model.DtUsuario = await _lstGnrl._context.Usuarios.Include(i => i.DatosEmergenciaUsuario).IgnoreQueryFilters().FirstOrDefaultAsync(f => f.UsuarioId.Equals(id) && f.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId));
 
-            if(_model.DtUsuario == null)
+            if (_model.DtUsuario == null)
             {
                 return null;
             }
@@ -141,16 +127,14 @@ namespace FRANLES_DENT_3.Areas.AdminPersonal.Metodos.AdminUsuario
                                                                    .Select(s => s.Name + " / " + s.Provincia.Name + " / " + s.Provincia.Departamento.Name)
                                                                    .FirstOrDefaultAsync();
 
+            _model.SucursalSelLst = await _lstGnrl._context.Sucursals.Where(w => w.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId)).Select(s => new SelectListItem { Text = s.Nombre, Value = s.SucursalId }).ToListAsync();
+
             if (_model.DtUsuario.DatosEmergenciaUsuario != null)
                 _model.ParentescoDet = TransfParam.ParamParentesco().FirstOrDefault(f => f.Value.Equals(_model.DtUsuario.DatosEmergenciaUsuario.Parentesco.ToString())).Text;
 
-
-
             if (_model.DtUsuario.IsMedic)
             {
-
                 _model.DtMedico = await GetObtenerDatosMedico(_model.DtUsuario.UsuarioId);
-
 
                 _model.EspcialiSelLst = await _lstGnrl._context.Especialidades.Where(w => w.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId))
                                                                               .Select(s => new SelectListItem
@@ -159,23 +143,22 @@ namespace FRANLES_DENT_3.Areas.AdminPersonal.Metodos.AdminUsuario
                                                                                   Text = s.Nombre
                                                                               })
                                                                               .ToListAsync();
-                
+
+              
+                //_model.DtSucursalAreaAtencions = await GetObtenerSucursalAreaAtenAsignadosUsuario(id);
             }
 
-            
             _model.Metodo = VarGnrl.GetModuloKey("Mant_Usuari");
-            _model.ModAct = VarGnrl.GetModuloActionKey("Mant_Usuario", "Vie");
+            _model.ModAct = VarGnrl.GetModuloActionKey("Mant_Usuari", "Vie");
 
             return _model;
         }
 
-
         public async Task<UsuarioViewInput.MedicoView> GetObtenerDatosMedico(string _usuarioId)
         {
             UsuarioViewInput.MedicoView _model = new UsuarioViewInput.MedicoView();
-          
-            _model.DatoMedico = await _lstGnrl._context.DatosMedicos.FirstOrDefaultAsync(f => f.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId) && f.UsuarioId.Equals(_usuarioId));
 
+            _model.DatoMedico = await _lstGnrl._context.DatosMedicos.FirstOrDefaultAsync(f => f.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId) && f.UsuarioId.Equals(_usuarioId));
 
             if (_model.DatoMedico == null)
             {
@@ -184,10 +167,8 @@ namespace FRANLES_DENT_3.Areas.AdminPersonal.Metodos.AdminUsuario
             }
             else
             {
-
                 if (await _lstGnrl._context.Especialidad_Medicos.AnyAsync(w => w.DatosMedicoId.Equals(_model.DatoMedico.DatosMedicoId) && w.Especialidad.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId)))
                 {
-
                     _model.EspcialidadMed = await _lstGnrl._context.Especialidad_Medicos.Where(w => w.DatosMedicoId.Equals(_model.DatoMedico.DatosMedicoId) && w.Especialidad.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId))
                                                                                         .Select(s => new SelectListItem
                                                                                         {
@@ -198,14 +179,89 @@ namespace FRANLES_DENT_3.Areas.AdminPersonal.Metodos.AdminUsuario
                 else
                 {
                     _model.EspcialidadMed = new List<SelectListItem>();
-
                 }
             }
 
             return _model;
-
         }
 
+        public async Task<List<UsuarioViewInput.SucursalAreaAtencion>> GetObtenerSucursalAreaAtenAsignadosUsuario(string idUsr)
+        {
+            List<UsuarioViewInput.SucursalAreaAtencion> _model = new List<UsuarioViewInput.SucursalAreaAtencion>();
 
+            List<string> sucursalUsrs;
+
+            if (await _lstGnrl._context.Area_Medicos.AnyAsync(a => a.UsuarioId.Equals(idUsr) && a.Usuario.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId)))
+            {
+                sucursalUsrs = await _lstGnrl._context.Area_Medicos.Where(w => w.UsuarioId.Equals(idUsr) && w.Usuario.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId))
+                                                              .Select(s => s.Sucursal_Area_Atencion.SucursalId).ToListAsync();
+
+                foreach (string sucursalUsr in sucursalUsrs)
+                {
+                    UsuarioViewInput.SucursalAreaAtencion _dt;
+
+                    _dt = await _lstGnrl._context.Area_Medicos.Where(w => w.UsuarioId.Equals(idUsr) && w.Usuario.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId) && w.Sucursal_Area_Atencion.SucursalId.Equals(sucursalUsr))
+                                                       .Select(s => new UsuarioViewInput.SucursalAreaAtencion
+                                                       {
+                                                           SucursalId = s.Sucursal_Area_Atencion.Sucursal.SucursalId,
+                                                           SucursalNom = s.Sucursal_Area_Atencion.Sucursal.Nombre,
+                                                           SucursalDirc = s.Sucursal_Area_Atencion.Sucursal.Direccion + ". " + s.Sucursal_Area_Atencion.Sucursal.Distrito.Name + ". " + s.Sucursal_Area_Atencion.Sucursal.Distrito.Provincia.Name
+                                                                          + ". " + s.Sucursal_Area_Atencion.Sucursal.Distrito.Provincia.Departamento.Name
+                                                       }).FirstOrDefaultAsync();
+
+                    _dt.Area_Atencions = await _lstGnrl._context.Area_Medicos.Where(w => w.UsuarioId.Equals(idUsr) && w.Usuario.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId) && w.Sucursal_Area_Atencion.SucursalId.Equals(sucursalUsr))
+                                                                           .Select(s => new SelectListItem
+                                                                           {
+                                                                               Value = s.Sucursal_Area_Atencion.Area_AtencionId,
+                                                                               Text = s.Sucursal_Area_Atencion.Area_Atencion.Nombre
+                                                                           }).ToListAsync();
+
+                    _model.Add(_dt);
+                }
+            }
+
+            return _model;
+        }
+
+        public async Task<UsuarioViewInput.SucursalAreaAtencion> GetAreaAtencionSucursal(string sucursalid, string usrId)
+        {
+            UsuarioViewInput.SucursalAreaAtencion _model = new UsuarioViewInput.SucursalAreaAtencion();
+
+            if (await _lstGnrl._context.Sucursal_Area_Atencions.AnyAsync(a => a.Sucursal.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId) && a.SucursalId.Equals(sucursalid)))
+            {
+                _model = await _lstGnrl._context.Sucursal_Area_Atencions.Where(w => w.Sucursal.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId) && w.SucursalId.Equals(sucursalid))
+                                                                        .Select(s => new UsuarioViewInput.SucursalAreaAtencion
+                                                                        {
+                                                                            SucursalId = s.SucursalId,
+                                                                            SucursalNom = s.Sucursal.Nombre,
+                                                                            SucursalDirc = s.Sucursal.Direccion + ". " + s.Sucursal.Distrito.Name + ". " + s.Sucursal.Distrito.Provincia.Name
+                                                                              + ". " + s.Sucursal.Distrito.Provincia.Departamento.Name
+                                                                        }).FirstOrDefaultAsync();
+
+                _model.Area_Atencions = await _lstGnrl._context.Sucursal_Area_Atencions.Where(w => w.Sucursal.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId) && w.SucursalId.Equals(sucursalid))
+                                                                                       .Select(s => new SelectListItem
+                                                                                       {
+                                                                                           Value = s.Area_AtencionId,
+                                                                                           Text = s.Area_Atencion.Nombre,
+                                                                                           Selected = false
+                                                                                       }).ToListAsync();
+
+                if (await _lstGnrl._context.Area_Medicos.AnyAsync(a => a.UsuarioId.Equals(usrId) && a.Sucursal_Area_Atencion.SucursalId.Equals(sucursalid) && a.Sucursal_Area_Atencion.Sucursal.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId)))
+                {
+                    List<string> areaAsignada = await _lstGnrl._context.Area_Medicos.Where(w => w.UsuarioId.Equals(usrId) && w.Usuario.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId) && w.Sucursal_Area_Atencion.SucursalId.Equals(sucursalid))
+                                                                                 .Select(s => s.Sucursal_Area_Atencion.Area_AtencionId).ToListAsync();
+
+                    if (areaAsignada.Count > 0)
+                    {
+                        _model.Area_Atencions.ForEach(f =>
+                        {
+                            f.Selected = areaAsignada.Contains(f.Value);
+                        });
+                    }
+                }
+            }
+
+            return _model;
+        }
     }
 }

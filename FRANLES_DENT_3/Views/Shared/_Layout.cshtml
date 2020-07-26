@@ -49,10 +49,15 @@
     <link rel="stylesheet" href="~/lib/assets/css/layouts/vertical/themes/theme-a.css">
     <!-- ======================= ANIMATE ===========================-->
     <link rel="stylesheet" href="~/lib/animate.css/animate.min.css" />
-    <!-- ======================= Picker ===========================--> 
+    <!-- ======================= Picker ===========================-->
+    <link rel="stylesheet" href="~/lib/assets/vendor/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css" />
+    <link rel="stylesheet" href="~/lib/assets/vendor/fullcalendar/main.css" />
+
 
     <link rel="stylesheet" href="~/lib/gijgo/combined/css/gijgo.min.css" />
     <link rel="stylesheet" href="~/lib/assets/vendor/sweetalert2/dist/sweetalert2.min.css" />
+    <link rel="stylesheet" href="~/css/movil.css" media="screen and (min-width: 900px)">
+
 
     @*<link rel="stylesheet" href="~/css/site.css" />*@
 </head>
@@ -385,12 +390,32 @@
     <!-- ================== SCRIPTS NOTIFY ==================-->
     <script src="~/lib/bootstrap-notify/bootstrap-notify.min.js"></script>
     <script src="~/lib/gijgo/combined/js/gijgo.min.js"></script>
-    <!-- ======================= Picker ===========================--> 
+    <!-- ======================= Picker ===========================-->
+    <script src="~/lib/assets/vendor/moment.js/moment.min.js"></script>
+    <script src="~/lib/assets/vendor/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+    <script src="~/lib/assets/js/components/tempusdominus-bootstrap-4-init.js"></script>
+    <script src="~/lib/assets/vendor/fullcalendar/main.js"></script>
+    <script src="~/lib/assets/vendor/fullcalendar/locales/es.js"></script>
+    <script src="~/lib/assets/vendor/moment.js/locale/es.min.js"></script>
+
+
+
+
 
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/js/UploadPicture.js" asp-append-version="true"></script>
+    @*<script>
+            if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+                //Do something for mobile
+                alert("MOBILE");
+            } else {
+                var script = document.createElement("script");
+                script.src = "http://www.smartreachdigitalchat.com/scripts/invitation/apexchat.js?company=2051";
+                document.write(script.outerHTML);
+            }
+        </script>*@
 
 
     @RenderSection("Scripts", required: false)
 </body>
-</html>
+</html> 

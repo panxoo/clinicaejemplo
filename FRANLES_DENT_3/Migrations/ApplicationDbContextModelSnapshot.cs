@@ -66,6 +66,39 @@ namespace FRANLES_DENT_3.Migrations
                     b.ToTable("Sucursal_Area_Atencions");
                 });
 
+            modelBuilder.Entity("FRANLES_DENT_3.Models.Empresa.Atributos.Tipo_Horario", b =>
+                {
+                    b.Property<string>("Tipo_HorarioId")
+                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4")
+                        .HasMaxLength(255);
+
+                    b.Property<string>("ClinicaId")
+                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
+
+                    b.Property<string>("Descripcion")
+                        .HasColumnType("varchar(1000) CHARACTER SET utf8mb4")
+                        .HasMaxLength(1000);
+
+                    b.Property<string>("Hora_Fin")
+                        .IsRequired()
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<string>("Hora_Inicio")
+                        .IsRequired()
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasColumnType("varchar(500) CHARACTER SET utf8mb4")
+                        .HasMaxLength(500);
+
+                    b.HasKey("Tipo_HorarioId");
+
+                    b.HasIndex("ClinicaId");
+
+                    b.ToTable("Tipo_Horarios");
+                });
+
             modelBuilder.Entity("FRANLES_DENT_3.Models.Empresa.Clinica", b =>
                 {
                     b.Property<string>("ClinicaID")
@@ -852,6 +885,13 @@ namespace FRANLES_DENT_3.Migrations
                     b.HasOne("FRANLES_DENT_3.Models.Empresa.Sucursal", "Sucursal")
                         .WithMany("Sucursal_Area_Atencions")
                         .HasForeignKey("SucursalId");
+                });
+
+            modelBuilder.Entity("FRANLES_DENT_3.Models.Empresa.Atributos.Tipo_Horario", b =>
+                {
+                    b.HasOne("FRANLES_DENT_3.Models.Empresa.Clinica", "Clinica")
+                        .WithMany("Tipo_Horarios")
+                        .HasForeignKey("ClinicaId");
                 });
 
             modelBuilder.Entity("FRANLES_DENT_3.Models.Empresa.Clinica", b =>

@@ -40,5 +40,6 @@ namespace FRANLES_DENT_3.Models.Empresa
         public ICollection<Area_Atencion> Area_Atencions { get; set; }
         public ICollection<Especialidad> Especialidads { get; set; }
         public ICollection<Sucursal> Sucursals { get; set; }
+        public ICollection<Tipo_Horario> Tipo_Horarios { get; set; }
     }
 }

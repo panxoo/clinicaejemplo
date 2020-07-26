@@ -77,3 +77,38 @@ function ReverseClass(decicion, objet, classelmPrim, classelemSec) {
         $(objet).addClass(classelemSec);
     }
 }
+
+function ClearAtributo() {
+    this.inputClear;
+    this.selectFirst;
+    this.listClear;
+    this.divHidden;
+}
+
+ClearAtributo.prototype.ExecClearAttr = function () {
+
+    if (this.inputClear != null) {
+        this.inputClear.forEach(function (input) {
+            $(input).val("");
+        });
+    };
+
+    if (this.selectFirst != null) {
+        this.selectFirst.forEach(function (input){
+            $(input).val("");
+        })
+    }
+
+    if (this.listClear != null) {
+        this.listClear.forEach(function (input) {
+            $(input).empty();
+        })
+    }
+
+    if (this.divHidden != null) {
+        this.divHidden.forEach(function (input) {
+            VisibleDivCheck(false, input);
+        })
+    }
+
+}

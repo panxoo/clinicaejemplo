@@ -94,10 +94,6 @@
       ]
     },
     {
-      "library": "font-awesome@5.13.0",
-      "destination": "wwwroot/lib/assets/css/icons/font-awesome/"
-    },
-    {
       "library": "line-awesome@1.3.0",
       "destination": "wwwroot/lib/assets/css/icons/line-awesome/",
       "files": [
@@ -124,8 +120,82 @@
       "destination": "wwwroot/lib/assets/vendor/bootstrap-datepicker/"
     },
     {
+      "library": "jquery.nicescroll@3.7.6",
+      "destination": "wwwroot/lib/assets/vendor/jquery.nicescroll/"
+    },
+    {
       "library": "bootstrap-datetimepicker@4.17.47",
-      "destination": "wwwroot/lib/assets/vendor/bootstrap-datetimepicker/"
+      "destination": "wwwroot/lib/assets/vendor/bootstrap-datetimepicker/",
+      "files": [
+        "js/bootstrap-datetimepicker.min.js",
+        "css/bootstrap-datetimepicker.min.css"
+      ]
+    },
+    {
+      "library": "tempusdominus-bootstrap-4@5.1.2",
+      "destination": "wwwroot/lib/assets/vendor/tempusdominus-bootstrap-4/"
+    },
+    {
+      "provider": "unpkg",
+      "library": "fullcalendar@5.1.0",
+      "destination": "wwwroot/lib/assets/vendor/fullcalendar/",
+      "files": [
+        "locales-all.min.js",
+        "main.css",
+        "main.js",
+        "main.min.css",
+        "main.min.js",
+        "locales/es.js"
+      ]
+    },
+    {
+      "library": "font-awesome@5.14.0",
+      "destination": "wwwroot/lib/assets/css/icons/font-awesome/"
+    },
+    {
+      "library": "moment.js@2.27.0",
+      "destination": "wwwroot/lib/assets/vendor/moment.js/",
+      "files": [
+        "locale/es.min.js",
+        "locale/es.js"
+      ]
+    },
+    {
+      "provider": "unpkg",
+      "library": "dhtmlx-scheduler@5.3.9",
+      "destination": "wwwroot/lib/assets/vendor/dhtmlx-scheduler/",
+      "files": [
+        "codebase/sources/dhtmlxscheduler.js.map",
+        "codebase/sources/ext/dhtmlxscheduler_active_links.js.map",
+        "codebase/sources/ext/dhtmlxscheduler_all_timed.js.map",
+        "codebase/sources/ext/dhtmlxscheduler_agenda_view.js.map",
+        "codebase/sources/ext/dhtmlxscheduler_collision.js.map",
+        "codebase/sources/ext/dhtmlxscheduler_container_autoresize.js.map",
+        "codebase/sources/ext/dhtmlxscheduler_cookie.js.map",
+        "codebase/sources/ext/dhtmlxscheduler_csp.js.map",
+        "codebase/sources/ext/dhtmlxscheduler_editors.js.map",
+        "codebase/sources/ext/dhtmlxscheduler_expand.js.map",
+        "codebase/sources/ext/dhtmlxscheduler_html_templates.js.map",
+        "codebase/sources/ext/dhtmlxscheduler_key_nav.js.map",
+        "codebase/sources/ext/dhtmlxscheduler_layer.js.map",
+        "codebase/sources/ext/dhtmlxscheduler_limit.js.map",
+        "codebase/sources/ext/dhtmlxscheduler_map_view.js.map",
+        "codebase/sources/ext/dhtmlxscheduler_minical.js.map",
+        "codebase/sources/ext/dhtmlxscheduler_monthheight.js.map",
+        "codebase/sources/ext/dhtmlxscheduler_multiselect.js.map",
+        "codebase/sources/ext/dhtmlxscheduler_multisource.js.map",
+        "codebase/sources/ext/dhtmlxscheduler_mvc.js.map",
+        "codebase/sources/ext/dhtmlxscheduler_outerdrag.js.map",
+        "codebase/sources/ext/dhtmlxscheduler_pdf.js.map",
+        "codebase/sources/ext/dhtmlxscheduler_quick_info.js.map",
+        "codebase/sources/ext/dhtmlxscheduler_readonly.js.map",
+        "codebase/sources/ext/dhtmlxscheduler_recurring.js.map",
+        "codebase/sources/ext/dhtmlxscheduler_serialize.js.map",
+        "codebase/sources/ext/dhtmlxscheduler_tooltip.js.map",
+        "codebase/sources/ext/dhtmlxscheduler_url.js.map",
+        "codebase/sources/ext/dhtmlxscheduler_year_view.js.map",
+        "codebase/sources/ext/dhtmlxscheduler_wp.js.map"
+      ]
     }
   ]
 }

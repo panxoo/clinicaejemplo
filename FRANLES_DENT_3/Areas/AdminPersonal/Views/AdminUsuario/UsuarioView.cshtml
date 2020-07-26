@@ -3,6 +3,12 @@
 @{
     ViewData["Title"] = "UsuarioView";
 }
+<link rel="stylesheet" href="~/css/stylescheduler.css" />
+<link rel="stylesheet" href="~/lib/assets/vendor/dhtmlx-scheduler/codebase/dhtmlxscheduler_material.css" />
+
+
+
+
 
 @if (Model.DtUsuario.IsMedic)
 {
@@ -10,8 +16,55 @@
 
 }
 
+<form id="AjaxFormSucursalMedicos" method="post">
+    <div class="modal fade" id="SucursalModal" tabindex="-1" role="dialog" aria-labelledby="SucursalModal" aria-hidden="true" data-modal="scroll">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Actualizar datos Medico</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
 
+                    @if (Model.SucursalSelLst.Count > 1)
+                    {
+                        <div class="d-flex justify-content-center">
 
+                            <div class="form-group row">
+                                <label asp-for="SucursalSelId" class="col-sm-3 col-form-label">Sucursal</label>
+                                <div class="col-sm-9">
+                                    <select asp-for="SucursalSelId" class="form-control">
+                                        <option value="" disabled selected>Seleccionar un Valor</option>
+                                        @foreach (var dato in Model.SucursalSelLst)
+                                        {
+                                            <option value="@dato.Value">@dato.Text</option>
+                                        }
+                                    </select>
+
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    <div id="DtSucursalAreaInput">
+                        <partial name="Shared/_UsuarioViewSucursalMedicoEdit" model="Model.SucursalAreaAtencionImp" />
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <div class="col-md-9">
+                        <div id="ErrorAlert" class="alert alert-danger" style="display:none" role="alert">
+                            Error en los datos enviados!
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" id="btnCancelSucurAA">Cancelar</button>
+                    <button type="submit" class="btn btn-success" id="SubmitBtnSucursalAA">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
 
 <header class="page-header">
     <div class="d-flex align-items-center">
@@ -45,7 +98,6 @@
                         <i class="fas fa-user-plus text-success"></i> Agregar
                     </a>
 
-
                     <a href="#" class="dropdown-item">
                         <i class="icon dripicons-cloud-download"></i> Export
                     </a>
@@ -55,11 +107,8 @@
                 </div>
             </li>
         </ul>
-
     </div>
 </header>
-
-
 
 <section class="page-content container-fluid">
 
@@ -88,7 +137,6 @@
                                     <div class="row  p-b-20">
                                         <h3 class="card-heading col-md-6">Datos Usuario.</h3>
 
-
                                         <div class="col-md-6">
 
                                             @if (Model.DtUsuario.Activo)
@@ -114,7 +162,6 @@
                                     <div class="ml-md-4">
                                         <div>
                                             <img src="~/img/436c69656e7465/DEFAULT/417661746172/default.png" class="w-50 rounded-circle" alt="Albert Einstein">
-
                                         </div>
 
                                         <dl class="row m-t-10">
@@ -145,14 +192,12 @@
                                                 @Model.DtUsuario.Nombre @Model.DtUsuario.Apellido_Paterno @Model.DtUsuario.Apellido_Materno
                                             </dd>
 
-
                                             <dt class="col-md-3">
                                                 Numero de @Model.TipoDocumento :
                                             </dt>
                                             <dd class="col-md-8 m-b-20">
                                                 @Model.DtUsuario.NumDocumento
                                             </dd>
-
 
                                             <dt class="col-md-3">
                                                 Sexo :
@@ -161,14 +206,12 @@
                                                 @Model.SexoDet
                                             </dd>
 
-
                                             <dt class="col-md-3">
                                                 Fecha Nacimiento :
                                             </dt>
                                             <dd class="col-md-8 m-b-20">
                                                 @Model.DtUsuario.Fecha_Nac
                                             </dd>
-
 
                                             <dt class="col-md-3">
                                                 Correo :
@@ -177,14 +220,12 @@
                                                 @Model.DtUsuario.Correo
                                             </dd>
 
-
                                             <dt class="col-md-3">
                                                 Movil / Telefono :
                                             </dt>
                                             <dd class="col-md-8 m-b-20">
                                                 @Model.DtUsuario.Movil / @Model.DtUsuario.Telefono
                                             </dd>
-
 
                                             <dt class="col-md-3">
                                                 Dirección :
@@ -193,14 +234,12 @@
                                                 @Model.DtUsuario.Direccion
                                             </dd>
 
-
                                             <dt class="col-md-3">
                                                 Departamento / Provincia / Distrito :
                                             </dt>
                                             <dd class="col-md-8 m-b-20">
                                                 @Model.Departamento
                                             </dd>
-
                                         </dl>
                                     </div>
 
@@ -217,14 +256,12 @@
                                                     @Model.DtUsuario.DatosEmergenciaUsuario.Nombre @Model.DtUsuario.DatosEmergenciaUsuario.Apellido_Paterno @Model.DtUsuario.DatosEmergenciaUsuario.Apellido_Materno
                                                 </dd>
 
-
                                                 <dt class="col-md-3">
                                                     Parentesco:
                                                 </dt>
                                                 <dd class="col-md-8 m-b-20">
                                                     @Model.ParentescoDet
                                                 </dd>
-
 
                                                 <dt class="col-md-3">
                                                     Movil :
@@ -236,7 +273,6 @@
                                         </div>
 
                                     }
-
                                 </div>
                                 @if (Model.DtUsuario.IsMedic)
                                 {
@@ -247,7 +283,7 @@
                                             @if (Model.DtUsuario.Activo)
                                             {
                                                 <div class="col-md-6 d-flex justify-content-end">
-                                                    <a href="#" data-toggle="modal" data-target="#MedicosModal" id="BtnMedicosModal" title="Editar Medico">
+                                                    <a href="#" data-toggle="modal" data-target="#MedicosModal" id="BtnMedicosModal" data-backdrop="static" data-keyboard="false" title="Editar Medico">
                                                         <i class="fas fa-user-md text-accent fa-2x"></i>
                                                     </a>
                                                 </div>
@@ -259,104 +295,23 @@
                                                 <partial name="Shared/_UsuarioViewMedico" model="Model.DtMedico" />
                                             </div>
                                         </div>
-
+                                    </div>
+                                    <div class="tab-pane fade" id="v-pills-shipping" role="tabpanel" aria-labelledby="v-pills-shipping-tab">
+                                        <div class="row  p-b-20">
+                                            <h4 class="card-heading col-md-6">Sucursal Medico</h4>
+                                            <div class="col-md-6 d-flex justify-content-end">
+                                                <a href="#" data-toggle="modal" data-target="#SucursalModal" id="BtnMedSucAreaModal" data-backdrop="static" data-keyboard="false" title="Editar Medico">
+                                                    <i class="fas fa-user-md text-accent fa-2x"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                        </div>
                                     </div>
                                 }
-                                <div class="tab-pane fade" id="v-pills-shipping" role="tabpanel" aria-labelledby="v-pills-shipping-tab">
-                                    <h4 class="card-heading p-b-20">Shipping Address</h4>
-                                    <form>
-                                        <div class="form-group">
-                                            <label for="inputAddressName">Your name</label>
-                                            <input type="text" class="form-control" id="inputAddressName" placeholder="Enter your name">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="inputCompanyName">Company</label>
-                                            <input type="text" class="form-control" id="inputCompanyName" placeholder="Enter your company name">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="inputAddress1">Address 1</label>
-                                            <input type="text" class="form-control" id="inputAddress1" placeholder="Enter your address 1">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="inputAddress2">Address 2</label>
-                                            <input type="text" class="form-control" id="inputAddress2" placeholder="Enter your address 2">
-                                        </div>
-                                        <div class="form-row">
-                                            <div class="form-group col-md-6">
-                                                <label for="inputCity">City</label>
-                                                <input type="text" class="form-control" id="inputCity" placeholder="Enter your city">
-                                            </div>
-                                            <div class="form-group col-md-6">
-                                                <label for="inputState">State</label>
-
-                                            </div>
-                                        </div>
-                                        <div class="form-row">
-                                            <div class="form-group col-md-6">
-                                                <label for="inputZip">Zip</label>
-                                                <input type="text" class="form-control" id="inputZip" placeholder="Enter your zip">
-                                            </div>
-                                            <div class="form-group col-md-6">
-                                                <label for="inputCountry">Country</label>
-
-                                            </div>
-                                        </div>
-                                        <button type="submit" class="btn btn-primary">Update Address</button>
-                                    </form>
-                                </div>
                                 <div class="tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab">
                                     <h4 class="card-heading p-b-20">Settings</h4>
-                                    <form>
-                                        <div class="form-row">
-                                            <div class="col-6">
-
-
-                                                <h6 class="m-b-20">Activity</h6>
-                                                <div class="form-group">
-                                                    <input type="checkbox" id="switchMentions" class="js-switch" checked />
-                                                    <label for="switchMentions" class="m-l-10">Mentions</label>
-                                                </div>
-                                                <div class="form-group">
-                                                    <input type="checkbox" id="switchComments" class="js-switch" />
-                                                    <label for="switchComments" class="m-l-10">Comments</label>
-
-                                                </div>
-                                                <div class="form-group">
-                                                    <input type="checkbox" id="switchLikes" class="js-switch" />
-                                                    <label for="switchLikes" class="m-l-10">Likes</label>
-
-                                                </div>
-
-                                                <div class="form-group">
-                                                    <input type="checkbox" id="switchFollows" class="js-switch" checked />
-                                                    <label for="switchFollows" class="m-l-10">Follows</label>
-                                                </div>
-
-                                            </div>
-                                            <div class="col-6">
-                                                <h6 class="m-b-20">Item Alerts</h6>
-                                                <div class="form-group">
-                                                    <input type="checkbox" id="switchDigest" class="js-switch" checked />
-                                                    <label for="switchDigest" class="m-l-10">Daily Digest</label>
-
-                                                </div>
-                                                <div class="form-group">
-                                                    <input type="checkbox" id="switchSearch" class="js-switch" />
-                                                    <label for="switchSearch" class="m-l-10">Saved Search</label>
-
-                                                </div>
-                                                <div class="form-group">
-                                                    <input type="checkbox" id="switchReminders" class="js-switch" />
-                                                    <label for="switchReminders" class="m-l-10">Reminders</label>
-
-                                                </div>
-                                                <div class="form-group">
-                                                    <input type="checkbox" id="switchEmail" class="js-switch" checked />
-                                                    <label for="switchEmail" class="m-l-10">Email Notification</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </form>
+                                    <partial name="Shared/_UsuarioViewHorarioMedico" />
                                 </div>
                             </div>
                         </div>
@@ -368,44 +323,79 @@
 </section>
 
 
-
-
 @section Scripts{
     @await Html.PartialAsync("_ValidationScriptsPartial")
 
     <script src="~/js/ValidacionJS.js"></script>
     <script src="~/js/CambioAtributos.js"></script>
     <script src="~/js/MetodosCallSubmit.js"></script>
-
+    <script src="~/lib/assets/vendor/dhtmlx-scheduler/codebase/dhtmlxscheduler.js"></script>
+    <script src="~/lib/assets/vendor/dhtmlx-scheduler/codebase/ext/dhtmlxscheduler_tooltip.js"></script>
+    <script src="~/lib/assets/vendor/dhtmlx-scheduler/codebase/ext/dhtmlxscheduler_limit.js"></script>
+    <script src="~/lib/assets/vendor/dhtmlx-scheduler/codebase/locale/locale_es.js"></script>
+    <script src="~/lib/assets/js/components/dhxscheduler-init.js"></script>
 
 
     <script type="text/javascript">
 
-
         VALIDACIONESTP.validacionGnrl.range();
         VALIDACIONESTP.validacionGnrl.rangett();
 
+        var UlLstSelect = new UlListItemElemnt("#CollectSelEsp", "#CollectEspec");
+        var UlComboSelect = new UlListItemElemnt("#CollectSelEsp", "#EspcialiSelLstId");
 
 
-            var UlLstSelect = new UlListItemElemnt("#CollectSelEsp", "#CollectEspec");
-            var UlComboSelect = new UlListItemElemnt("#CollectSelEsp", "#EspcialiSelLstId");
+        $('#EspcialiSelLstId').change(function () {
+            UlComboSelect.ForComboAdd();
+        });
 
-            $('#EspcialiSelLstId').change(function () {
-                UlComboSelect.ForComboAdd();
-            });
+        $("#DtMedicoInp_OpcRemFija").change(function () {
+            VisibleTwoDivCheck($(this).prop('checked'), "#DvRemFija", "#DvPorcentajeGanancia");
+        })
 
-            $("#DtMedicoInp_OpcRemFija").change(function () {
-                VisibleTwoDivCheck($(this).prop('checked'), "#DvRemFija", "#DvPorcentajeGanancia");
-            })
+        $("#DtMedicoInp_OpcPorc_Ganancia_REM_fj").change(function () {
+            VisibleDivCheck( $(this).prop('checked') ,"#DvPorcExtraRemFj");
+        })
 
-            $("#DtMedicoInp_OpcPorc_Ganancia_REM_fj").change(function () {
-              VisibleDivCheck( $(this).prop('checked') ,"#DvPorcExtraRemFj");
-            })
+        $('#BtnMedicosModal').click(function () {
+            CargaInputMedico();
+        });
 
-            $('#BtnMedicosModal').click(function () {
-                CargaInputMedico();
-            });
+        @if(Model.SucursalSelLst.Count > 1)
+        {
+            <Text>
+        $("#SucursalSelId").change(function () {
+            id = $(this).val();
+            if (id != '') {
+                ObtenerDatosSucursalPop(id);
+            }
+        });
 
+            </Text>
+        }
+        else
+        {
+            <Text>
+        $("#BtnMedSucAreaModal").click(function () {
+           {
+                ObtenerDatosSucursalPop('@Model.SucursalSelLst[0].Value');
+            }
+        });
+
+            </Text>
+        }
+
+
+
+        $("#btnCancelSucurAA").click(function () {
+            let cleari = new ClearAtributo();
+            cleari.inputClear =  ["#SucursalNom", "#SucursalDirc"];
+            cleari.selectFirst = [ "#SucursalSelId"];
+            cleari.listClear = ["#lstAreaAtencion"];
+            cleari.divHidden = ["#DtSucursalAA"];
+
+            cleari.ExecClearAttr();
+        })
 
         function CargaInputMedico() {
             UlLstSelect.ForListAdd();
@@ -441,11 +431,8 @@
 
         }
 
-
-
         $("#AjaxFormMedicos").submit( async function (e) {
             e.preventDefault();
-
 
             if (!$("#AjaxFormMedicos").valid()) {
                 return;
@@ -466,8 +453,6 @@
                 post.AjaxPop(dt);
             }
         });
-
-
 
         function ObtenerDatosMedico() {
             var expeci = [];
@@ -491,14 +476,95 @@
             }
 
             return dt;
-        }
+        };
+
+        function ObtenerDatosSucursalPop(sucid) {
+            let post = new AjaxSubmit('@Url.Action("AreaSucursalDetalle", "AdminUsuario")');
+            post.partial = "#DtSucursalAreaInput";
+            post.divBlock = "#datosMedico";
+
+            dt = {
+                id: sucid,
+                usuarioId: $("#DtUsuario_UsuarioId").val(),
+                actmtd: $("#ModAct").val()
+            };
+            post.AjaxGetDato(dt);
+        };
+
+
+        $("#AjaxFormSucursalMedicos").submit(async function (e) {
+            e.preventDefault();
+
+            if (!$("#AjaxFormSucursalMedicos").valid()) {
+                return;
+            }
+
+
+
+            if (await MensajeDecision("Actualización de Usuario", "¿Se desea agregar nuevas area de atención?")) {
+
+                let arat = [];
+
+                $.each($("#lstAreaAtencion li input"), function () {
+                    if ($("#" + this.id).prop('checked'))
+                        arat.push(this.id);
+                });
+
+
+                if (arat.length == 0) {
+                    MensajeError('Error en usuario tipo medico', 'Se debe seleccionar especialidad del doctor');
+                    return;
+                }
+
+                let post = new AjaxSubmit('@Url.Action("DetalleUsuarioSucursalAA", "AdminUsuario")', "#SubmitBtnSucursalAA", "Error almacenamiento");
+                post.btnCancel = "#btnCancelSucurAA";
+               // post.partial = "#datosMedico";
+
+                dt = {
+                    UsuarioId: $("#DtUsuario_UsuarioId").val(),
+                    ModAct: $("#ModAct").val(),
+                    AreaAtencions: arat,
+                    Sucursal:  $("#SucursalIdMAA").val()
+                }
+                post.AjaxPopRedirec(dt);
+            }
+        });
+
+
+        window.addEventListener("DOMContentLoaded", function () {
+
+             
+           new schedulerHorario();
+
+            var options = [{
+                start_date: new Date(2020, 6, 21, 10, 30),
+                end_date: new Date(2020, 6, 21, 14, 30),
+                type: "dhx_time_block", /* creating events on those dates will be disabled - dates are blocked */
+                css: "sel-sched1",
+                html: "asad"
+            },
+
+                {
+                    start_date: new Date(2020, 6, 21, 16, 30),
+                    end_date: new Date(2020, 6, 21, 20, 30),
+                    type: "dhx_time_block", /* creating events on those dates will be disabled - dates are blocked */
+                    css: "sel-sched1",
+                    html: "asad"
+                }
+            ];
+
+            options.forEach(function (entry) {
+                scheduler.addMarkedTimespan(entry);
+            });
+          
+
+            scheduler.init('scheduler_medico', new Date(2020, 6, 20), "week");
+        });
+
+
 
 
 
 
     </script>
 }
-
-
-
-

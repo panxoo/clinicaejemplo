@@ -12,6 +12,7 @@
 				center: 'title',
 				right: 'month,agendaWeek,agendaDay'
 			},
+			
 			theme: false,
 			selectable: true,
 			selectHelper: true,

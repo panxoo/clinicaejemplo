@@ -1,0 +1,46 @@
+﻿@model UsuarioViewInput.SucursalAreaAtencion
+
+@if (Model.SucursalId != null)
+{
+
+    <div id="DtSucursalAA">
+
+        @Html.HiddenFor(h => h.SucursalId, new { id = "SucursalIdMAA" })
+
+        <div class="form-group row">
+            <label asp-for="SucursalNom" class="col-sm-2 col-form-label">Sucursal: </label>
+            <div class="col-sm-10">
+                <input type="text" readonly="" class="form-control-plaintext" asp-for="SucursalNom">
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label asp-for="SucursalDirc" class="col-sm-2 col-form-label">Direccion: </label>
+            <div class="col-sm-10">
+                <input type="text" readonly="" class="form-control-plaintext" asp-for="SucursalDirc">
+            </div>
+        </div>
+
+        <div>
+            <ul class="list-group" id="lstAreaAtencion">
+                @foreach (SelectListItem dt in Model.Area_Atencions)
+                {
+                    <li class="list-group-item">
+                        <div class="custom-control custom-checkbox">
+                            @if (dt.Selected)
+                            {
+                                <input id="@dt.Value"  name="Area" type="checkbox" class="custom-control-input" checked>
+
+                            }
+                            else
+                            {
+                                <input id="@dt.Value"  name="Area" type="checkbox" class="custom-control-input">
+                            }
+                            <label for="@dt.Value" class="custom-control-label">@dt.Text</label>
+                        </div>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+}

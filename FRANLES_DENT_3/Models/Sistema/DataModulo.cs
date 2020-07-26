@@ -11,7 +11,7 @@ namespace FRANLES_DENT_3.Models.Sistema
         public DataModulo()
         {
             Acciones = VarGnrl.GetActionAll();
-        }
+       }
         public string Metodo { get; set; }
         public string ModAct { get; set; }
         public string Action { get; set; }

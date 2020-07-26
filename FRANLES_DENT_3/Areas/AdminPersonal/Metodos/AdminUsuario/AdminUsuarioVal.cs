@@ -135,7 +135,52 @@ namespace FRANLES_DENT_3.Areas.AdminPersonal.Metodos.AdminUsuario
                     return new RetornoAction { Code = 1, Mensaje = "Se debe seleccionar especialidad del medico" };
                 }
 
-                if (_model.EspecialIds.Except(await _lstGnrl._context.Especialidades.Where(w => w.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId)).Select(a => a.EspecialidadId.ToString()).ToListAsync()).Any())
+                if (_model.EspecialIds.Except(await _lstGnrl._context.Especialidades.Where(w => w.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId)).Select(a => a.EspecialidadId).ToListAsync()).Any())
+                {
+                    return new RetornoAction { Code = 2, Mensaje = "" };
+                }
+
+
+                return new RetornoAction { Code = 0, Mensaje = "" };
+
+            }
+            catch (Exception ex)
+            {
+                return new RetornoAction { Code = 2, Mensaje = "Error de sistema, contactar con soporte" };
+            }
+        }
+
+      public async Task<RetornoAction> ValDetalleUsuarioSucursalAA(UsuarioViewPost.UsuarioSucursalAAPost _model)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(_model.UsuarioId))
+                {
+                    return new RetornoAction { Code = 2, Mensaje = "" };
+                }
+
+                if (!await _lstGnrl._context.Usuarios.AnyAsync(a => a.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId) && a.UsuarioId.Equals(_model.UsuarioId) && a.IsMedic))
+                {
+                    return new RetornoAction { Code = 2, Mensaje = "" };
+                }
+
+                if (string.IsNullOrEmpty(_model.Sucursal))
+                {
+                    return new RetornoAction { Code = 2, Mensaje = "" };
+                }
+
+                if (!await _lstGnrl._context.Sucursals.AnyAsync(a => a.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId) && a.SucursalId.Equals(_model.Sucursal)))
+                {
+                    return new RetornoAction { Code = 2, Mensaje = "" };
+                }
+
+                if (_model.AreaAtencions == null || _model.AreaAtencions.Count == 0)
+                {
+                    return new RetornoAction { Code = 1, Mensaje = "Se debe seleccionar especialidad del medico" };
+                }
+
+                if (_model.AreaAtencions.Except(await _lstGnrl._context.Sucursal_Area_Atencions.Where(w => w.Sucursal.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId) && w.SucursalId.Equals(_model.Sucursal))
+                                                                                               .Select(a => a.Area_AtencionId).ToListAsync()).Any())
                 {
                     return new RetornoAction { Code = 2, Mensaje = "" };
                 }

@@ -1,4 +1,5 @@
-﻿using FRANLES_DENT_3.Models.MedicoDato;
+﻿using FRANLES_DENT_3.Models.Empresa;
+using FRANLES_DENT_3.Models.MedicoDato;
 using FRANLES_DENT_3.Models.Personal;
 using FRANLES_DENT_3.Models.Sistema;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -16,9 +17,11 @@ namespace FRANLES_DENT_3.Areas.AdminPersonal.Models.AdminUsuario
             ParentescoDet = "";
             DtMedicoInp = new DatosMedico();
             EspcialiSelLst = new List<SelectListItem>();
-        }
+            SucursalAreaAtencionImp = new SucursalAreaAtencion();
 
-        public Usuario DtUsuario { get; set; }
+    }
+
+    public Usuario DtUsuario { get; set; }
         public MedicoView DtMedico { get; set; }
 
         public string PerfilDet { get; set; }
@@ -29,6 +32,11 @@ namespace FRANLES_DENT_3.Areas.AdminPersonal.Models.AdminUsuario
         public DatosMedico DtMedicoInp { get; set; }
         public List<SelectListItem> EspcialiSelLst { get; set; }
 
+        public List<SelectListItem> SucursalSelLst { get; set; }
+        public string SucursalSelId { get; set; }
+        public SucursalAreaAtencion SucursalAreaAtencionImp { get; set; } 
+        public List<SucursalAreaAtencionMant> DtSucursalAreaAtencionMants { get; set; }
+
         public class MedicoView
         {
             public MedicoView()
@@ -37,10 +45,30 @@ namespace FRANLES_DENT_3.Areas.AdminPersonal.Models.AdminUsuario
                 EspcialidadMed = new List<SelectListItem>();
             }
 
-
             public DatosMedico DatoMedico { get; set; }
-
             public List<SelectListItem> EspcialidadMed { get; set; }
         }
+
+        public class SucursalAreaAtencion
+        {
+            public string SucursalId { get; set; }
+            public string SucursalNom { get; set; }
+            public string SucursalDirc { get; set; }
+            public string Activo { get; set; }
+
+            public List<SelectListItem> Area_Atencions { get; set; }
+        }
+
+        public class SucursalAreaAtencionMant
+        {
+            public string SucursalId { get; set; }
+            public string SucursalNom { get; set; }
+            public string SucursalDirc { get; set; }
+            public string Activo { get; set; }
+
+            public List<SelectListItem> Area_Atencions { get; set; }
+        }
+
+
     }
 }

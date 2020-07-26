@@ -4,62 +4,49 @@
     ViewData["Title"] = "SucursalConfEdit";
 }
 
+@*<style type="text/css">
+        #boxscroll {
+            height: 220px;
+            overflow: auto;
+            overscroll-behavior: contain;
+      }
+    </style>*@
 
-<form id="AjaxForm">
+
+
+<form id="AjaxFormPopAA">
     <div class="modal fade" tabindex="-1" role="dialog" id="ModalAreaAtencion" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
-            <div class="modal-content">
+            <div class="modal-content block-el" id="ModalAABodyBlock">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Modificar Especialidad</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Activar Area Atencion</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
 
-                @*  <partial name="Shared/_SucursalConfAreaAtencionPop" model="Model.sucursalAreaAtencionInputs" />*@
-                <div class="modal-body ">
-                    <div class="row">
-                        <div data-scroll="dark" style="max-height:200px">
+                <div class="modal-body">
 
-                            <ul class="list-group">
+                    <h5>Seleccionar las Area de Atención para la sucursal:</h5>
+                    <br />
+                    <br />
 
-                                @foreach (SucursalConfInput.AreaAtencionSucursalInput dt in Model.AreaAtencionSucursalInputs)
-                                {
-                                    <li class="list-group-item">
-                                        <div class="custom-control custom-checkbox">
-                                            @if (dt.Activo)
-                                            {
-                                                <input id="@dt.AreaAtencionId" value="@dt.AreaAtencionId" name="Roles" type="checkbox" class="custom-control-input" checked>
-                                            }
-                                            else
-                                            {
-                                                <input id="@dt.AreaAtencionId" value="@dt.AreaAtencionId" name="Roles" type="checkbox" class="custom-control-input">
-                                            }
+                    <div  style="max-height:200px" data-scroll='dark'>
 
-                                            <label for="@dt.AreaAtencionId" class="custom-control-label">@dt.AANombre</label>
-                                        </div>
-                                    </li>
-                                }
-
-                            </ul>
+                        <div id="ModalAABody">
+                            <partial name="Shared/_SucursalConfAreaAtencionPop" model="Model.AreaAtencionSucursalInputs" />
                         </div>
                     </div>
                 </div>
 
-
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal" id="btnCancel">Cancelar</button>
-                    <button type="submit" class="btn btn-success" id="SubmitBtn">Guardar</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" id="btnCancelPopAA">Cancelar</button>
+                    <button type="submit" class="btn btn-success" id="SubmitBtnPopAA">Guardar</button>
                 </div>
             </div>
         </div>
     </div>
-
-
 </form>
-
-
-
 
 <header class="page-header">
     <div class="d-flex align-items-center">
@@ -108,18 +95,16 @@
     <div class="row">
         <div class="col">
 
-
-
             <div class="card" id="packages">
                 <h5 class="card-header text-center"> @Model.Input.Nombre</h5>
                 <div class="card-body">
                     <dl class="row m-t-30">
                         @*<dt class="col-md-3  m-b-20">
-                        Nombre Sucursal:
-                    </dt>
-                    <dd class="col-md-9 m-b-20 ">
-                        @Model.Input.Nombre
-                    </dd>*@
+                                Nombre Sucursal:
+                            </dt>
+                            <dd class="col-md-9 m-b-20 ">
+                                @Model.Input.Nombre
+                            </dd>*@
                         <dt class="col-md-3  m-b-20">
                             Telefono de Sucursal:
                         </dt>
@@ -156,7 +141,6 @@
                                 <li><a href="#" data-toggle="modal" data-target="#ModalAreaAtencion" id="BtnAddAreaSucursal"><i class="icon dripicons-plus text-success"></i></a></li>
                                 <li><a href="javascript:void(0)" data-q-action="card-collapsed"><i class="icon dripicons- text-success"></i></a></li>
 
-
                                 <li><a href="javascript:void(0)" data-q-action="card-collapsed"><i class="icon dripicons-chevron-down"></i></a></li>
                                 <li><a href="javascript:void(0)" data-qt-block=".block-el"><i class="icon dripicons-clockwise"></i></a></li>
                                 <li><a href="javascript:void(0)" data-q-action="card-expand"><i class="icon dripicons-expand-2"></i></a></li>
@@ -173,87 +157,13 @@
                                 </li>
                             </ul>
                         </div>
-                        <div class="card-body">
-                            <p>
-                                Responsive tables allow tables to be scrolled horizontally with ease. Make any table responsive across all viewports by wrapping a <code class="highlighter-rouge">.table</code> with <code class="highlighter-rouge">.table-responsive</code>. Or,
-                                pick a maximum breakpoint with which to have a responsive table up to by using <code class="highlighter-rouge">.table-responsive{-sm|-md|-lg|-xl}</code>.
-                            </p>
-                            <div class="table-responsive">
-                                <table class="table">
-                                    <thead>
-                                        <tr>
-                                            <th>Area Atencion</th>
-                                            <th>Cant. Medicos</th>
-                                            <th>Opciones</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var item in Model.AreaSucursal)
-                                        {
-                                            <tr>
-                                                <td>@Html.DisplayFor(modelItem => item.AreaNombre)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.CantMedicos)</td>
-                                                <td>
-                                                    <a asp-area="Configuracion" asp-action="SucursalConfEdit" asp-route-id="@item.AreaId" asp-route-actmtd="436f6e665f456d70726573566965"><i data-toggle="tooltip" data-placement="top" title="" data-original-title="Visualizar" class="far fa-eye text-secondary fa-2x"></i></a>
 
-                                                </td>
-                                            </tr>
-                                        }
-
-                                    </tbody>
-                                </table>
-                            </div>
+                        <div class="card-body" id="SucursalArAt">
+                            <partial name="Shared/_SucursalConfAreaAtencion" model="Model.AreaSucursal" />
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="row">
-
-
-
-                <div class="card">
-                    <div class="col">
-                        <div class="card-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Modificar Especialidad</h5>
-
-                        </div>
-
-                        @*  <partial name="Shared/_SucursalConfAreaAtencionPop" model="Model.sucursalAreaAtencionInputs" />*@
-                        <div class="card-body" data-scroll="dark" style="max-height:200px">
-
-                            <ul class="list-group">
-
-                                @foreach (SucursalConfInput.AreaAtencionSucursalInput dt in Model.AreaAtencionSucursalInputs)
-                                {
-                                    <li class="list-group-item">
-                                        <div class="custom-control custom-checkbox">
-                                            @if (dt.Activo)
-                                            {
-                                                <input id="@dt.AreaAtencionId" type="checkbox" class="custom-control-input" checked>
-                                            }
-                                            else
-                                            {
-                                                <input id="@dt.AreaAtencionId" type="checkbox" class="custom-control-input">
-                                            }
-
-                                            <label for="@dt.AreaAtencionId" class="custom-control-label">@dt.AANombre</label>
-                                        </div>
-                                    </li>
-                                }
-
-                            </ul>
-                        </div>
-
-
-                        <div class="card-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal" id="btnCancel">Cancelar</button>
-                            <button type="submit" class="btn btn-success" id="SubmitBtn">Guardar</button>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
         </div>
     </div>
 </section>
@@ -264,63 +174,47 @@
     <script src="~/js/MetodosCallSubmit.js"></script>
     <script src="~/js/CargaDatosGnrl.js"></script>
 
-     
-        <script type="text/javascript">
+    <script type="text/javascript">
 
-
-
-        $(document).ready(function () {
-
-            $("#BtnAddAreaSucursal").click(function () {
-                console.log("asdasdadasd");
-            let post = new AjaxSubmit("@Url.Action("SucursalObtenerAreaAdd", "EmpresaConfg")", "", "Error obtener area atención");
+        $("#BtnAddAreaSucursal").click(function () {
+            console.log("aaaaaa");
+                let post = new AjaxSubmit("@Url.Action("SucursalObtenerAreaAdd", "EmpresaConfg")", "", "Error obtener area atención");
                 let dt = { id: $("#Input_SucursalId").val() }
                 post.partial = "#ModalAABody";
-                post.divBlock = "#ModalAABody";
+                post.divBlock = "#ModalAABodyBlock";
                 post.AjaxPopCall(dt);
-        });
+            });
 
-
-
-        });
-
-
-
-
-        $("#AjaxFormSucursal").submit( async function (e) {
+        $("#AjaxFormPopAA").submit(function (e) {
             e.preventDefault();
 
-            if (!$("#AjaxFormSucursal").valid()) {
+            if (!$("#AjaxFormPopAA").valid()) {
                 return;
             }
 
-            let post = new AjaxSubmit("@Url.Action("SucursalConfEdit","EmpresaConfg")", "#SubmitBtn", "Error almacenamiento");
-
-            if (await MensajeDecision("Registro de usuario", "¿Se desea actualizar los datos del usuario?")) {
-                let dt = ExtraccionDt();
-                post.AjaxPopRedirec(dt);
-            }
-
+            let post = new AjaxSubmit("@Url.Action("SucursalConfAddArAt", "EmpresaConfg")", "#SubmitBtnPopAA", "Error almacenamiento");
+            post.btnCancel = "#btnCancelPopAA";
+            post.partial = "#SucursalArAt";
+            let dt = ExtraccionDt();
+            post.AjaxPop(dt);
         });
 
         function ExtraccionDt() {
+            let arat = [];
+
+            $.each($("#CollectAreAten li input"), function () {
+              if ( $("#" + this.id).prop('checked'))
+                  arat.push(this.id);
+            });
 
             var DtGnrl = {
                 SucursalId: $("#Input_SucursalId").val(),
-                Nombre: $("#Input_Nombre").val(),
-                Direccion: $("#Input_Direccion").val(),
-                DistritoId: $("#LocalizacionGnrl_DistriId").val(),
-                Telefono: $("#Input_Telefono").val(),
-                Telefono2: $("#Input_Telefono2").val(),
-                CorreoSucursal: $("#Input_CorreoSucursal").val(),
-                CorreoSucursal2: $("#Input_CorreoSucursal2").val(),
+                AreaAtencions: arat,
                 ModAct: $("#ModAct").val()
             };
 
             return DtGnrl;
         }
-        </script>
-     
-
+    </script>
 
 }
