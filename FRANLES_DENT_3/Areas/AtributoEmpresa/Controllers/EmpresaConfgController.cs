@@ -177,7 +177,7 @@ namespace FRANLES_DENT_3.Areas.AtributoEmpresa.Controllers
             string moduloAcc = VarGnrl.AccionModulo(_model.ModAct, "Conf_Empres");
 
             if (!(moduloAcc == "Upd" || moduloAcc == "Add"))
-                return RedirectToAction(nameof(EmpresaConfgController.SucursalConfMant), "EmpresaConfg");
+                return RedirectToAction(nameof(EmpresaConfgController.RangoHorarioConfMant), "EmpresaConfg");
 
             if (!ModelState.IsValid)
             {
@@ -195,7 +195,7 @@ namespace FRANLES_DENT_3.Areas.AtributoEmpresa.Controllers
             {
                 case 0:
                     Response.StatusCode = (int)HttpStatusCode.OK;
-                    return Json(new { redirectToUrl = Url.Action(nameof(EmpresaConfgController.SucursalConfMant), "EmpresaConfg"), redir = true });
+                    return Json(new { redirectToUrl = Url.Action(nameof(EmpresaConfgController.RangoHorarioConfMant), "EmpresaConfg"), redir = true });
 
                 case 1:
                     Response.StatusCode = (int)HttpStatusCode.BadRequest;
@@ -205,7 +205,7 @@ namespace FRANLES_DENT_3.Areas.AtributoEmpresa.Controllers
                     Response.StatusCode = (int)HttpStatusCode.BadRequest;
                     return Json(new
                     {
-                        redirectToUrl = Url.Action(nameof(EmpresaConfgController.SucursalConfMant), "EmpresaConfg"),
+                        redirectToUrl = Url.Action(nameof(EmpresaConfgController.RangoHorarioConfMant), "EmpresaConfg"),
                         redir = true,
                         mnsj = string.IsNullOrEmpty(retornoAction.Mensaje) ? "Error en el registro, volver abrir pantalla para registro." : retornoAction.Mensaje
                     });

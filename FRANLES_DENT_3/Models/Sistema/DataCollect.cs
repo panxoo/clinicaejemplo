@@ -1,5 +1,4 @@
-﻿using FRANLES_DENT_3.Variables;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace FRANLES_DENT_3.Models.Sistema
 {

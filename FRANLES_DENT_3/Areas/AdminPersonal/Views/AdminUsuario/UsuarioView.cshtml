@@ -13,58 +13,58 @@
 @if (Model.DtUsuario.IsMedic)
 {
     <partial name="Shared/_UsuarioViewMedicoEdit" model="Model" />
-
+    <partial name="Shared/_UsuarioViewHorarioMedicoEdit" model="@Model.HorarioMedicoMantInput" />
 }
 
-<form id="AjaxFormSucursalMedicos" method="post">
-    <div class="modal fade" id="SucursalModal" tabindex="-1" role="dialog" aria-labelledby="SucursalModal" aria-hidden="true" data-modal="scroll">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Actualizar datos Medico</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
+@*<form id="AjaxFormSucursalMedicos" method="post">
+        <div class="modal fade" id="SucursalModal" tabindex="-1" role="dialog" aria-labelledby="SucursalModal" aria-hidden="true" data-modal="scroll">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Actualizar datos Medico</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
 
-                    @if (Model.SucursalSelLst.Count > 1)
-                    {
-                        <div class="d-flex justify-content-center">
+                        @if (Model.SucursalSelLst.Count > 1)
+                        {
+                            <div class="d-flex justify-content-center">
 
-                            <div class="form-group row">
-                                <label asp-for="SucursalSelId" class="col-sm-3 col-form-label">Sucursal</label>
-                                <div class="col-sm-9">
-                                    <select asp-for="SucursalSelId" class="form-control">
-                                        <option value="" disabled selected>Seleccionar un Valor</option>
-                                        @foreach (var dato in Model.SucursalSelLst)
-                                        {
-                                            <option value="@dato.Value">@dato.Text</option>
-                                        }
-                                    </select>
+                                <div class="form-group row">
+                                    <label asp-for="SucursalSelId" class="col-sm-3 col-form-label">Sucursal</label>
+                                    <div class="col-sm-9">
+                                        <select asp-for="SucursalSelId" class="form-control">
+                                            <option value="" disabled selected>Seleccionar un Valor</option>
+                                            @foreach (var dato in Model.SucursalSelLst)
+                                            {
+                                                <option value="@dato.Value">@dato.Text</option>
+                                            }
+                                        </select>
 
+                                    </div>
                                 </div>
                             </div>
+                        }
+                        <div id="DtSucursalAreaInput">
+                            <partial name="Shared/_UsuarioViewSucursalMedicoEdit" model="Model.SucursalAreaAtencionImp" />
                         </div>
-                    }
-                    <div id="DtSucursalAreaInput">
-                        <partial name="Shared/_UsuarioViewSucursalMedicoEdit" model="Model.SucursalAreaAtencionImp" />
-                    </div>
 
-                </div>
-                <div class="modal-footer">
-                    <div class="col-md-9">
-                        <div id="ErrorAlert" class="alert alert-danger" style="display:none" role="alert">
-                            Error en los datos enviados!
-                        </div>
                     </div>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal" id="btnCancelSucurAA">Cancelar</button>
-                    <button type="submit" class="btn btn-success" id="SubmitBtnSucursalAA">Guardar</button>
+                    <div class="modal-footer">
+                        <div class="col-md-9">
+                            <div id="ErrorAlert" class="alert alert-danger" style="display:none" role="alert">
+                                Error en los datos enviados!
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" id="btnCancelSucurAA">Cancelar</button>
+                        <button type="submit" class="btn btn-success" id="SubmitBtnSucursalAA">Guardar</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</form>
+    </form>*@
 
 <header class="page-header">
     <div class="d-flex align-items-center">
@@ -310,8 +310,15 @@
                                     </div>
                                 }
                                 <div class="tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab">
-                                    <h4 class="card-heading p-b-20">Settings</h4>
-                                    <partial name="Shared/_UsuarioViewHorarioMedico" />
+                                    <div class="row  p-b-20">
+                                        <h4 class="card-heading col-md-6">Sucursal Medico</h4>
+                                        <div class="col-md-6 d-flex justify-content-end">
+                                            <a href="#" data-toggle="modal" data-target="#HorarioMedicosModal" id="BtnHorarioMedicos" data-backdrop="static" data-keyboard="false" title="Editar Medico">
+                                                <i class="far fa-calendar-plus fa-2x"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <partial name="Shared/_UsuarioViewHorarioMedico" model="@Model.HorarioMedicoMantInput" />
                                 </div>
                             </div>
                         </div>
@@ -321,7 +328,6 @@
         </div>
     </div>
 </section>
-
 
 @section Scripts{
     @await Html.PartialAsync("_ValidationScriptsPartial")
@@ -532,33 +538,29 @@
 
 
         window.addEventListener("DOMContentLoaded", function () {
+                   new schedulerHorario();
+            let options = [];
+                @foreach(HorarioMedico asda in Model.HorarioMedicoMantInput.HorarioMedicos)
+            {
 
-             
-           new schedulerHorario();
 
-            var options = [{
-                start_date: new Date(2020, 6, 21, 10, 30),
-                end_date: new Date(2020, 6, 21, 14, 30),
-                type: "dhx_time_block", /* creating events on those dates will be disabled - dates are blocked */
-                css: "sel-sched1",
-                html: "asad"
-            },
+                <text>
 
-                {
-                    start_date: new Date(2020, 6, 21, 16, 30),
-                    end_date: new Date(2020, 6, 21, 20, 30),
-                    type: "dhx_time_block", /* creating events on those dates will be disabled - dates are blocked */
-                    css: "sel-sched1",
-                    html: "asad"
-                }
-            ];
+            options.push({start_date: new Date(2020, 6, 19 + @asda.DiaWeekId, @asda.Hora_Inicio.Hours, @asda.Hora_Inicio.Minutes),end_date: new Date(2020, 6, 19 + @asda.DiaWeekId, @asda.Hora_Fin.Hours, @asda.Hora_Fin.Minutes),type: "dhx_time_block",css: "sel-sched1",html: "asad"});
+
+
+            </text>
+            }
 
             options.forEach(function (entry) {
-                scheduler.addMarkedTimespan(entry);
+                 scheduler.addMarkedTimespan(entry);
             });
-          
+
 
             scheduler.init('scheduler_medico', new Date(2020, 6, 20), "week");
+            //scheduler.init('scheduler_medico1', new Date(2020, 6, 20), "week");
+
+
         });
 
 

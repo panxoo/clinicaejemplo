@@ -78,7 +78,7 @@
                         <div class="form-row">
                             <div class="form-group col-md-3">
                                 <label asp-for="Input.Hora_Inicio"></label>
-                                <input type="text" class="form-control datetimepicker-input timepicker-input-act" asp-for="Input.Hora_Inicio"    data-toggle="datetimepicker" data-target="#Input_Hora_Inicio" autocomplete="off">
+                                <input type="text" class="form-control datetimepicker-input timepicker-input-act" asp-for="Input.Hora_Inicio" data-toggle="datetimepicker" data-target="#Input_Hora_Inicio" autocomplete="off">  
                                 <span asp-validation-for="Input.Hora_Inicio" class="text-danger"></span>
                             </div>
                             <div class="form-group col-md-3">
@@ -97,26 +97,7 @@
                     </div>
                 </form>
             </div>
-            <div class="card">
-                <div class="body">
-                    <div id="scheduler_here" class="dhx_cal_container" style='width:100%; height:500px'>
-                        <div class="dhx_cal_navline">
-                            <div class="dhx_cal_prev_button">&nbsp;</div>
-                            <div class="dhx_cal_next_button">&nbsp;</div>
-                            <div class="dhx_cal_today_button"></div>
-                            <div class="dhx_cal_date"></div>
-                            <div class="dhx_cal_tab" name="day_tab" style="right:204px;"></div>
-                            <div class="dhx_cal_tab" name="week_tab" style="right:140px;"></div>
-                            <div class="dhx_cal_tab" name="month_tab" style="right:76px;"></div>
-                        </div>
-                        <div class="dhx_cal_header">
-                        </div>
-                        <div class="dhx_cal_data">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+
     </div>
 </section>
 
@@ -159,14 +140,7 @@
             return DtGnrl;
         }
 
-        window.addEventListener("DOMContentLoaded", function(){
-            scheduler.init('scheduler_here', new Date(2018, 0, 1), "week");
-            scheduler.markTimespan({
-                start_date: fixed_dat,
-                end_date: scheduler.date.add(fixed_date, event_step, "minute"),
-                css: "highlighted_timespan"
-            });
-		});
+
      
         
         

@@ -29,6 +29,18 @@ namespace FRANLES_DENT_3.Libreria
             };
         }
 
+        static public List<SelectListItem> ParamDiaSemanaScheduler()
+        {
+            return new List<SelectListItem> { new SelectListItem { Text = "Lunes", Value = "1"},
+                                              new SelectListItem { Text = "Martes", Value = "2"},
+                                              new SelectListItem { Text = "Miercoles", Value = "3"},
+                                              new SelectListItem { Text = "Jueves", Value = "4"},
+                                              new SelectListItem { Text = "Viernes", Value = "5"},
+                                              new SelectListItem { Text = "Sabado", Value = "6"},
+                                              new SelectListItem { Text = "Domingo", Value = "7"},
+            };
+        }
+
         public static bool ValParmSexo(string val)
         {
             return ParamSexo().Any(a => a.Value == val);

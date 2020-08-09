@@ -104,5 +104,6 @@ namespace FRANLES_DENT_3.Models.Personal
 
         public List<Sucursal_Usuario> Sucursal_Usuarios { get; set; }
         public List<Area_Medico> Area_Medicos { get; set; }
+        public List<HorarioMedico> HorarioMedicos { get; set; }
     }
 }

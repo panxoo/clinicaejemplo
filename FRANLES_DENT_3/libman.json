@@ -165,36 +165,7 @@
       "library": "dhtmlx-scheduler@5.3.9",
       "destination": "wwwroot/lib/assets/vendor/dhtmlx-scheduler/",
       "files": [
-        "codebase/sources/dhtmlxscheduler.js.map",
-        "codebase/sources/ext/dhtmlxscheduler_active_links.js.map",
-        "codebase/sources/ext/dhtmlxscheduler_all_timed.js.map",
-        "codebase/sources/ext/dhtmlxscheduler_agenda_view.js.map",
-        "codebase/sources/ext/dhtmlxscheduler_collision.js.map",
-        "codebase/sources/ext/dhtmlxscheduler_container_autoresize.js.map",
-        "codebase/sources/ext/dhtmlxscheduler_cookie.js.map",
-        "codebase/sources/ext/dhtmlxscheduler_csp.js.map",
-        "codebase/sources/ext/dhtmlxscheduler_editors.js.map",
-        "codebase/sources/ext/dhtmlxscheduler_expand.js.map",
-        "codebase/sources/ext/dhtmlxscheduler_html_templates.js.map",
-        "codebase/sources/ext/dhtmlxscheduler_key_nav.js.map",
-        "codebase/sources/ext/dhtmlxscheduler_layer.js.map",
-        "codebase/sources/ext/dhtmlxscheduler_limit.js.map",
-        "codebase/sources/ext/dhtmlxscheduler_map_view.js.map",
-        "codebase/sources/ext/dhtmlxscheduler_minical.js.map",
-        "codebase/sources/ext/dhtmlxscheduler_monthheight.js.map",
-        "codebase/sources/ext/dhtmlxscheduler_multiselect.js.map",
-        "codebase/sources/ext/dhtmlxscheduler_multisource.js.map",
-        "codebase/sources/ext/dhtmlxscheduler_mvc.js.map",
-        "codebase/sources/ext/dhtmlxscheduler_outerdrag.js.map",
-        "codebase/sources/ext/dhtmlxscheduler_pdf.js.map",
-        "codebase/sources/ext/dhtmlxscheduler_quick_info.js.map",
-        "codebase/sources/ext/dhtmlxscheduler_readonly.js.map",
-        "codebase/sources/ext/dhtmlxscheduler_recurring.js.map",
-        "codebase/sources/ext/dhtmlxscheduler_serialize.js.map",
-        "codebase/sources/ext/dhtmlxscheduler_tooltip.js.map",
-        "codebase/sources/ext/dhtmlxscheduler_url.js.map",
-        "codebase/sources/ext/dhtmlxscheduler_year_view.js.map",
-        "codebase/sources/ext/dhtmlxscheduler_wp.js.map"
+        "codebase/sources/locale/locale_es.js.map"
       ]
     }
   ]

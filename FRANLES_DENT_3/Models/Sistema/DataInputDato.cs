@@ -1,6 +1,4 @@
-﻿using FRANLES_DENT_3.Variables;
-using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace FRANLES_DENT_3.Models.Sistema
 {

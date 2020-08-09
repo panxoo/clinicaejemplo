@@ -12,6 +12,7 @@ namespace FRANLES_DENT_3.Models.MedicoDato
 
         [StringLength(255)]
         public string EspecialidadId { get; set; }
+
         public Especialidad Especialidad { get; set; }
     }
 }

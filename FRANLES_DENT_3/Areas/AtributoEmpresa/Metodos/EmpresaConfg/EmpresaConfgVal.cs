@@ -109,22 +109,22 @@ namespace FRANLES_DENT_3.Areas.AtributoEmpresa.Metodos.EmpresaConfg
                     }
                 }
 
-                DateTime valTime;
+                //DateTime valTime;
 
-                DateTime.TryParse(_model.Hora_Inicio, out valTime);
+                //DateTime.TryParse(_model.Hora_Inicio, out valTime);
 
-                if(valTime.Date.Year != DateTime.Now.Year)
-                {
-                    return new RetornoAction { Code = 1, Mensaje = "Error en el formato de la fecha de inicio HH:MM" };
-                }
+                //if(valTime.Date.Year != DateTime.Now.Year)
+                //{
+                //    return new RetornoAction { Code = 1, Mensaje = "Error en el formato de la fecha de inicio HH:MM" };
+                //}
 
 
-                DateTime.TryParse(_model.Hora_Fin, out valTime);
+                //DateTime.TryParse(_model.Hora_Fin, out valTime);
 
-                if (valTime.Date.Year != DateTime.Now.Year)
-                {
-                    return new RetornoAction { Code = 1, Mensaje = "Error en el formato de la fecha de fin HH:MM" };
-                }
+                //if (valTime.Date.Year != DateTime.Now.Year)
+                //{
+                //    return new RetornoAction { Code = 1, Mensaje = "Error en el formato de la fecha de fin HH:MM" };
+                //}
 
                 return new RetornoAction { Code = 0 };
 

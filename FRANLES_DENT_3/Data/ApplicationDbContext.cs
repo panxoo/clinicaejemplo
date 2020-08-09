@@ -39,6 +39,8 @@ namespace FRANLES_DENT_3.Data
         public DbSet<Sucursal_Usuario> Sucursal_Usuarios { get; set; }
         public DbSet<Area_Medico> Area_Medicos { get; set; }
         public DbSet<Tipo_Horario> Tipo_Horarios { get; set; }
+        public DbSet<HorarioMedico> HorarioMedicos { get; set; }
+        public DbSet<HorarioMedicoAreaAtencion> HorarioMedicoAreaAtencions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -119,6 +121,24 @@ namespace FRANLES_DENT_3.Data
                    .HasOne<Usuario>(sc => sc.Usuario)
                    .WithMany(s => s.Sucursal_Usuarios)
                    .HasForeignKey(sc => sc.UsuarioId);
+
+
+            builder.Entity<HorarioMedicoAreaAtencion>().HasKey(x => new { x.Area_AtencionId, x.HorarioMedicoId });
+
+
+            builder.Entity<HorarioMedicoAreaAtencion>()
+                   .HasOne(a => a.Area_Atencion)
+                   .WithMany(b => b.HorarioMedicoAreaAtencions)
+                   .HasForeignKey(c => c.Area_AtencionId);
+
+            builder.Entity<HorarioMedicoAreaAtencion>()
+                   .HasOne(a => a.HorarioMedico)
+                   .WithMany(b => b.HorarioMedicoAreaAtencions)
+                   .HasForeignKey(c => c.HorarioMedicoId);
+
+
+
+
 
             builder.Entity<Sucursal_Area_Atencion>()
                    .HasMany<Area_Medico>(sc => sc.Area_Medicos).WithOne(wo => wo.Sucursal_Area_Atencion).HasForeignKey(sc => sc.Sucursal_Area_AtencionId);
@@ -205,6 +225,7 @@ namespace FRANLES_DENT_3.Data
                    .HasOne(a => a.Clinica)
                    .WithMany(b => b.Tipo_Horarios)
                    .HasForeignKey(s => s.ClinicaId);
+
 
             base.OnModelCreating(builder);
         }

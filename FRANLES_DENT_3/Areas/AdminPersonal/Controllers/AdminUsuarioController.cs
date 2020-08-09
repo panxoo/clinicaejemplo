@@ -128,38 +128,38 @@ namespace FRANLES_DENT_3.Areas.AdminPersonal.Controllers
             return View(_model);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> AreaSucursalDetalle(string id,string usuarioId, string actmtd)
-        {
-            string moduloAcc = VarGnrl.AccionModulo(actmtd, "Mant_Usuari");
+        //[HttpPost]
+        //public async Task<IActionResult> AreaSucursalDetalle(string id,string usuarioId, string actmtd)
+        //{
+        //    string moduloAcc = VarGnrl.AccionModulo(actmtd, "Mant_Usuari");
 
-            if (moduloAcc != "Vie")
-            {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return Json(new
-                {
-                    redirectToUrl = Url.Action(nameof(AdminUsuarioController.UsuarioMant), "AdminUsuario"),
-                    redir = true,
-                    mnsj = "Error en el registro, volver abrir pantalla para registro."
-                });
-            }
+        //    if (moduloAcc != "Vie")
+        //    {
+        //        Response.StatusCode = (int)HttpStatusCode.BadRequest;
+        //        return Json(new
+        //        {
+        //            redirectToUrl = Url.Action(nameof(AdminUsuarioController.UsuarioMant), "AdminUsuario"),
+        //            redir = true,
+        //            mnsj = "Error en el registro, volver abrir pantalla para registro."
+        //        });
+        //    }
 
-            _lstGnrl._datosUsuario = await _lstGnrl._usuarios.DatosSession(HttpContext);
+        //    _lstGnrl._datosUsuario = await _lstGnrl._usuarios.DatosSession(HttpContext);
 
-            var _model = await new AdminUsuarioGet(_lstGnrl).GetAreaAtencionSucursal(id, usuarioId);
+        //    var _model = await new AdminUsuarioGet(_lstGnrl).GetAreaAtencionSucursal(id, usuarioId);
 
 
-            if (_model != null)
-            {
-                Response.StatusCode = (int)HttpStatusCode.OK;
-                return PartialView("Shared/_UsuarioViewSucursalMedicoEdit", _model);
-            }
-            else
-            {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return null;
-            }                      
-        }
+        //    if (_model != null)
+        //    {
+        //        Response.StatusCode = (int)HttpStatusCode.OK;
+        //        return PartialView("Shared/_UsuarioViewSucursalMedicoEdit", _model);
+        //    }
+        //    else
+        //    {
+        //        Response.StatusCode = (int)HttpStatusCode.BadRequest;
+        //        return null;
+        //    }                      
+        //}
 
         [HttpPost]
         public async Task<IActionResult> DetalleUsuarioMedUpd(UsuarioViewPost.UsuarioMedicoPost _model)

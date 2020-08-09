@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using FRANLES_DENT_3.Models.MedicoDato;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace FRANLES_DENT_3.Models.Empresa.Atributos
@@ -20,5 +21,6 @@ namespace FRANLES_DENT_3.Models.Empresa.Atributos
         public Clinica Clinica { get; set; }
 
         public List<Sucursal_Area_Atencion> Sucursal_Area_Atencions { get; set; }
+        public List<HorarioMedicoAreaAtencion> HorarioMedicoAreaAtencions { get; set; }
     }
 }

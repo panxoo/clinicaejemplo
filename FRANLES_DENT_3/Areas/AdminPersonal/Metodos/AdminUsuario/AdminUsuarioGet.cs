@@ -144,7 +144,24 @@ namespace FRANLES_DENT_3.Areas.AdminPersonal.Metodos.AdminUsuario
                                                                               })
                                                                               .ToListAsync();
 
-              
+                _model.HorarioMedicoMantInput = new UsuarioViewInput.HorarioMedicoMant();
+
+                if (await _lstGnrl._context.HorarioMedicos.AnyAsync(w => w.UsuarioId.Equals(id)))
+                {
+                    _model.HorarioMedicoMantInput.HorarioMedicos = await _lstGnrl._context.HorarioMedicos.Where(w => w.UsuarioId.Equals(id)).Select(s => new UsuarioViewInput.HorarioMedicoTableMant
+                    {
+                        DiaWeek  = s.DiaWeek,
+                        DiaWeekId = s.DiaWeekId,
+                        HorarioMedicoId = s.HorarioMedicoId,
+                        Hora_Fin = s.Hora_Fin,
+                        Hora_Inicio = s.Hora_Inicio,
+                         NombreSucursal  = s.Sucursal.Nombre,
+                        SucursalId = s.SucursalId, 
+                        NombreTipoHorario = s.Tipo_Horario.Nombre,
+                         Tipo_HorarioId = s.Tipo_HorarioId
+                    }).ToListAsync();
+                }
+
                 //_model.DtSucursalAreaAtencions = await GetObtenerSucursalAreaAtenAsignadosUsuario(id);
             }
 
@@ -181,87 +198,88 @@ namespace FRANLES_DENT_3.Areas.AdminPersonal.Metodos.AdminUsuario
                     _model.EspcialidadMed = new List<SelectListItem>();
                 }
             }
+            
 
             return _model;
         }
 
-        public async Task<List<UsuarioViewInput.SucursalAreaAtencion>> GetObtenerSucursalAreaAtenAsignadosUsuario(string idUsr)
-        {
-            List<UsuarioViewInput.SucursalAreaAtencion> _model = new List<UsuarioViewInput.SucursalAreaAtencion>();
+        //public async Task<List<UsuarioViewInput.SucursalAreaAtencion>> GetObtenerSucursalAreaAtenAsignadosUsuario(string idUsr)
+        //{
+        //    List<UsuarioViewInput.SucursalAreaAtencion> _model = new List<UsuarioViewInput.SucursalAreaAtencion>();
 
-            List<string> sucursalUsrs;
+        //    List<string> sucursalUsrs;
 
-            if (await _lstGnrl._context.Area_Medicos.AnyAsync(a => a.UsuarioId.Equals(idUsr) && a.Usuario.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId)))
-            {
-                sucursalUsrs = await _lstGnrl._context.Area_Medicos.Where(w => w.UsuarioId.Equals(idUsr) && w.Usuario.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId))
-                                                              .Select(s => s.Sucursal_Area_Atencion.SucursalId).ToListAsync();
+        //    if (await _lstGnrl._context.Area_Medicos.AnyAsync(a => a.UsuarioId.Equals(idUsr) && a.Usuario.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId)))
+        //    {
+        //        sucursalUsrs = await _lstGnrl._context.Area_Medicos.Where(w => w.UsuarioId.Equals(idUsr) && w.Usuario.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId))
+        //                                                      .Select(s => s.Sucursal_Area_Atencion.SucursalId).ToListAsync();
 
-                foreach (string sucursalUsr in sucursalUsrs)
-                {
-                    UsuarioViewInput.SucursalAreaAtencion _dt;
+        //        foreach (string sucursalUsr in sucursalUsrs)
+        //        {
+        //            UsuarioViewInput.SucursalAreaAtencion _dt;
 
-                    _dt = await _lstGnrl._context.Area_Medicos.Where(w => w.UsuarioId.Equals(idUsr) && w.Usuario.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId) && w.Sucursal_Area_Atencion.SucursalId.Equals(sucursalUsr))
-                                                       .Select(s => new UsuarioViewInput.SucursalAreaAtencion
-                                                       {
-                                                           SucursalId = s.Sucursal_Area_Atencion.Sucursal.SucursalId,
-                                                           SucursalNom = s.Sucursal_Area_Atencion.Sucursal.Nombre,
-                                                           SucursalDirc = s.Sucursal_Area_Atencion.Sucursal.Direccion + ". " + s.Sucursal_Area_Atencion.Sucursal.Distrito.Name + ". " + s.Sucursal_Area_Atencion.Sucursal.Distrito.Provincia.Name
-                                                                          + ". " + s.Sucursal_Area_Atencion.Sucursal.Distrito.Provincia.Departamento.Name
-                                                       }).FirstOrDefaultAsync();
+        //            _dt = await _lstGnrl._context.Area_Medicos.Where(w => w.UsuarioId.Equals(idUsr) && w.Usuario.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId) && w.Sucursal_Area_Atencion.SucursalId.Equals(sucursalUsr))
+        //                                               .Select(s => new UsuarioViewInput.SucursalAreaAtencion
+        //                                               {
+        //                                                   SucursalId = s.Sucursal_Area_Atencion.Sucursal.SucursalId,
+        //                                                   SucursalNom = s.Sucursal_Area_Atencion.Sucursal.Nombre,
+        //                                                   SucursalDirc = s.Sucursal_Area_Atencion.Sucursal.Direccion + ". " + s.Sucursal_Area_Atencion.Sucursal.Distrito.Name + ". " + s.Sucursal_Area_Atencion.Sucursal.Distrito.Provincia.Name
+        //                                                                  + ". " + s.Sucursal_Area_Atencion.Sucursal.Distrito.Provincia.Departamento.Name
+        //                                               }).FirstOrDefaultAsync();
 
-                    _dt.Area_Atencions = await _lstGnrl._context.Area_Medicos.Where(w => w.UsuarioId.Equals(idUsr) && w.Usuario.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId) && w.Sucursal_Area_Atencion.SucursalId.Equals(sucursalUsr))
-                                                                           .Select(s => new SelectListItem
-                                                                           {
-                                                                               Value = s.Sucursal_Area_Atencion.Area_AtencionId,
-                                                                               Text = s.Sucursal_Area_Atencion.Area_Atencion.Nombre
-                                                                           }).ToListAsync();
+        //            _dt.Area_Atencions = await _lstGnrl._context.Area_Medicos.Where(w => w.UsuarioId.Equals(idUsr) && w.Usuario.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId) && w.Sucursal_Area_Atencion.SucursalId.Equals(sucursalUsr))
+        //                                                                   .Select(s => new SelectListItem
+        //                                                                   {
+        //                                                                       Value = s.Sucursal_Area_Atencion.Area_AtencionId,
+        //                                                                       Text = s.Sucursal_Area_Atencion.Area_Atencion.Nombre
+        //                                                                   }).ToListAsync();
 
-                    _model.Add(_dt);
-                }
-            }
+        //            _model.Add(_dt);
+        //        }
+        //    }
 
-            return _model;
-        }
+        //    return _model;
+        //}
 
-        public async Task<UsuarioViewInput.SucursalAreaAtencion> GetAreaAtencionSucursal(string sucursalid, string usrId)
-        {
-            UsuarioViewInput.SucursalAreaAtencion _model = new UsuarioViewInput.SucursalAreaAtencion();
+        //public async Task<UsuarioViewInput.SucursalAreaAtencion> GetAreaAtencionSucursal(string sucursalid, string usrId)
+        //{
+        //    UsuarioViewInput.SucursalAreaAtencion _model = new UsuarioViewInput.SucursalAreaAtencion();
 
-            if (await _lstGnrl._context.Sucursal_Area_Atencions.AnyAsync(a => a.Sucursal.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId) && a.SucursalId.Equals(sucursalid)))
-            {
-                _model = await _lstGnrl._context.Sucursal_Area_Atencions.Where(w => w.Sucursal.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId) && w.SucursalId.Equals(sucursalid))
-                                                                        .Select(s => new UsuarioViewInput.SucursalAreaAtencion
-                                                                        {
-                                                                            SucursalId = s.SucursalId,
-                                                                            SucursalNom = s.Sucursal.Nombre,
-                                                                            SucursalDirc = s.Sucursal.Direccion + ". " + s.Sucursal.Distrito.Name + ". " + s.Sucursal.Distrito.Provincia.Name
-                                                                              + ". " + s.Sucursal.Distrito.Provincia.Departamento.Name
-                                                                        }).FirstOrDefaultAsync();
+        //    if (await _lstGnrl._context.Sucursal_Area_Atencions.AnyAsync(a => a.Sucursal.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId) && a.SucursalId.Equals(sucursalid)))
+        //    {
+        //        _model = await _lstGnrl._context.Sucursal_Area_Atencions.Where(w => w.Sucursal.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId) && w.SucursalId.Equals(sucursalid))
+        //                                                                .Select(s => new UsuarioViewInput.SucursalAreaAtencion
+        //                                                                {
+        //                                                                    SucursalId = s.SucursalId,
+        //                                                                    SucursalNom = s.Sucursal.Nombre,
+        //                                                                    SucursalDirc = s.Sucursal.Direccion + ". " + s.Sucursal.Distrito.Name + ". " + s.Sucursal.Distrito.Provincia.Name
+        //                                                                      + ". " + s.Sucursal.Distrito.Provincia.Departamento.Name
+        //                                                                }).FirstOrDefaultAsync();
 
-                _model.Area_Atencions = await _lstGnrl._context.Sucursal_Area_Atencions.Where(w => w.Sucursal.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId) && w.SucursalId.Equals(sucursalid))
-                                                                                       .Select(s => new SelectListItem
-                                                                                       {
-                                                                                           Value = s.Area_AtencionId,
-                                                                                           Text = s.Area_Atencion.Nombre,
-                                                                                           Selected = false
-                                                                                       }).ToListAsync();
+        //        _model.Area_Atencions = await _lstGnrl._context.Sucursal_Area_Atencions.Where(w => w.Sucursal.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId) && w.SucursalId.Equals(sucursalid))
+        //                                                                               .Select(s => new SelectListItem
+        //                                                                               {
+        //                                                                                   Value = s.Area_AtencionId,
+        //                                                                                   Text = s.Area_Atencion.Nombre,
+        //                                                                                   Selected = false
+        //                                                                               }).ToListAsync();
 
-                if (await _lstGnrl._context.Area_Medicos.AnyAsync(a => a.UsuarioId.Equals(usrId) && a.Sucursal_Area_Atencion.SucursalId.Equals(sucursalid) && a.Sucursal_Area_Atencion.Sucursal.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId)))
-                {
-                    List<string> areaAsignada = await _lstGnrl._context.Area_Medicos.Where(w => w.UsuarioId.Equals(usrId) && w.Usuario.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId) && w.Sucursal_Area_Atencion.SucursalId.Equals(sucursalid))
-                                                                                 .Select(s => s.Sucursal_Area_Atencion.Area_AtencionId).ToListAsync();
+        //        if (await _lstGnrl._context.Area_Medicos.AnyAsync(a => a.UsuarioId.Equals(usrId) && a.Sucursal_Area_Atencion.SucursalId.Equals(sucursalid) && a.Sucursal_Area_Atencion.Sucursal.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId)))
+        //        {
+        //            List<string> areaAsignada = await _lstGnrl._context.Area_Medicos.Where(w => w.UsuarioId.Equals(usrId) && w.Usuario.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId) && w.Sucursal_Area_Atencion.SucursalId.Equals(sucursalid))
+        //                                                                         .Select(s => s.Sucursal_Area_Atencion.Area_AtencionId).ToListAsync();
 
-                    if (areaAsignada.Count > 0)
-                    {
-                        _model.Area_Atencions.ForEach(f =>
-                        {
-                            f.Selected = areaAsignada.Contains(f.Value);
-                        });
-                    }
-                }
-            }
+        //            if (areaAsignada.Count > 0)
+        //            {
+        //                _model.Area_Atencions.ForEach(f =>
+        //                {
+        //                    f.Selected = areaAsignada.Contains(f.Value);
+        //                });
+        //            }
+        //        }
+        //    }
 
-            return _model;
-        }
+        //    return _model;
+        //}
     }
 }

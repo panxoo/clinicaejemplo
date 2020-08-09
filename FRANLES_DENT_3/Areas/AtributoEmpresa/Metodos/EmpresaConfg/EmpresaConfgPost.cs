@@ -54,20 +54,20 @@ namespace FRANLES_DENT_3.Areas.AtributoEmpresa.Metodos.EmpresaConfg
 
             retornoAction = await new EmpresaConfgVal(_lstGnrl).ValRangoHorarioConfDetalle(_model, _accion);
 
-            //if (retornoAction.Code == 0)
-            //{
-            //    if(_accion == "Upd")
-            //    {
-            //        await new EmpresaConfgSave(_lstGnrl).SaveUpdRangoHorarioConfDetalle(_model);
-            //    }   
-            //    else
-            //    {
-            //        await new EmpresaConfgSave(_lstGnrl).SaveAddRangoHorarioConfDetalle(_model);
+            if (retornoAction.Code == 0)
+            {
+                if (_accion == "Upd")
+                {
+                    await new EmpresaConfgSave(_lstGnrl).SaveUpdRangoHorarioConfDetalle(_model);
+                }
+                else
+                {
+                    await new EmpresaConfgSave(_lstGnrl).SaveAddRangoHorarioConfDetalle(_model);
 
-            //    }
-            //}
-           
-        
+                }
+            }
+
+
             return retornoAction;
            
         }    

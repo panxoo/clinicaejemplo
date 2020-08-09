@@ -3,14 +3,16 @@ using System;
 using FRANLES_DENT_3.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FRANLES_DENT_3.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200726220830_HorarioMedico")]
+    partial class HorarioMedico
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -578,15 +580,6 @@ namespace FRANLES_DENT_3.Migrations
                     b.Property<string>("DiaWeek")
                         .HasColumnType("varchar(20) CHARACTER SET utf8mb4")
                         .HasMaxLength(20);
-
-                    b.Property<short>("DiaWeekId")
-                        .HasColumnType("smallint");
-
-                    b.Property<TimeSpan>("Hora_Fin")
-                        .HasColumnType("time(6)");
-
-                    b.Property<TimeSpan>("Hora_Inicio")
-                        .HasColumnType("time(6)");
 
                     b.Property<string>("SucursalId")
                         .HasColumnType("varchar(255) CHARACTER SET utf8mb4")
