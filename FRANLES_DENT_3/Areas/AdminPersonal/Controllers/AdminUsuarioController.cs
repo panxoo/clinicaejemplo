@@ -21,7 +21,7 @@ namespace FRANLES_DENT_3.Areas.AdminPersonal.Controllers
     {
 
         public AdminUsuarioController(IListGeneral lstGnrl, ApplicationDbContext context, UserManager<IdentityUser> userManager)
-        {
+        { 
             _lstGnrl = lstGnrl;
             _lstGnrl._context = context;
             _lstGnrl._usuarios = new Libreria.LibUsuario(_lstGnrl);

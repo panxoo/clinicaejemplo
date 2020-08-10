@@ -17,7 +17,7 @@
                         <div class="form-group col-md-3">
                             <label asp-for=""></label>
                             <select asp-for="" class="form-control" disabled>
-                                @foreach (var dato in Model.TipoDocumentoSelect)
+                                @foreach (var dato in Model.DiaScheduler)
                                 {
                                     <option value="@dato.Value">@dato.Text</option>
                                 }
