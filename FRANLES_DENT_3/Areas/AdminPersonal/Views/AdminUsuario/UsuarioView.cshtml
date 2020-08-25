@@ -13,58 +13,42 @@
 @if (Model.DtUsuario.IsMedic)
 {
     <partial name="Shared/_UsuarioViewMedicoEdit" model="Model" />
-    <partial name="Shared/_UsuarioViewHorarioMedicoEdit" model="@Model.HorarioMedicoMantInput" />
-}
 
-@*<form id="AjaxFormSucursalMedicos" method="post">
-        <div class="modal fade" id="SucursalModal" tabindex="-1" role="dialog" aria-labelledby="SucursalModal" aria-hidden="true" data-modal="scroll">
+
+    <form id="AjaxFormMedicos" method="post">
+        <div class="modal fade" id="HorarioMedicosModal" tabindex="-1" role="dialog" aria-labelledby="MedicosModal" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Actualizar datos Medico</h5>
+                        <a><></a>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <div class="modal-body">
 
-                        @if (Model.SucursalSelLst.Count > 1)
-                        {
-                            <div class="d-flex justify-content-center">
 
-                                <div class="form-group row">
-                                    <label asp-for="SucursalSelId" class="col-sm-3 col-form-label">Sucursal</label>
-                                    <div class="col-sm-9">
-                                        <select asp-for="SucursalSelId" class="form-control">
-                                            <option value="" disabled selected>Seleccionar un Valor</option>
-                                            @foreach (var dato in Model.SucursalSelLst)
-                                            {
-                                                <option value="@dato.Value">@dato.Text</option>
-                                            }
-                                        </select>
-
-                                    </div>
-                                </div>
-                            </div>
-                        }
-                        <div id="DtSucursalAreaInput">
-                            <partial name="Shared/_UsuarioViewSucursalMedicoEdit" model="Model.SucursalAreaAtencionImp" />
-                        </div>
-
+                    <div id="dtShedulerMedEdit">
+                        <partial name="Shared/_UsuarioViewHorarioMedicoEdit" model="@Model.HorarioMedicoMantEditInput" />
                     </div>
+
+
                     <div class="modal-footer">
                         <div class="col-md-9">
                             <div id="ErrorAlert" class="alert alert-danger" style="display:none" role="alert">
                                 Error en los datos enviados!
                             </div>
                         </div>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal" id="btnCancelSucurAA">Cancelar</button>
-                        <button type="submit" class="btn btn-success" id="SubmitBtnSucursalAA">Guardar</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" id="btnCancel">Cancelar</button>
+                        <button type="submit" class="btn btn-success" id="SubmitBtn">Guardar</button>
                     </div>
                 </div>
             </div>
         </div>
-    </form>*@
+    </form>
+}
+
+
 
 <header class="page-header">
     <div class="d-flex align-items-center">
@@ -313,12 +297,12 @@
                                     <div class="row  p-b-20">
                                         <h4 class="card-heading col-md-6">Sucursal Medico</h4>
                                         <div class="col-md-6 d-flex justify-content-end">
-                                            <a href="#" data-toggle="modal" data-target="#HorarioMedicosModal" id="BtnHorarioMedicos" data-backdrop="static" data-keyboard="false" title="Editar Medico">
+                                            <a href="#" data-toggle="modal" data-target="#HorarioMedicosModal" id="BtnHorarioMedicosEdit" data-backdrop="static" data-keyboard="false" title="Editar Medico">
                                                 <i class="far fa-calendar-plus fa-2x"></i>
                                             </a>
                                         </div>
                                     </div>
-                                    <partial name="Shared/_UsuarioViewHorarioMedico" model="@Model.HorarioMedicoMantInput" />
+                                    <partial name="Shared/_UsuarioViewHorarioMedico" model="@Model.HorarioMedicoViewInput" />
                                 </div>
                             </div>
                         </div>
@@ -367,41 +351,13 @@
             CargaInputMedico();
         });
 
-        @if(Model.SucursalSelLst.Count > 1)
-        {
-            <Text>
-        $("#SucursalSelId").change(function () {
-            id = $(this).val();
-            if (id != '') {
-                ObtenerDatosSucursalPop(id);
-            }
+        $("#BtnHorarioMedicosEdit").click(function () {
+            GetDtHorarioMdEdit();
         });
 
-            </Text>
-        }
-        else
-        {
-            <Text>
-        $("#BtnMedSucAreaModal").click(function () {
-           {
-                ObtenerDatosSucursalPop('@Model.SucursalSelLst[0].Value');
-            }
-        });
-
-            </Text>
-        }
 
 
 
-        $("#btnCancelSucurAA").click(function () {
-            let cleari = new ClearAtributo();
-            cleari.inputClear =  ["#SucursalNom", "#SucursalDirc"];
-            cleari.selectFirst = [ "#SucursalSelId"];
-            cleari.listClear = ["#lstAreaAtencion"];
-            cleari.divHidden = ["#DtSucursalAA"];
-
-            cleari.ExecClearAttr();
-        })
 
         function CargaInputMedico() {
             UlLstSelect.ForListAdd();
@@ -484,14 +440,12 @@
             return dt;
         };
 
-        function ObtenerDatosSucursalPop(sucid) {
-            let post = new AjaxSubmit('@Url.Action("AreaSucursalDetalle", "AdminUsuario")');
-            post.partial = "#DtSucursalAreaInput";
+        function GetDtHorarioMdEdit() {
+            let post = new AjaxSubmit('@Url.Action("DetalleHorarioMedico", "AdminUsuario")');
+            post.partial = "#dtShedulerMedEdit";
             post.divBlock = "#datosMedico";
-
             dt = {
-                id: sucid,
-                usuarioId: $("#DtUsuario_UsuarioId").val(),
+                id: $("#DtUsuario_UsuarioId").val(),
                 actmtd: $("#ModAct").val()
             };
             post.AjaxGetDato(dt);
@@ -540,13 +494,13 @@
         window.addEventListener("DOMContentLoaded", function () {
                    new schedulerHorario();
             let options = [];
-                @foreach(HorarioMedico asda in Model.HorarioMedicoMantInput.HorarioMedicos)
+                @foreach(var asda in Model.HorarioMedicoViewInput.HorarioMedicoViews)
             {
 
 
                 <text>
 
-            options.push({start_date: new Date(2020, 6, 19 + @asda.DiaWeekId, @asda.Hora_Inicio.Hours, @asda.Hora_Inicio.Minutes),end_date: new Date(2020, 6, 19 + @asda.DiaWeekId, @asda.Hora_Fin.Hours, @asda.Hora_Fin.Minutes),type: "dhx_time_block",css: "sel-sched1",html: "asad"});
+            options.push({start_date: new Date(2020, 6, 19 + @asda.DiaSemanaId, @asda.HoraIni.Hours, @asda.HoraIni.Minutes),end_date: new Date(2020, 6, 19 + @asda.DiaSemanaId, @asda.HoraFin.Hours, @asda.HoraFin.Minutes),type: "dhx_time_block",css: "sel-sched1",html: "asad"});
 
 
             </text>

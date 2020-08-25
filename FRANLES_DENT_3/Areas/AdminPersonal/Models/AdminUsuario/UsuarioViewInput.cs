@@ -1,8 +1,10 @@
 ﻿using FRANLES_DENT_3.Libreria;
+using FRANLES_DENT_3.Models.Empresa.Atributos;
 using FRANLES_DENT_3.Models.MedicoDato;
 using FRANLES_DENT_3.Models.Personal;
 using FRANLES_DENT_3.Models.Sistema;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
 using System.Collections.Generic;
 
 namespace FRANLES_DENT_3.Areas.AdminPersonal.Models.AdminUsuario
@@ -14,7 +16,7 @@ namespace FRANLES_DENT_3.Areas.AdminPersonal.Models.AdminUsuario
             ParentescoDet = "";
             DtMedicoInp = new DatosMedico();
             EspcialiSelLst = new List<SelectListItem>();
-            //SucursalAreaAtencionImp = new SucursalAreaAtencion();
+            HorarioMedicoMantEditInput = new HorarioMedicoMantEdit();
         }
 
         public Usuario DtUsuario { get; set; }
@@ -30,10 +32,10 @@ namespace FRANLES_DENT_3.Areas.AdminPersonal.Models.AdminUsuario
 
         public List<SelectListItem> SucursalSelLst { get; set; }
         public string SucursalSelId { get; set; }
-        //public SucursalAreaAtencion SucursalAreaAtencionImp { get; set; }
-        //public List<SucursalAreaAtencionMant> DtSucursalAreaAtencionMants { get; set; }
 
-        public HorarioMedicoMant HorarioMedicoMantInput { get; set; }
+        public HorarioMedicoViewParam HorarioMedicoViewInput { get; set; }
+
+        public HorarioMedicoMantEdit HorarioMedicoMantEditInput { get; set; }
 
         public class MedicoView
         {
@@ -47,45 +49,47 @@ namespace FRANLES_DENT_3.Areas.AdminPersonal.Models.AdminUsuario
             public List<SelectListItem> EspcialidadMed { get; set; }
         }
 
-        //public class SucursalAreaAtencion
-        //{
-        //    public string SucursalId { get; set; }
-        //    public string SucursalNom { get; set; }
-        //    public string SucursalDirc { get; set; }
-        //    public string Activo { get; set; }
-
-        //    public List<SelectListItem> Area_Atencions { get; set; }
-        //}
-
-        //public class SucursalAreaAtencionMant
-        //{
-        //    public string SucursalId { get; set; }
-        //    public string SucursalNom { get; set; }
-        //    public string SucursalDirc { get; set; }
-        //    public string Activo { get; set; }
-
-        //    public List<SelectListItem> Area_Atencions { get; set; }
-        //}
-
-        public class HorarioMedicoMant
+        public class HorarioMedicoViewParam
         {
-            public HorarioMedicoMant()
+            public HorarioMedicoViewParam()
             {
-                HorarioMedicos = new List<HorarioMedicoTableMant>();
                 DiaScheduler = TransfParam.ParamDiaSemanaScheduler();
             }
 
-            public List<HorarioMedicoTableMant> HorarioMedicos { get; set; }
             public List<SelectListItem> DiaScheduler { get; set; }
-            public List<SelectListItem> Area_Atencions { get; set; }
-
+            public List<HorarioMedicoView> HorarioMedicoViews { get; set; }
         }
 
-        public class HorarioMedicoTableMant : HorarioMedico
+        public class HorarioMedicoView
+        {
+            public string HorarioId { get; set; }
+            public int DiaSemanaId { get; set; }
+            public TimeSpan HoraIni { get; set; }
+            public TimeSpan HoraFin { get; set; }
+            public string SucursalName { get; set; }
+            public List<string> AreaAtencions { get; set; }
+        }
+
+        public class HorarioMedicoMantEdit
+        {
+            public HorarioMedicoMantEdit()
+            {
+                HorarioMedicos = new List<HorarioMedicoTableMantEdit>();
+                DiaScheduler = TransfParam.ParamDiaSemanaScheduler();
+            }
+
+            public List<HorarioMedicoTableMantEdit> HorarioMedicos { get; set; }
+            public List<SelectListItem> DiaScheduler { get; set; }
+            public List<SelectListItem> Sucursals { get; set; }
+            public List<Tipo_Horario> Tipo_Horarios { get; set; }
+            public List<SelectListItem> Area_Atencions { get; set; }
+        }
+
+        public class HorarioMedicoTableMantEdit : HorarioMedico
         {
             public string NombreSucursal { get; set; }
-
             public string NombreTipoHorario { get; set; }
+            public List<SelectListItem> Area_AtencionsSel { get; set; }
         }
     }
 }
