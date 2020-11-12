@@ -1,5 +1,6 @@
 ﻿using FRANLES_DENT_3.Models.Empresa.Atributos;
 using FRANLES_DENT_3.Models.Localization;
+using FRANLES_DENT_3.Models.Marca;
 using FRANLES_DENT_3.Models.MedicoDato.Atributo;
 using FRANLES_DENT_3.Models.Permisos;
 using FRANLES_DENT_3.Models.Personal;
@@ -41,5 +42,6 @@ namespace FRANLES_DENT_3.Models.Empresa
         public ICollection<Especialidad> Especialidads { get; set; }
         public ICollection<Sucursal> Sucursals { get; set; }
         public ICollection<Tipo_Horario> Tipo_Horarios { get; set; }
+        public ICollection<TipoRecomendacion> TipoRecomendacions { get; set; }
     }
 }

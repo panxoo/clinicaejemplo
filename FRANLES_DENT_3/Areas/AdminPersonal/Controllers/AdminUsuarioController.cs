@@ -21,7 +21,7 @@ namespace FRANLES_DENT_3.Areas.AdminPersonal.Controllers
     {
 
         public AdminUsuarioController(IListGeneral lstGnrl, ApplicationDbContext context, UserManager<IdentityUser> userManager)
-        { 
+        {
             _lstGnrl = lstGnrl;
             _lstGnrl._context = context;
             _lstGnrl._usuarios = new Libreria.LibUsuario(_lstGnrl);
@@ -36,6 +36,9 @@ namespace FRANLES_DENT_3.Areas.AdminPersonal.Controllers
 
             return View(await new AdminUsuarioGet(_lstGnrl).GetUsuarioMant());
         }
+
+        #region Crea Usuario
+
 
         public async Task<IActionResult> CreaUsuario(string id, string actmtd)
         {
@@ -91,7 +94,7 @@ namespace FRANLES_DENT_3.Areas.AdminPersonal.Controllers
             {
                 case 0:
                     Response.StatusCode = (int)HttpStatusCode.OK;
-                 return Json(new { redirectToUrl = Url.Action(nameof(AdminUsuarioController.UsuarioView), "AdminUsuario", new { id = _model.UsuarioId, actmtd = VarGnrl.GetModuloActionKey("Mant_Usuari", "Vie") }), redir = true });                    
+                    return Json(new { redirectToUrl = Url.Action(nameof(AdminUsuarioController.UsuarioView), "AdminUsuario", new { id = _model.UsuarioId, actmtd = VarGnrl.GetModuloActionKey("Mant_Usuari", "Vie") }), redir = true });
                 case 1:
                     Response.StatusCode = (int)HttpStatusCode.BadRequest;
                     return Json(new { redir = false, mnsj = retornoAction.Mensaje });
@@ -107,6 +110,10 @@ namespace FRANLES_DENT_3.Areas.AdminPersonal.Controllers
 
         }
 
+        #endregion
+
+        #region View Usuario Admin
+
         public async Task<IActionResult> UsuarioView(string id, string actmtd)
         {
             string moduloAcc = VarGnrl.AccionModulo(actmtd, "Mant_Usuari");
@@ -116,7 +123,7 @@ namespace FRANLES_DENT_3.Areas.AdminPersonal.Controllers
 
             _lstGnrl._datosUsuario = await _lstGnrl._usuarios.DatosSession(HttpContext);
 
-            if ( string.IsNullOrEmpty(id))
+            if (string.IsNullOrEmpty(id))
                 return RedirectToAction(nameof(AdminUsuarioController.UsuarioMant), "AdminUsuario");
 
 
@@ -128,38 +135,6 @@ namespace FRANLES_DENT_3.Areas.AdminPersonal.Controllers
             return View(_model);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> DetalleHorarioMedico(string id, string actmtd)
-        {
-            string moduloAcc = VarGnrl.AccionModulo(actmtd, "Mant_Usuari");
-
-            if (moduloAcc != "Vie")
-            {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return Json(new
-                {
-                    redirectToUrl = Url.Action(nameof(AdminUsuarioController.UsuarioMant), "AdminUsuario"),
-                    redir = true,
-                    mnsj = "Error en el registro, volver abrir pantalla para registro."
-                });
-            }
-
-            _lstGnrl._datosUsuario = await _lstGnrl._usuarios.DatosSession(HttpContext);
-
-            var _model = await new AdminUsuarioGet(_lstGnrl).GetDetalleHorarioMedico(id);
-
-
-            if (_model != null)
-            {
-                Response.StatusCode = (int)HttpStatusCode.OK;
-                return PartialView("Shared/_UsuarioViewHorarioMedicoEdit", _model);
-            }
-            else
-            {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return null;
-            }
-        }
 
         [HttpPost]
         public async Task<IActionResult> DetalleUsuarioMedUpd(UsuarioViewPost.UsuarioMedicoPost _model)
@@ -208,12 +183,14 @@ namespace FRANLES_DENT_3.Areas.AdminPersonal.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> DetalleUsuarioSucursalAA(UsuarioViewPost.UsuarioSucursalAAPost _model)
+        public async Task<IActionResult> DetalleUsuarioHorarioMedico(UsuarioViewPost.UsuarioHorarioMedicoPost _model)
         {
 
             string moduloAcc = VarGnrl.AccionModulo(_model.ModAct, "Mant_Usuari");
+            string moduloAccClient = VarGnrl.GetActionClient(_model.Act);
 
-            if (moduloAcc != "Vie")
+
+            if (!(moduloAcc == "Vie" && (moduloAccClient == "Agr" || moduloAccClient == "Mod")))
             {
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return Json(new
@@ -232,16 +209,13 @@ namespace FRANLES_DENT_3.Areas.AdminPersonal.Controllers
 
             _lstGnrl._datosUsuario = await _lstGnrl._usuarios.DatosSession(HttpContext);
 
-            RetornoAction retornoAction = await new AdminUsuarioPost(_lstGnrl).PostDetalleUsuarioSucursalAA(_model);
+            RetornoAction retornoAction = await new AdminUsuarioPost(_lstGnrl).PostDetalleUsuarioHorarioMedico(_model,moduloAccClient);
 
             switch (retornoAction.Code)
             {
                 case 0:
                     Response.StatusCode = (int)HttpStatusCode.OK;
-                    return Json(new RetornoActionView { redir = false});
-
-                    //UsuarioViewInput.MedicoView modelret = await new AdminUsuarioGet(_lstGnrl).GetObtenerDatosMedico(_model.UsuarioId);
-                    //return PartialView("Shared/_UsuarioViewMedico", modelret);
+                    return PartialView("Shared/_UsuarioViewHorarioMedico", retornoAction.Parametro);
                 case 1:
                     Response.StatusCode = (int)HttpStatusCode.BadRequest;
                     return Json(new RetornoActionView { mnsj = retornoAction.Mensaje });
@@ -257,7 +231,7 @@ namespace FRANLES_DENT_3.Areas.AdminPersonal.Controllers
 
         }
 
-
+        #endregion
 
         public IActionResult Index()
         {

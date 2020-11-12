@@ -1,39 +1,9 @@
 ﻿@model UsuarioViewInput.HorarioMedicoViewParam
 
-<ul class="nav nav-pills nav-pills-info mb-3" id="pills-horario-medico" role="tablist">
-    <li class="nav-item">
-        <a class="nav-link active" id="pills-horario-medico-scheduler-tab" data-toggle="pill" href="#pills-horario-meico-scheduler" role="tab" aria-controls="pills-horario-meico-scheduler" aria-selected="true"><i class="la la-calendar-week"></i>Calendario Horario</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" id="pills-horario-medico-List-tab" data-toggle="pill" href="#pills-horario-medico-List" role="tab" aria-controls="pills-horario-medico-List" aria-selected="false"><i class="fas fa-clipboard-list"></i>Lista de Horario</a>
-    </li>
-</ul>
-<div class="tab-content" id="pills-tabContent-2">
 
-    <div class="tab-pane fade show active" id="pills-horario-meico-scheduler" role="tabpanel" aria-labelledby="pills-horario-meico-scheduler">
+  
         <div class="card">
             <div class="card-body">
-                <div id="scheduler_medico" class="dhx_cal_container scheduler_medico" style='width:100%; height:500px'>
-                    <div class="dhx_cal_navline" style='display:none;'>
-                        <div class="dhx_cal_prev_button">&nbsp;</div>
-                        <div class="dhx_cal_next_button">&nbsp;</div>
-                        <div class="dhx_cal_today_button"></div>
-                        <div class="dhx_cal_date"></div>
-                        <div class="dhx_cal_tab" name="day_tab" style="right:204px;"></div>
-                        <div class="dhx_cal_tab" name="week_tab" style="right:140px;"></div>
-                        <div class="dhx_cal_tab" name="month_tab" style="right:76px;"></div>
-                    </div>
-                    <div class="dhx_cal_header">
-                    </div>
-                    <div class="dhx_cal_data">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="tab-pane fade" id="pills-horario-medico-List" role="tabpanel" aria-labelledby="pills-horario-medico-List">
-        <div class="card">
-            <div class="card-body" >
                 <ul class="list-group list-group-flush">
                     @foreach (SelectListItem diasel in Model.DiaScheduler)
                     {
@@ -42,17 +12,23 @@
 
                             <h5 class="p-b-30"> @diasel.Text</h5>
 
-                            <table class="table v-align-middle">
+                            <table class="table v-align-middle" id="004154564">
                                 <thead class="bg-light">
                                     <tr>
                                         <th>
                                             Hora Inicio - Fin
                                         </th>
-                                        <th>
-                                            Sucursal
-                                        </th>
+                                        @if (Model.MultiSucursal)
+                                        {
+                                            <th>
+                                                Sucursal
+                                            </th>
+                                        }
                                         <th>
                                             Area Atencion
+                                        </th>
+                                        <th>
+                                            Opciones
                                         </th>
                                     </tr>
                                 </thead>
@@ -62,18 +38,28 @@
                                     {
                                         <tr>
                                             <td>
-                                                @valorhm.HoraIni.ToString() - @valorhm.HoraFin.ToString()
+                                                @valorhm.FechaIni.TimeOfDay.ToString() - @valorhm.FechaFin.TimeOfDay.ToString()
                                             </td>
+
+                                            @if (Model.MultiSucursal)
+                                            {
+                                                <td>
+                                                    @valorhm.SucursalName
+                                                </td>
+                                            }
+
                                             <td>
-                                                @valorhm.SucursalName
-                                            </td>
-                                            <td>
-                                                <select class="form-control">
-                                                    @foreach (string item in valorhm.AreaAtencions)
+                                                <select class="form-control arealst" name="@valorhm.HorarioId">
+                                                    @foreach (SelectListItem item in valorhm.AreaAtencions)
                                                     {
-                                                        <option>@item</option>
+                                                        <option value="@item.Value">@item.Text</option>
                                                     }
                                                 </select>
+                                            </td>
+                                            <td>
+                                                <a href="#" class="BtnHorarioMedicosEdit" title="Editar Medico" data-dia="@valorhm.DiaSemanaId" data-suc="@valorhm.SucursalId" data-tih="@valorhm.Tipo_HorarioId" id="@valorhm.HorarioId">
+                                                    <i class="far fa-pencil-alt fa-2x"></i>
+                                                </a>
                                             </td>
                                         </tr>
                                     }
@@ -85,5 +71,3 @@
                 </ul>
             </div>
         </div>
-    </div>
-</div>

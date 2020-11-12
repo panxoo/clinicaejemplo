@@ -20,7 +20,15 @@ namespace FRANLES_DENT_3.Variables
             { "Add", "416464" },
             { "Del", "44656c" },
             { "Vie", "566965" },
-            { "Lst", "4c7374" }
+            { "Lst", "4c7374" },
+            { "Agr", "416772" },
+            { "Mod", "4d6f64" }
+        };
+
+        static private Dictionary<string, string> accionesCliente = new Dictionary<string, string>
+        {            
+            { "Agr", "416772" },
+            { "Mod", "4d6f64" }
         };
 
         static public string AccionModulo(string _key, string _modulo)
@@ -89,6 +97,11 @@ namespace FRANLES_DENT_3.Variables
         static public Dictionary<string, string> GetActionAll()
         {
             return acciones;
+        }
+
+        static public string GetActionClient(string _accion)
+        {
+            return accionesCliente.ContainsValue(_accion) ? accionesCliente.FirstOrDefault(s => s.Value.Equals(_accion)).Key : "notAccClient";
         }
     }
 }

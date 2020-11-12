@@ -1,9 +1,9 @@
-﻿function UlListItemElemnt(_lstDest, _lstOrigen) {
+﻿function UlListItemElemntAdd(_lstDest, _lstOrigen) {
     this.lstDest = _lstDest;
     this.lstOrigen = _lstOrigen;
 }
 
-UlListItemElemnt.prototype.ForComboAdd = function () {
+UlListItemElemntAdd.prototype.ForComboAdd = function () {
     selected = $(this.lstOrigen).find('option:selected');
 
     if (!selected.val().length) {
@@ -19,7 +19,7 @@ UlListItemElemnt.prototype.ForComboAdd = function () {
     $(this.lstOrigen).get(0).selectedIndex = 0;
 }
 
-UlListItemElemnt.prototype.ForListAdd = function () {
+UlListItemElemntAdd.prototype.ForListAdd = function () {
     $(this.lstDest).empty();
     destAux = this.lstDest;
 
@@ -32,8 +32,6 @@ function AddUlListItemElemnt(lstDest, id, text) {
     $(lstDest).append('<li id=' + id + ' class="list-group-item d-flex justify-content-between align-items-center">' + text + ' <a href="javascript:void(0)" data-name="' + id + '"><i class="far fa-times-circle mr-5 fa-2x text-danger"></i></a>');
     $(lstDest).on('click', 'a', function () {
         var selected = $(this).data('name');
-        console.log(selected);
-        console.log(lstDest + ' #' + selected);
 
         $(lstDest + ' #' + selected).remove();
     });
@@ -95,7 +93,7 @@ ClearAtributo.prototype.ExecClearAttr = function () {
 
     if (this.selectFirst != null) {
         this.selectFirst.forEach(function (input){
-            $(input).val("");
+            $(input).prop('selectedIndex', 0);
         })
     }
 
@@ -111,4 +109,26 @@ ClearAtributo.prototype.ExecClearAttr = function () {
         })
     }
 
+}
+
+function CheckedCheckbox(objet, decicion) {
+    if (decicion) {
+        $(objet).attr("checked", "checked");
+        $(objet).prop("checked", true);
+    }
+    else {
+        $(objet).prop("checked", false);
+    }
+}
+
+function SetSessionArray(name, valor) {
+    sessionStorage.setItem(name, JSON.stringify(valor));
+}
+
+function GetSession(name) {
+   return JSON.parse(sessionStorage.getItem(name));
+}
+
+function RemSession(name) {
+    sessionStorage.removeItem(name);
 }

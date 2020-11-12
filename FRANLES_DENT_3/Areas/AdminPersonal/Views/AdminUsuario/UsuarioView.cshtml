@@ -6,49 +6,13 @@
 <link rel="stylesheet" href="~/css/stylescheduler.css" />
 <link rel="stylesheet" href="~/lib/assets/vendor/dhtmlx-scheduler/codebase/dhtmlxscheduler_material.css" />
 
-
-
-
-
 @if (Model.DtUsuario.IsMedic)
 {
     <partial name="Shared/_UsuarioViewMedicoEdit" model="Model" />
 
+    <partial name="Shared/_UsuarioViewHorarioMedicoEdit" model="@Model.ShedulerMedMantEditParam" />
 
-    <form id="AjaxFormMedicos" method="post">
-        <div class="modal fade" id="HorarioMedicosModal" tabindex="-1" role="dialog" aria-labelledby="MedicosModal" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Actualizar datos Medico</h5>
-                        <a><></a>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-
-
-                    <div id="dtShedulerMedEdit">
-                        <partial name="Shared/_UsuarioViewHorarioMedicoEdit" model="@Model.HorarioMedicoMantEditInput" />
-                    </div>
-
-
-                    <div class="modal-footer">
-                        <div class="col-md-9">
-                            <div id="ErrorAlert" class="alert alert-danger" style="display:none" role="alert">
-                                Error en los datos enviados!
-                            </div>
-                        </div>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal" id="btnCancel">Cancelar</button>
-                        <button type="submit" class="btn btn-success" id="SubmitBtn">Guardar</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </form>
 }
-
-
 
 <header class="page-header">
     <div class="d-flex align-items-center">
@@ -297,12 +261,48 @@
                                     <div class="row  p-b-20">
                                         <h4 class="card-heading col-md-6">Sucursal Medico</h4>
                                         <div class="col-md-6 d-flex justify-content-end">
-                                            <a href="#" data-toggle="modal" data-target="#HorarioMedicosModal" id="BtnHorarioMedicosEdit" data-backdrop="static" data-keyboard="false" title="Editar Medico">
+                                            <a href="#" data-toggle="modal" data-target="#HorarioMedicosModal" id="BtnHorarioMedicosAdd" data-backdrop="static" data-keyboard="true" title="Editar Medico">
                                                 <i class="far fa-calendar-plus fa-2x"></i>
                                             </a>
                                         </div>
                                     </div>
-                                    <partial name="Shared/_UsuarioViewHorarioMedico" model="@Model.HorarioMedicoViewInput" />
+                                    <ul class="nav nav-pills nav-pills-info mb-3" id="pills-horario-medico" role="tablist">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" id="pills-horario-medico-scheduler-tab" data-toggle="pill" href="#pills-horario-meico-scheduler" role="tab" aria-controls="pills-horario-meico-scheduler" aria-selected="true"><i class="la la-calendar-week"></i>Calendario Horario</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="pills-horario-medico-List-tab" data-toggle="pill" href="#pills-horario-medico-List" role="tab" aria-controls="pills-horario-medico-List" aria-selected="false"><i class="fas fa-clipboard-list"></i>Lista de Horario</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content" id="pills-tabContent-2">
+
+                                        <div class="tab-pane fade show active" id="pills-horario-meico-scheduler" role="tabpanel" aria-labelledby="pills-horario-meico-scheduler">
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <div id="scheduler_medico" class="dhx_cal_container scheduler_medico" style='width:100%; height:500px'>
+                                                        <div class="dhx_cal_navline" style='display:none;'>
+                                                            <div class="dhx_cal_prev_button">&nbsp;</div>
+                                                            <div class="dhx_cal_next_button">&nbsp;</div>
+                                                            <div class="dhx_cal_today_button"></div>
+                                                            <div class="dhx_cal_date"></div>
+                                                            <div class="dhx_cal_tab" name="day_tab" style="right:204px;"></div>
+                                                            <div class="dhx_cal_tab" name="week_tab" style="right:140px;"></div>
+                                                            <div class="dhx_cal_tab" name="month_tab" style="right:76px;"></div>
+                                                        </div>
+                                                        <div class="dhx_cal_header">
+                                                        </div>
+                                                        <div class="dhx_cal_data">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane fade" id="pills-horario-medico-List" role="tabpanel" aria-labelledby="pills-horario-medico-List">
+                                            <div id="DatosHMView">
+                                                <partial name="Shared/_UsuarioViewHorarioMedico" model="@Model.HorarioMedicoViewInput" />
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -325,15 +325,13 @@
     <script src="~/lib/assets/vendor/dhtmlx-scheduler/codebase/locale/locale_es.js"></script>
     <script src="~/lib/assets/js/components/dhxscheduler-init.js"></script>
 
-
     <script type="text/javascript">
 
         VALIDACIONESTP.validacionGnrl.range();
         VALIDACIONESTP.validacionGnrl.rangett();
 
-        var UlLstSelect = new UlListItemElemnt("#CollectSelEsp", "#CollectEspec");
-        var UlComboSelect = new UlListItemElemnt("#CollectSelEsp", "#EspcialiSelLstId");
-
+        var UlLstSelect = new UlListItemElemntAdd("#CollectSelEsp", "#CollectEspec");
+        var UlComboSelect = new UlListItemElemntAdd("#CollectSelEsp", "#EspcialiSelLstId");
 
         $('#EspcialiSelLstId').change(function () {
             UlComboSelect.ForComboAdd();
@@ -351,13 +349,58 @@
             CargaInputMedico();
         });
 
-        $("#BtnHorarioMedicosEdit").click(function () {
-            GetDtHorarioMdEdit();
+        $('#BtnHorarioMedicosAdd').click(function () {
+            SetSessionArray("dtthmant", ["416772", ""]);
+
+            let clearAt = new ClearAtributo();
+
+            clearAt.selectFirst = ['#MHE_Sucursal', '#MHE_DiaWeek', "#MHE_Tipo_Horario"];
+            clearAt.ExecClearAttr();
+
+            let suc = $('#MHE_Sucursal').val();
+            HorarioMedicoChangeSucurs(suc);
         });
 
+        $(".BtnHorarioMedicosEdit").click(function (e) {
 
+            let suc = $(this).data('suc');
 
+            HorarioMedicoChangeSucurs(suc);
 
+            $(this).closest('tr').find('.arealst option').each(function () {
+               CheckedCheckbox("#" + $(this).val(),true);
+            });
+
+            $("#MHE_DiaWeek").val($(this).data('dia'));
+            $("#MHE_Sucursal").val($(this).data('suc'));
+            $("#MHE_Tipo_Horario").val($(this).data('tih'));
+
+            $("#HorarioMedicosModal").modal({
+                keyboard: true,
+                backdrop: "static"
+            });
+
+            SetSessionArray("dtthmant", ["4d6f64", this.id]);
+        });
+
+        $("#MHE_Sucursal").change(function () {
+            let suc = $(this).val();
+            HorarioMedicoChangeSucurs(suc);
+        })
+
+        $(".CloseHmEdit").click(function () {
+            RemSession("dtthmant");
+        })
+
+        function HorarioMedicoChangeSucurs(suc) {
+            $.each($("#LstAreAtencionHrMeEd li"), function () {
+                VisibleDivCheck($(this).data('sucurcont').includes(suc), this);
+            });
+
+            $.each($("#LstAreAtencionHrMeEd").find(":checkbox"), function () {
+                CheckedCheckbox("#" + this.id, false);
+            });
+        }
 
         function CargaInputMedico() {
             UlLstSelect.ForListAdd();
@@ -390,7 +433,6 @@
             $("#DtMedicoInp_Porc_Ganancia_REM_FJ").val($("#DatoMedico_Porc_Ganancia_REM_FJ").val());
             VisibleTwoDivCheck($("#DtMedicoInp_OpcRemFija").prop('checked'), "#DvRemFija", "#DvPorcentajeGanancia");
             VisibleDivCheck($("#DtMedicoInp_OpcPorc_Ganancia_REM_fj").prop('checked'), "#DvPorcExtraRemFj");
-
         }
 
         $("#AjaxFormMedicos").submit( async function (e) {
@@ -440,87 +482,71 @@
             return dt;
         };
 
-        function GetDtHorarioMdEdit() {
-            let post = new AjaxSubmit('@Url.Action("DetalleHorarioMedico", "AdminUsuario")');
-            post.partial = "#dtShedulerMedEdit";
-            post.divBlock = "#datosMedico";
-            dt = {
-                id: $("#DtUsuario_UsuarioId").val(),
-                actmtd: $("#ModAct").val()
-            };
-            post.AjaxGetDato(dt);
-        };
-
-
-        $("#AjaxFormSucursalMedicos").submit(async function (e) {
+        $("#AjaxFormHorarioMedico").submit( async function (e) {
             e.preventDefault();
 
-            if (!$("#AjaxFormSucursalMedicos").valid()) {
+            if (!$("#AjaxFormHorarioMedico").valid()) {
                 return;
             }
 
+            let arat = [];
 
+            $.each($("#LstAreAtencionHrMeEd").find(":checkbox"), function () {
+                if ($("#" + this.id).prop('checked'))
+                    arat.push(this.id);
+            });
 
-            if (await MensajeDecision("Actualización de Usuario", "¿Se desea agregar nuevas area de atención?")) {
+            if (arat.length == 0) {
+                MensajeError('Error en horario de medico', 'Se debe seleccionar el area de atención del horario');
+                return;
+            }
 
-                let arat = [];
+            let accion = GetSession("dtthmant");
 
-                $.each($("#lstAreaAtencion li input"), function () {
-                    if ($("#" + this.id).prop('checked'))
-                        arat.push(this.id);
-                });
+            if (accion[0] == "4d6f64") {
+                if (await MensajeDecision("Actualización de Usuario", "¿Se desea modificar el usuario?")) {
 
+                    let post = new AjaxSubmit('@Url.Action("DetalleUsuarioHorarioMedico", "AdminUsuario")', "#SubmitBtnHM", "Error almacenamiento");
+                    post.btnCancel = "#CancelBtnHM";
+                    post.partial = "#DatosHMView";
 
-                if (arat.length == 0) {
-                    MensajeError('Error en usuario tipo medico', 'Se debe seleccionar especialidad del doctor');
-                    return;
+                    let dt = Object.assign({}, ExtraccionDtHorariomedico(accion[0], arat), { MedicoHorarioId: accion[1]});
+                    post.AjaxPop(dt);
                 }
+            }
+            else {
+                let post = new AjaxSubmit('@Url.Action("DetalleUsuarioHorarioMedico", "AdminUsuario")', "#SubmitBtnHM", "Error almacenamiento");
+                post.btnCancel = "#CancelBtnHM";
+                post.partial = "#DatosHMView";
 
-                let post = new AjaxSubmit('@Url.Action("DetalleUsuarioSucursalAA", "AdminUsuario")', "#SubmitBtnSucursalAA", "Error almacenamiento");
-                post.btnCancel = "#btnCancelSucurAA";
-               // post.partial = "#datosMedico";
-
-                dt = {
-                    UsuarioId: $("#DtUsuario_UsuarioId").val(),
-                    ModAct: $("#ModAct").val(),
-                    AreaAtencions: arat,
-                    Sucursal:  $("#SucursalIdMAA").val()
-                }
-                post.AjaxPopRedirec(dt);
+                dt = ExtraccionDtHorariomedico(accion[0], arat);
+                post.AjaxPopCargaScheduler(dt);
             }
         });
 
+        function ExtraccionDtHorariomedico(accion,arat) {
+            return dt = {
+                Act: accion,
+                MHE_DiaWeek: $("#MHE_DiaWeek").val(),
+                MHE_Sucursal: $("#MHE_Sucursal").val(),
+                MHE_Tipo_Horario: $("#MHE_Tipo_Horario").val(),
+                AreaAtencion: arat,
+                ModAct: $('#ModAct').val(),
+                UsuarioId: $('#DtUsuario_UsuarioId').val()
+            };
+        }
 
         window.addEventListener("DOMContentLoaded", function () {
-                   new schedulerHorario();
-            let options = [];
-                @foreach(var asda in Model.HorarioMedicoViewInput.HorarioMedicoViews)
+            new schedulerHorario();
+            @foreach(var sm in Model.HorarioMedicoViewInput.SchedulerMarkeds)
             {
-
-
-                <text>
-
-            options.push({start_date: new Date(2020, 6, 19 + @asda.DiaSemanaId, @asda.HoraIni.Hours, @asda.HoraIni.Minutes),end_date: new Date(2020, 6, 19 + @asda.DiaSemanaId, @asda.HoraFin.Hours, @asda.HoraFin.Minutes),type: "dhx_time_block",css: "sel-sched1",html: "asad"});
-
-
+            <text>
+            scheduler.addMarkedTimespan({ start_date: new Date('@sm.start_date'), end_date: new Date('@sm.end_date'), type: '@sm.type', css: '@sm.css', html: '@sm.html' });
             </text>
             }
 
-            options.forEach(function (entry) {
-                 scheduler.addMarkedTimespan(entry);
-            });
-
-
             scheduler.init('scheduler_medico', new Date(2020, 6, 20), "week");
-            //scheduler.init('scheduler_medico1', new Date(2020, 6, 20), "week");
-
 
         });
-
-
-
-
-
-
     </script>
 }

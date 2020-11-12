@@ -167,6 +167,10 @@
       "files": [
         "codebase/sources/locale/locale_es.js.map"
       ]
+    },
+    {
+      "library": "json2@20160511",
+      "destination": "wwwroot/lib/assets/vendor/json2/"
     }
   ]
 }

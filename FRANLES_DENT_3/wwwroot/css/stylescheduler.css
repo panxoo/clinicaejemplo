@@ -9,9 +9,65 @@
 }
 
 .sel-sched2 {
-    background-color: #fadcd3;
+    background-color: #deaf4d !important;
     text-align: center;
-    font-size: 24px;
-    opacity: 0.8;
-    color: #84e945;
+    font-size: 14px;
+    opacity: 0.8 !important;
+    color: #2d2410;
+}
+
+.sel-sched3 {
+    background-color: #5b50e0 !important;
+    text-align: center;
+    font-size: 14px;
+    opacity: 0.8 !important;
+    color: #9b98b9;
+}
+
+.sel-sched4 {
+    background-color: #16caa3 !important;
+    text-align: center;
+    font-size: 14px;
+    opacity: 0.8 !important;
+    color: #0d4035;
+}
+
+.sel-sched5 {
+    background-color: #cc3975 !important;
+    text-align: center;
+    font-size: 14px;
+    opacity: 0.8 !important;
+    color: #500d18;
+}
+
+.sel-sched6 {
+    background-color: #43b9d0 !important;
+    text-align: center;
+    font-size: 14px;
+    opacity: 0.8 !important;
+    color: #043f4a;
+}
+
+.sel-sched7 {
+    background-color: #e6a52e !important;
+    text-align: center;
+    font-size: 14px;
+    opacity: 0.8 !important;
+    color: #3e2903;
+}
+
+.sel-sched8 {
+    background-color: #f1531d !important;
+    text-align: center;
+    font-size: 14px;
+    opacity: 0.8 !important;
+    color: #421607;
+}
+
+.sel-sched9 {
+    background-color: #21e223 !important;
+    text-align: center;
+    font-size: 14px;
+    opacity: 0.8 !important;
+    color: #133a13;
 }

@@ -12,16 +12,10 @@ namespace FRANLES_DENT_3.Models.Personal
         [StringLength(255)]
         public string HorarioMedicoId { get; set; }
 
-        [StringLength(20)]
-        public string DiaWeek { get; set; }
-
         public Int16 DiaWeekId { get; set; }
 
         [StringLength(255)]
         public string Tipo_HorarioId { get; set; }
-
-        public TimeSpan Hora_Inicio { get; set; }
-        public TimeSpan Hora_Fin { get; set; }
 
         public Tipo_Horario Tipo_Horario { get; set; }
 

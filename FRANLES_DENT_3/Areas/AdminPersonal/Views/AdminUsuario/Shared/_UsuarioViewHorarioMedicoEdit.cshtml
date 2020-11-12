@@ -1,100 +1,93 @@
-﻿@model UsuarioViewInput.HorarioMedicoMantEdit
+﻿@model UsuarioViewInput.HorarioMedicoMantEditParam
 
-
+<form id="AjaxFormHorarioMedico" method="post">
+    <div class="modal fade" id="HorarioMedicosModal" tabindex="-1" role="dialog" aria-labelledby="MedicosModal" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Actualizar datos Medico</h5>
+                    <button type="button" class="close CloseHmEdit" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
                 <div class="modal-body">
 
-                    @*<div>
-                            <div class="form-group col-md-3">
-                                <label asp-for=""></label>
-                                <select asp-for="" class="form-control" disabled>
-                                    @foreach (var dato in Model.DiaScheduler )
-                                    {
-                                        <option value="@dato.Value">@dato.Text</option>
-                                    }
-                                </select>
-                            </div>
-                            <div class="form-group col-md-3">
-                                <label asp-for="Input.TipoDocumento"></label>
-                                <select asp-for="Input.TipoDocumento" class="form-control" disabled>
-                                    @foreach (var dato in Model.TipoDocumentoSelect)
-                                    {
-                                        <option value="@dato.Value">@dato.Text</option>
-                                    }
-                                </select>
-                            </div>
-                            <div class="form-group col-md-3">
-                                <label asp-for="Input.TipoDocumento"></label>
-                                <select asp-for="Input.TipoDocumento" class="form-control" disabled>
-                                    @foreach (var dato in Model.TipoDocumentoSelect)
-                                    {
-                                        <option value="@dato.Value">@dato.Text</option>
-                                    }
-                                </select>
-                            </div>
-                        </div>*@
-                    <div style='height:500px'>
+                    <div class="form-group row">
+                        <label asp-for="MHE_DiaWeek" class="col-md-3 col-form-label">Dia de la Semana</label>
+                        <div class="col-md-9">
+                            <select asp-for="MHE_DiaWeek" class="form-control">
+                                <option value="" disabled selected>Seleccionar Dia de la Semana</option>
 
-                        <ul class="list-group list-group-flush">
-                            @foreach (SelectListItem diasel in Model.DiaScheduler)
-                            {
+                                @foreach (SelectListItem val in Model.DiaScheduler)
+                                {
+                                    <option value="@val.Value">@val.Text</option>
+                                }
+                            </select>
+                            <span asp-validation-for="MHE_DiaWeek" class="text-danger"></span>
 
-                                <li class="list-group-item">
-
-                                    <h5 class="p-b-30"> @diasel.Text</h5>
-
-                                    <table class="table v-align-middle">
-                                        <thead class="bg-light">
-                                            <tr>
-                                                <th>
-                                                    Tipo Horario
-                                                </th>
-                                                <th>
-                                                    Hora Inicio - Fin
-                                                </th>
-                                                <th>
-                                                    Sucursal
-                                                </th>
-                                                <th>
-                                                    Area Atencion
-                                                </th>
-                                                <th>
-                                                    Opciones
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-
-                                            @foreach (var valorhm in Model.HorarioMedicos.Where(w => w.DiaWeekId.Equals(Convert.ToInt16(diasel.Value))))
-                                            {
-                                                <tr>
-                                                    <td>
-                                                        @valorhm.NombreTipoHorario
-                                                    </td>
-                                                    <td>
-                                                        @valorhm.Hora_Inicio.ToString() - @valorhm.Hora_Fin.ToString()
-                                                    </td>
-                                                    <td>
-                                                        @valorhm.NombreSucursal
-                                                    </td>
-                                                    <td>
-                                                        <select class="form-control">
-                                                            @foreach (SelectListItem aa in valorhm.Area_AtencionsSel)
-                                                            {
-                                                                <option>aa.Text</option>
-                                                            }
-                                                        </select>
-                                                    </td>
-
-                                                    <td>
-                                                    </td>
-                                                </tr>
-                                            }
-                                        </tbody>
-                                    </table>
-                                </li>
-
-                            }
-                        </ul>
+                        </div>
                     </div>
+                    @if (Model.MultiSucursal)
+                    {
+                        <div class="form-group row">
+                            <label asp-for="MHE_Sucursal" class="col-md-3 col-form-label">Sucursal</label>
+                            <div class="col-md-9">
+                                <select asp-for="MHE_Sucursal" class="form-control">
+
+                                    @foreach (SelectListItem val in Model.Sucursals)
+                                    {
+                                        <option value="@val.Value" |>@val.Text</option>
+                                    }
+                                </select>
+                                <span asp-validation-for="MHE_Sucursal" class="text-danger"></span>
+                            </div>
+                        </div>
+                    }
+                    <div class="form-group row">
+                        <label asp-for="MHE_Tipo_Horario" class="col-md-3 col-form-label">Tipo de Horario</label>
+                        <div class="col-md-9">
+                            <select asp-for="MHE_Tipo_Horario" class="form-control">
+                                <option value="" disabled selected>Seleccionar Tipo Horario</option>
+
+                                @foreach (FRANLES_DENT_3.Models.Empresa.Atributos.Tipo_Horario val in Model.Tipo_Horarios)
+                                {
+                                    <option value="@val.Tipo_HorarioId">@val.Hora_Inicio.ToString(@"hh\:mm") - @val.Hora_Fin.ToString(@"hh\:mm") | @val.Nombre</option>
+                                }
+                            </select>
+                            <span asp-validation-for="MHE_Tipo_Horario" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-md-3">
+                            <label for="MHE_Area_Atencion" class="col-form-label">Area Atención</label>
+                        </div>
+                        <div class="col-md-9">
+                            <ul id="LstAreAtencionHrMeEd" class="list-group border overflow-auto" style="max-height:300px">
+                                @foreach (var val in Model.Area_Atencions)
+                                {
+                                    <li class="list-group-item border-none d-none" data-sucurcont="@val.Sucursals">
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input" id="@val.Value">
+                                            <label class="custom-control-label" for="@val.Value">@val.Text</label>
+                                        </div>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div> 
+
+                <div class="modal-footer">
+                    <div class="col-md-9">
+                        <div id="ErrorAlert" class="alert alert-danger" style="display:none" role="alert">
+                            Error en los datos enviados!
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-secondary CloseHmEdit" data-dismiss="modal" id="CancelBtnHM">Cancelar</button>
+                    <button type="submit" class="btn btn-success" id="SubmitBtnHM">Guardar</button>
                 </div>
-                
+            </div>
+        </div>
+    </div>
+</form>

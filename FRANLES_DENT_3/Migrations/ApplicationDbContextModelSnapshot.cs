@@ -14,7 +14,7 @@ namespace FRANLES_DENT_3.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.6")
+                .HasAnnotation("ProductVersion", "3.1.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("FRANLES_DENT_3.Models.Empresa.Atributos.Area_Atencion", b =>
@@ -575,18 +575,8 @@ namespace FRANLES_DENT_3.Migrations
                         .HasColumnType("varchar(255) CHARACTER SET utf8mb4")
                         .HasMaxLength(255);
 
-                    b.Property<string>("DiaWeek")
-                        .HasColumnType("varchar(20) CHARACTER SET utf8mb4")
-                        .HasMaxLength(20);
-
                     b.Property<short>("DiaWeekId")
                         .HasColumnType("smallint");
-
-                    b.Property<TimeSpan>("Hora_Fin")
-                        .HasColumnType("time(6)");
-
-                    b.Property<TimeSpan>("Hora_Inicio")
-                        .HasColumnType("time(6)");
 
                     b.Property<string>("SucursalId")
                         .HasColumnType("varchar(255) CHARACTER SET utf8mb4")

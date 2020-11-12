@@ -41,6 +41,7 @@ namespace FRANLES_DENT_3.Data
         public DbSet<Tipo_Horario> Tipo_Horarios { get; set; }
         public DbSet<HorarioMedico> HorarioMedicos { get; set; }
         public DbSet<HorarioMedicoAreaAtencion> HorarioMedicoAreaAtencions { get; set; }
+        public DbSet<ViewHorarioMedicoDateWeek> ViewHorarioMedicoDateWeeks { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -226,6 +227,15 @@ namespace FRANLES_DENT_3.Data
                    .WithMany(b => b.Tipo_Horarios)
                    .HasForeignKey(s => s.ClinicaId);
 
+
+            //------########## CREACION DE VIEWS  ###########-------
+
+            builder.Entity<ViewHorarioMedicoDateWeek>(eb =>
+            {
+                eb.HasNoKey();
+                eb.ToView("View_HorarioMedicosDateWeek");
+            });
+                   
 
             base.OnModelCreating(builder);
         }

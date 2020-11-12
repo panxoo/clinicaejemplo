@@ -85,16 +85,23 @@ namespace FRANLES_DENT_3.Areas.AdminPersonal.Metodos.AdminUsuario
 
         }
 
-        public async Task<RetornoAction> PostDetalleUsuarioSucursalAA(UsuarioViewPost.UsuarioSucursalAAPost _model)
+        public async Task<RetornoAction> PostDetalleUsuarioHorarioMedico(UsuarioViewPost.UsuarioHorarioMedicoPost _model, string accion)
         {
 
             RetornoAction retornoAction = new RetornoAction();
 
-            retornoAction = await new AdminUsuarioVal(_lstGnrl).ValDetalleUsuarioSucursalAA(_model);
+            retornoAction = await new AdminUsuarioVal(_lstGnrl).ValDetalleUsuarioHorarioMedico(_model,accion);
 
             if (retornoAction.Code == 0)
             {
-                retornoAction = await new AdminUsuarioSave(_lstGnrl).SaveDetalleUsuarioSucursalAA(_model);
+                retornoAction = await new AdminUsuarioSave(_lstGnrl).SaveDetalleUsuarioHorarioMedico(_model,accion);
+            }
+
+            if(retornoAction.Code== 0)
+            {
+               var dt =  await new AdminUsuarioGet(_lstGnrl).GetHorarioMedicoView(_model.UsuarioId);
+
+                retornoAction = new RetornoAction { Code = 0, Mensaje = "", Parametro =   dt };
             }
 
             return retornoAction;

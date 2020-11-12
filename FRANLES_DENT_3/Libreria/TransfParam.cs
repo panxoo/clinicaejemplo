@@ -31,13 +31,13 @@ namespace FRANLES_DENT_3.Libreria
 
         static public List<SelectListItem> ParamDiaSemanaScheduler()
         {
-            return new List<SelectListItem> { new SelectListItem { Text = "Lunes", Value = "1"},
-                                              new SelectListItem { Text = "Martes", Value = "2"},
-                                              new SelectListItem { Text = "Miercoles", Value = "3"},
-                                              new SelectListItem { Text = "Jueves", Value = "4"},
-                                              new SelectListItem { Text = "Viernes", Value = "5"},
-                                              new SelectListItem { Text = "Sabado", Value = "6"},
-                                              new SelectListItem { Text = "Domingo", Value = "7"},
+            return new List<SelectListItem> { new SelectListItem { Text = "Lunes", Value = "0"},
+                                              new SelectListItem { Text = "Martes", Value = "1"},
+                                              new SelectListItem { Text = "Miercoles", Value = "2"},
+                                              new SelectListItem { Text = "Jueves", Value = "3"},
+                                              new SelectListItem { Text = "Viernes", Value = "4"},
+                                              new SelectListItem { Text = "Sabado", Value = "5"},
+                                              new SelectListItem { Text = "Domingo", Value = "6"},
             };
         }
 
@@ -54,6 +54,16 @@ namespace FRANLES_DENT_3.Libreria
         public static bool ValParmTipoDoc(string val)
         {
             return ParamTipoDocumento().Any(a => a.Value == val);
+        }
+
+        public static bool ValParmDiaSemana(string val)
+        {
+            return ParamDiaSemanaScheduler().Any(a => a.Value == val);
+        }
+
+        public static string GetParamDiaSemana(string val)
+        {
+            return ParamDiaSemanaScheduler().FirstOrDefault(f => f.Value.Equals(val)).Text;
         }
     }
 }

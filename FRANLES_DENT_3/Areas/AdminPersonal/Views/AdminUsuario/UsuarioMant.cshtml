@@ -86,6 +86,7 @@
                                     <td>
                                         <a asp-area="AdminPersonal" asp-action="UsuarioView" asp-controller="AdminUsuario" asp-route-id="@item.UsuarioId" asp-route-actmtd="@Model.Metodo@Model.Acciones["Vie"]"><i data-toggle="tooltip" data-placement="top" title="" data-original-title="Visualizar" class="far fa-eye text-success fa-2x"></i></a>
                                         <a asp-area="AdminPersonal" asp-action="CreaUsuario" asp-controller="AdminUsuario" asp-route-id="@item.UsuarioId" asp-route-actmtd="@Model.Metodo@Model.Acciones["Upd"]"><i data-toggle="tooltip" data-placement="top" title="" data-original-title="Editar" class="far fa-edit text-success fa-2x"></i></a>
+                                        <a asp-area="AdminPersonal" asp-action="ProfilePersonal" asp-controller="AdminPersonal" asp-route-id="@item.UsuarioId" asp-route-actmtd="@Model.Metodo@Model.Acciones["Vie"]"><i data-toggle="tooltip" data-placement="top" title="" data-original-title="Editar" class="far fa-eye-dropper text-success fa-2x"></i></a>
                                     </td>
                                 </tr>
                             }

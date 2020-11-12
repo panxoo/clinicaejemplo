@@ -1,5 +1,6 @@
 ﻿using FRANLES_DENT_3.Areas.AdminPersonal.Models.AdminUsuario;
 using FRANLES_DENT_3.Libreria;
+using FRANLES_DENT_3.Models.Empresa;
 using FRANLES_DENT_3.Servicios.Interfaces;
 using FRANLES_DENT_3.Variables;
 using Microsoft.AspNetCore.Identity;
@@ -150,43 +151,111 @@ namespace FRANLES_DENT_3.Areas.AdminPersonal.Metodos.AdminUsuario
             }
         }
 
-      public async Task<RetornoAction> ValDetalleUsuarioSucursalAA(UsuarioViewPost.UsuarioSucursalAAPost _model)
+        public async Task<RetornoAction> ValDetalleUsuarioHorarioMedico(UsuarioViewPost.UsuarioHorarioMedicoPost _model, string accion)
         {
             try
             {
+
                 if (string.IsNullOrEmpty(_model.UsuarioId))
+                {
+                    return new RetornoAction { Code = 2, Mensaje = "" };
+                }
+
+                if(!TransfParam.ValParmDiaSemana(_model.MHE_DiaWeek.ToString()))
                 {
                     return new RetornoAction { Code = 2, Mensaje = "" };
                 }
 
                 if (!await _lstGnrl._context.Usuarios.AnyAsync(a => a.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId) && a.UsuarioId.Equals(_model.UsuarioId) && a.IsMedic))
                 {
-                    return new RetornoAction { Code = 2, Mensaje = "" };
+                    return new RetornoAction { Code = 2, Mensaje = "Error de usuario se debe seleccionar un usuario con el perfil de medico" };
                 }
 
-                if (string.IsNullOrEmpty(_model.Sucursal))
+                if (accion == "Mod")
                 {
-                    return new RetornoAction { Code = 2, Mensaje = "" };
+                    if (string.IsNullOrEmpty(_model.MedicoHorarioId))
+                    {
+                        return new RetornoAction { Code = 1, Mensaje = "Error en seleccionar el tipo de horario a modificar" };
+                    }
+
+                    if (!await _lstGnrl._context.HorarioMedicos.AnyAsync(a => a.HorarioMedicoId.Equals(_model.MedicoHorarioId) && a.UsuarioId.Equals(_model.UsuarioId) && a.Usuario.IsMedic && a.Usuario.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId)))
+                        {
+                        return new RetornoAction { Code = 2, Mensaje = "Error en seleccionar el tipo de horario a modificar" };
+                    }
                 }
 
-                if (!await _lstGnrl._context.Sucursals.AnyAsync(a => a.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId) && a.SucursalId.Equals(_model.Sucursal)))
+                if(_lstGnrl._datosUsuario.MultiSucursal)
                 {
-                    return new RetornoAction { Code = 2, Mensaje = "" };
-                }
+                    if (string.IsNullOrEmpty(_model.MHE_Sucursal))
+                    {
+                        return new RetornoAction { Code = 1, Mensaje = "Se debe seleccionar sucursal para el horario" };
+                    }
 
-                if (_model.AreaAtencions == null || _model.AreaAtencions.Count == 0)
+                    if (!await _lstGnrl._context.Sucursals.AnyAsync(a => a.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId) && a.SucursalId.Equals(_model.MHE_Sucursal)))
+                    {
+                        return new RetornoAction { Code = 2, Mensaje = "" };
+                    }
+
+                    if (_model.AreaAtencion.Except(await _lstGnrl._context.Sucursal_Area_Atencions.Where(w => w.Sucursal.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId) && w.SucursalId.Equals(_model.MHE_Sucursal))
+                                                                                                   .Select(a => a.Area_AtencionId).Distinct().ToListAsync()).Any())
+                    {
+                        return new RetornoAction { Code = 2, Mensaje = "" };
+                    }
+
+                }
+                else
                 {
-                    return new RetornoAction { Code = 1, Mensaje = "Se debe seleccionar especialidad del medico" };
+                    if (_model.AreaAtencion.Except(await _lstGnrl._context.Area_Atencions.Where(w => w.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId)).Select(a => a.Area_AtencionId).ToListAsync()).Any())
+                    {
+                        return new RetornoAction { Code = 2, Mensaje = "" };
+                    }
                 }
 
-                if (_model.AreaAtencions.Except(await _lstGnrl._context.Sucursal_Area_Atencions.Where(w => w.Sucursal.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId) && w.SucursalId.Equals(_model.Sucursal))
-                                                                                               .Select(a => a.Area_AtencionId).ToListAsync()).Any())
+                bool valhora = true;
+
+                if(accion == "Mod")
                 {
-                    return new RetornoAction { Code = 2, Mensaje = "" };
+                    if (!await _lstGnrl._context.HorarioMedicos.AnyAsync(a => a.HorarioMedicoId.Equals(_model.MedicoHorarioId) && a.UsuarioId.Equals(_model.UsuarioId) && 
+                                                                             (!a.Tipo_HorarioId.Equals(_model.MHE_Tipo_Horario) || !a.SucursalId.Equals(_model.MHE_Sucursal) || !a.DiaWeekId.Equals(_model.MHE_DiaWeek))))
+                    {
+                        valhora = false;
+                    }
+                }
+
+                if(valhora)
+                {
+                    var hora = await _lstGnrl._context.Tipo_Horarios.Where(w => w.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId) && w.Tipo_HorarioId.Equals(_model.MHE_Tipo_Horario))
+                                                            .Select(s => new { horaini = s.Hora_Inicio, horafin = s.Hora_Fin }).FirstOrDefaultAsync();
+
+                    DateTime dia = new DateTime(2020, 7, 20);
+                    DateTime diaIni = dia.AddDays(_model.MHE_DiaWeek) + hora.horaini;
+
+                    DateTime diaFin = dia.AddDays(hora.horafin < hora.horaini ? _model.MHE_DiaWeek : _model.MHE_DiaWeek) + hora.horafin;
+
+
+                    if (accion == "Mod")
+                    {
+
+                        if( await _lstGnrl._context.ViewHorarioMedicoDateWeeks.AnyAsync(w => w.UsuarioId.Equals(_model.UsuarioId) && w.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId) &&
+                                                                                                       ((diaIni >= w.FechaInicio && diaIni < w.Fecha_Fin) || (diaFin > w.Fecha_Inicio && diaFin <= w.FechaFin) || (w.FechaInicio >= diaIni && w.FechaInicio < diaFin)) && 
+                                                                                                       !w.HorarioMedicoId.Equals(_model.MedicoHorarioId)))
+                        {
+                            return new RetornoAction { Code = 1, Mensaje = "El horario ingresado ya se encuentra seleccionado, favor de seleccionar un tipo de horario distinto o crear un nuevo tipo de horario" };
+
+                        }
+                    }
+                    else
+                    {
+                        if (await _lstGnrl._context.ViewHorarioMedicoDateWeeks.AnyAsync(w => w.UsuarioId.Equals(_model.UsuarioId) && w.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId) &&
+                                                                                                                               ((diaIni >= w.FechaInicio && diaIni < w.Fecha_Fin) || (diaFin > w.Fecha_Inicio && diaFin <= w.FechaFin) || (w.FechaInicio >= diaIni && w.FechaInicio < diaFin))))
+                        {
+                            return new RetornoAction { Code = 1, Mensaje = "El horario ingresado ya se encuentra seleccionado, favor de seleccionar un tipo de horario distinto o crear un nuevo tipo de horario" };
+                        }
+                    }
                 }
 
 
-                return new RetornoAction { Code = 0, Mensaje = "" };
+                return new RetornoAction { Code =0, Mensaje = "" };
 
             }
             catch (Exception ex)

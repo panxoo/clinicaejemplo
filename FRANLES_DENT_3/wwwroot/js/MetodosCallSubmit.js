@@ -152,3 +152,45 @@ AjaxSubmit.prototype.AjaxGetDato = function (_dt) {
         }
     });
 }
+
+AjaxSubmit.prototype.AjaxPopCargaScheduler = function (_dt) {
+    _btnCancel = this.btnCancel;
+    _partial = this.partial;
+    _titleError = this.titleError;
+    _btnSubmit = this.btnSubmit;
+    _inputClear = this.inputClear;
+
+    $(this.btnSubmit).prop("disabled", true);
+
+    $.ajax({
+        url: this.url,
+        data: _dt,
+        type: "post",
+        cache: false,
+        success: function (result) {
+            if (result != null) {
+                $(_btnCancel).click();
+                $(_partial).html(result);
+                NotificaSave();
+                scheduler.deleteMarkedTimespan();
+                scheduler.updateView();
+
+                console.log(result);
+                //if (_inputClear != null) {
+                //    _inputClear.forEach(function (input) {
+                //        $(input).val("");
+                //    });
+                //};
+            };
+        },
+        error: function (result) {
+            MensajeError(_titleError, result.responseJSON.mnsj);
+            if (result.responseJSON.redir) {
+                setTimeout(function () { window.location.replace(result.responseJSON.redirectToUrl); }, 3000);
+            }
+        },
+        complete: function () {
+            $(_btnSubmit).prop("disabled", false);
+        }
+    });
+}

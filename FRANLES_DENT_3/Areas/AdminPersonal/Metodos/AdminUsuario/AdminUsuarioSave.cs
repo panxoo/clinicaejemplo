@@ -1,6 +1,5 @@
 ﻿using FRANLES_DENT_3.Areas.AdminPersonal.Models.AdminUsuario;
 using FRANLES_DENT_3.Metodos.Permisos;
-using FRANLES_DENT_3.Models.Empresa.Atributos;
 using FRANLES_DENT_3.Models.MedicoDato;
 using FRANLES_DENT_3.Models.Personal;
 using FRANLES_DENT_3.Servicios.Interfaces;
@@ -27,7 +26,6 @@ namespace FRANLES_DENT_3.Areas.AdminPersonal.Metodos.AdminUsuario
         {
             try
             {
-
                 IdentityUser _user = new IdentityUser();
 
                 if (_model.Acceso)
@@ -162,7 +160,6 @@ namespace FRANLES_DENT_3.Areas.AdminPersonal.Metodos.AdminUsuario
                     }
                 }
 
-
                 _usuario.Nombre = _model.Nombre.Trim();
                 _usuario.Apellido_Paterno = _model.Apellido_Paterno.Trim();
                 _usuario.Apellido_Materno = string.IsNullOrEmpty(_model.Apellido_Materno) ? "" : _model.Apellido_Materno.Trim();
@@ -179,7 +176,6 @@ namespace FRANLES_DENT_3.Areas.AdminPersonal.Metodos.AdminUsuario
 
                 if (_model.Acceso)
                 {
-
                     _usuario.PerfilId = _model.PerfilId;
 
                     if (!_model.UserNomExist)
@@ -295,7 +291,6 @@ namespace FRANLES_DENT_3.Areas.AdminPersonal.Metodos.AdminUsuario
         {
             try
             {
-
                 DatosMedico _medico;
 
                 if (await _lstGnrl._context.DatosMedicos.AnyAsync(a => a.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId) && a.UsuarioId.Equals(_model.UsuarioId)))
@@ -336,8 +331,6 @@ namespace FRANLES_DENT_3.Areas.AdminPersonal.Metodos.AdminUsuario
                 await EvaluacionMedicoEsp(_medico.DatosMedicoId, _model.EspecialIds);
 
                 return new RetornoAction { Code = 0, Mensaje = "" };
-
-
             }
             catch (Exception ex)
             {
@@ -347,11 +340,9 @@ namespace FRANLES_DENT_3.Areas.AdminPersonal.Metodos.AdminUsuario
 
         private async Task<bool> EvaluacionMedicoEsp(string _idMedico, List<string> _lstEspec)
         {
-
             List<Especialidad_Medico> _espMedicoAct;
             List<Especialidad_Medico> _espMedicoNew;
             List<Especialidad_Medico> _espMedicoDel = new List<Especialidad_Medico>();
-
 
             _espMedicoAct = await _lstGnrl._context.Especialidad_Medicos.Where(w => w.DatosMedico.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId) && w.DatosMedico.DatosMedicoId.Equals(_idMedico)).ToListAsync();
 
@@ -363,7 +354,6 @@ namespace FRANLES_DENT_3.Areas.AdminPersonal.Metodos.AdminUsuario
                 }
 
                 _espMedicoNew = _lstEspec.Except(_espMedicoAct.Select(s => s.EspecialidadId).ToList()).Select(s => new Especialidad_Medico { DatosMedicoId = _idMedico, EspecialidadId = s }).ToList();
-
             }
             else
             {
@@ -386,66 +376,91 @@ namespace FRANLES_DENT_3.Areas.AdminPersonal.Metodos.AdminUsuario
             return true;
         }
 
-        public async Task<RetornoAction> SaveDetalleUsuarioSucursalAA(UsuarioViewPost.UsuarioSucursalAAPost _model)
+        public async Task<RetornoAction> SaveDetalleUsuarioHorarioMedico(UsuarioViewPost.UsuarioHorarioMedicoPost _model, string accion)
         {
             try
             {
+                HorarioMedico horariomedico;
 
-                List<Sucursal_Area_Atencion> sucursalaas = await _lstGnrl._context.Sucursal_Area_Atencions.Where(w => w.Sucursal.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId) && w.SucursalId.Equals(_model.Sucursal)).ToListAsync();
-                List<Area_Medico> area_MedicosActual = await _lstGnrl._context.Area_Medicos.IgnoreQueryFilters().Include(i => i.Sucursal_Area_Atencion)
-                                                                                                                .Where(w => w.UsuarioId.Equals(_model.UsuarioId) && w.Sucursal_Area_Atencion.SucursalId.Equals(_model.Sucursal)
-                                                                                                                        && w.Sucursal_Area_Atencion.Sucursal.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId)).ToListAsync();
-
-                area_MedicosActual.ForEach(f =>
+                if (accion == "Mod")
                 {
-                    f.Activo = _model.AreaAtencions.Contains(f.Sucursal_Area_Atencion.Area_AtencionId);
-                }                );
+                    horariomedico = await _lstGnrl._context.HorarioMedicos.FirstOrDefaultAsync(f => f.HorarioMedicoId.Equals(_model.MedicoHorarioId) &&
+                                                                                                                  f.UsuarioId.Equals(_model.UsuarioId) &&
+                                                                                                                  f.Usuario.ClinicaId.Equals(_lstGnrl._datosUsuario.ClinicaId));
 
+                    horariomedico.DiaWeekId = _model.MHE_DiaWeek;
+                    horariomedico.SucursalId = _model.MHE_Sucursal;
+                    horariomedico.Tipo_HorarioId = _model.MHE_Tipo_Horario;
 
-                
-                if (_model.AreaAtencions.Except(area_MedicosActual.Select(s => s.Sucursal_Area_Atencion.Area_AtencionId)).Any())
+                    await _lstGnrl._context.SaveChangesAsync();
+                }
+                else
                 {
-
-                    List<Area_Medico> area_medicoAdd = new List<Area_Medico>();
-
-
-                    var sucuraaNotAsign = await (from saa in _lstGnrl._context.Sucursal_Area_Atencions
-                                         join suc in _lstGnrl._context.Sucursals on new { s1 = saa.SucursalId, s2 = _lstGnrl._datosUsuario.ClinicaId, s3 = _model.Sucursal } equals new { s1 = suc.SucursalId, s2 = suc.ClinicaId, s3 = suc.SucursalId }
-                                         join ame in _lstGnrl._context.Area_Medicos on new { s1 = saa.Sucursal_Area_AtencionId, s2 = _model.UsuarioId } equals new { s1 = ame.Sucursal_Area_AtencionId, s2 = ame.UsuarioId } into armed
-                                         from armedNul in armed.DefaultIfEmpty()
-                                         where armedNul == null
-                                         select new
-                                         {
-                                             saaid = saa.Sucursal_Area_AtencionId,
-                                             aaid = saa.Area_AtencionId
-                                         }).ToListAsync();
-
-                    foreach(var dt in sucuraaNotAsign.Where(w => _model.AreaAtencions.Contains(w.aaid)))
+                    horariomedico = new HorarioMedico
                     {
-                        area_medicoAdd.Add(new Area_Medico
-                        {
-                            Area_MedicoId = Ulid.NewUlid().ToString(),
-                            Sucursal_Area_AtencionId = dt.saaid,
-                            UsuarioId = _model.UsuarioId,
-                            Activo = true
-                        });
-                    }
+                        DiaWeekId = _model.MHE_DiaWeek,
+                        SucursalId = _model.MHE_Sucursal,
+                        Tipo_HorarioId = _model.MHE_Tipo_Horario,
+                        UsuarioId = _model.UsuarioId,
+                        HorarioMedicoId = Ulid.NewUlid().ToString()
+                    };
 
-                    await _lstGnrl._context.AddRangeAsync(area_medicoAdd);
+                    await _lstGnrl._context.AddAsync(horariomedico);
+                    await _lstGnrl._context.SaveChangesAsync();
                 }
 
-                await _lstGnrl._context.SaveChangesAsync();
+                await SaveAreaAtencionHorarioMedico(horariomedico.HorarioMedicoId, _model.AreaAtencion);
 
                 return new RetornoAction { Code = 0 };
-
-
             }
             catch (Exception ex)
             {
                 return new RetornoAction { Code = 1, Mensaje = "Error del almacenamiento" };
-
             }
         }
 
+        private async Task<bool> SaveAreaAtencionHorarioMedico(string id, List<string> AreaAtencion)
+        {
+            List<string> horaAreaAten = await _lstGnrl._context.HorarioMedicoAreaAtencions.Where(w => w.HorarioMedicoId.Equals(id)).Select(s => s.Area_AtencionId).ToListAsync();
+            List<HorarioMedicoAreaAtencion> horaAreaAtenAdd = new List<HorarioMedicoAreaAtencion>();
+
+            if (horaAreaAten.Any())
+            {
+                foreach (string aa in AreaAtencion.Where(w => !horaAreaAten.Contains(w)))
+                {
+                    horaAreaAtenAdd.Add(new HorarioMedicoAreaAtencion { Area_AtencionId = aa, HorarioMedicoId = id });
+                }
+
+                if (horaAreaAtenAdd.Any())
+                {
+                    await _lstGnrl._context.AddRangeAsync(horaAreaAtenAdd);
+                }
+
+                List<HorarioMedicoAreaAtencion> horaAreaAtenDel = new List<HorarioMedicoAreaAtencion>();
+
+                foreach (string aa in horaAreaAten.Where(w => !AreaAtencion.Contains(w)))
+                {
+                    horaAreaAtenDel.Add(new HorarioMedicoAreaAtencion { Area_AtencionId = aa, HorarioMedicoId = id });
+                }
+
+                if (horaAreaAtenDel.Count() > 0)
+                {
+                    _lstGnrl._context.RemoveRange(horaAreaAtenDel);
+                }
+            }
+            else
+            {
+                AreaAtencion.ForEach(f =>
+                {
+                    horaAreaAtenAdd.Add(new HorarioMedicoAreaAtencion { Area_AtencionId = f, HorarioMedicoId = id });
+                });
+
+                await _lstGnrl._context.AddRangeAsync(horaAreaAtenAdd);
+            }
+
+            await _lstGnrl._context.SaveChangesAsync();
+
+            return true;
+        }
     }
 }
