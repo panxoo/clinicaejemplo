@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using FRANLES_DENT_3.Areas.AdminPersonal.Metodos.AdminPersonal;
 using FRANLES_DENT_3.Data;
 using FRANLES_DENT_3.Servicios.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -24,8 +25,11 @@ namespace FRANLES_DENT_3.Areas.AdminPersonal.Controllers
 
         public async Task<IActionResult> ProfilePersonal(string id)
         {
+            _lstGnrl._datosUsuario = await _lstGnrl._usuarios.DatosSession(HttpContext);
 
-            return View();
+            var _model = await new AdminPersonalGet(_lstGnrl).GetProfilePersonal(id);
+
+            return View(_model.Parametro);
         }
 
         public IActionResult Index()
