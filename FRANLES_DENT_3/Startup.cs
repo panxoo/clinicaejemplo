@@ -47,7 +47,7 @@ namespace FRANLES_DENT_3
                                             mySqlOptions.ServerVersion(new Version(8, 0, 16), ServerType.MySql);
                                         })
                         .UseLoggerFactory(_factory)
-                        .EnableSensitiveDataLogging());
+                        .EnableSensitiveDataLogging(false));
 
             var dataProtectionProviderType = typeof(DataProtectorTokenProvider<IdentityUser>);
 
